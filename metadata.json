@@ -1,0 +1,10 @@
+{
+  "name": "Remix: GroundZero",
+  "description": "GroundZero - Real-time hyperlocal citizen journalism platform. Be the reporter. No editors. No agenda. Just truth. Features: live map, Gemini AI, trust scores, citizen reactions, anonymous posting.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
