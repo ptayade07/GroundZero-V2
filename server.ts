@@ -53,13 +53,34 @@ function saveIssues(issues: Issue[]) {
 
 // Helper to load issues from file or fall back to seeds
 function loadIssues(): Issue[] {
+  let loaded: Issue[] = [];
   try {
     if (fs.existsSync(DATA_FILE)) {
       const content = fs.readFileSync(DATA_FILE, "utf-8");
-      return JSON.parse(content) as Issue[];
+      loaded = JSON.parse(content) as Issue[];
     }
   } catch (err) {
     console.error("Error loading issues from JSON, falling back to seeds:", err);
+  }
+
+  if (loaded.length > 0) {
+    let upgraded = false;
+    const mapped = loaded.map(issue => {
+      const updated = { ...issue };
+      if (updated.seeThisTooCount === undefined) {
+        updated.seeThisTooCount = issue.id === "seed-1" ? 12 : (issue.id === "seed-2" ? 6 : 0);
+        upgraded = true;
+      }
+      if (updated.seeThisTooUsers === undefined) {
+        updated.seeThisTooUsers = [];
+        upgraded = true;
+      }
+      return updated;
+    });
+    if (upgraded) {
+      saveIssues(mapped);
+    }
+    return mapped;
   }
 
   // Seed data for generic worldwide issues
@@ -609,6 +630,8 @@ async function startServer() {
         createdAt: new Date().toISOString(),
         reactions: { verified: 0, cap: 0, big_issue: 0, bruh: 0 },
         userReactions: {},
+        seeThisTooCount: 0,
+        seeThisTooUsers: [],
         aiDescription,
         isSpam,
         spamReasoning
@@ -695,6 +718,41 @@ async function startServer() {
       success: true,
       issue,
       reporterTrustScore: newTrustScore
+    });
+  });
+
+  // I See This Too endpoint: Toggles count
+  app.post("/api/issues/:id/see-this-too", (req, res) => {
+    const { id } = req.params;
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ error: "Missing userId" });
+    }
+
+    const issue = activeIssues.find(i => i.id === id);
+    if (!issue) {
+      return res.status(404).json({ error: "Issue not found" });
+    }
+
+    if (!issue.seeThisTooUsers) {
+      issue.seeThisTooUsers = [];
+    }
+
+    const index = issue.seeThisTooUsers.indexOf(userId);
+    if (index > -1) {
+      issue.seeThisTooUsers.splice(index, 1);
+    } else {
+      issue.seeThisTooUsers.push(userId);
+    }
+
+    issue.seeThisTooCount = issue.seeThisTooUsers.length;
+
+    saveIssues(activeIssues);
+
+    res.json({
+      success: true,
+      issue
     });
   });
 

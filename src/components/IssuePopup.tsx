@@ -17,6 +17,7 @@ interface IssuePopupProps {
   onUpdateStatus?: (issueId: string, newStatus: Status) => void;
   onAddPerspective?: (parentIssueId: string) => void;
   onSelectPerspective?: (issue: Issue) => void;
+  onSeeThisToo?: (issueId: string) => void;
 }
 
 const CATEGORY_STYLES: Record<Category, { label: string; emoji: string; bg: string; text: string; border: string }> = {
@@ -53,15 +54,12 @@ export default function IssuePopup({
   onReact,
   onUpdateStatus,
   onAddPerspective,
-  onSelectPerspective
+  onSelectPerspective,
+  onSeeThisToo
 }: IssuePopupProps) {
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
-
-  // Compute media and parent-perspective linkings
-  const mediaUrls = issue.mediaUrls || (issue.photoUrl ? [issue.photoUrl] : []);
-  const activeMediaUrl = mediaUrls[activeMediaIndex] || "";
-  const isVideo = issue.mediaType === "video" || activeMediaUrl.startsWith("data:video/");
+  const [touchStart, setTouchStart] = useState<number | null>(null);
 
   const parentId = issue.parentIssueId || issue.id;
   // Sibling perspectives include the parent and any children who link to this parent
@@ -69,6 +67,72 @@ export default function IssuePopup({
     i => i.id === parentId || i.parentIssueId === parentId
   );
   const reporterCount = siblingPerspectives.length || 1;
+
+  // Create aggregated list of all media items across all perspectives of this incident
+  interface CarouselMedia {
+    url: string;
+    type: 'photo' | 'video';
+    addedBy: string;
+  }
+
+  const allMedia: CarouselMedia[] = [];
+
+  // Add current issue media first
+  const currentMediaUrls = issue.mediaUrls || (issue.photoUrl ? [issue.photoUrl] : []);
+  currentMediaUrls.forEach((url) => {
+    allMedia.push({
+      url,
+      type: issue.mediaType || 'photo',
+      addedBy: issue.isAnonymous 
+        ? (issue.reporterName.startsWith("Anonymous Citizen") && issue.reporterName.includes("#") 
+            ? issue.reporterName 
+            : `Anonymous Citizen #` + (Math.abs(issue.id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0)) % 9000 + 1000))
+        : issue.reporterName
+    });
+  });
+
+  // Add media from other sibling perspectives of the same incident
+  siblingPerspectives.forEach((sib) => {
+    if (sib.id !== issue.id) {
+      const sibMediaUrls = sib.mediaUrls || (sib.photoUrl ? [sib.photoUrl] : []);
+      sibMediaUrls.forEach((url) => {
+        if (!allMedia.some(m => m.url === url)) {
+          allMedia.push({
+            url,
+            type: sib.mediaType || 'photo',
+            addedBy: sib.isAnonymous 
+              ? (sib.reporterName.startsWith("Anonymous Citizen") && sib.reporterName.includes("#") 
+                  ? sib.reporterName 
+                  : `Anonymous Citizen #` + (Math.abs(sib.id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0)) % 9000 + 1000))
+              : sib.reporterName
+          });
+        }
+      });
+    }
+  });
+
+  const activeMedia = allMedia[activeMediaIndex] || null;
+  const activeMediaUrl = activeMedia?.url || "";
+  const isVideo = activeMedia?.type === "video" || activeMediaUrl.startsWith("data:video/");
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchStart - touchEnd;
+
+    if (diff > 50) {
+      // Swiped left, show next photo
+      setActiveMediaIndex((prev) => (prev + 1) % allMedia.length);
+    } else if (diff < -50) {
+      // Swiped right, show prev photo
+      setActiveMediaIndex((prev) => (prev - 1 + allMedia.length) % allMedia.length);
+    }
+    setTouchStart(null);
+  };
 
   const getTrustBadge = (score: number) => {
     if (score >= 90) return { label: "Ground Zero Reporter", color: "text-brand border-brand/50 bg-brand/10" };
@@ -149,10 +213,14 @@ export default function IssuePopup({
         </button>
       </div>
 
-      {/* Photo / Video Gallery and Description */}
+      {/* Photo / Video Swipeable Carousel and Description */}
       <div className="grid grid-cols-1 gap-2 mb-3">
         {activeMediaUrl && (
-          <div className="w-full h-44 rounded-xl overflow-hidden border border-gray-900 bg-black/40 relative">
+          <div 
+            className="w-full h-48 rounded-xl overflow-hidden border border-gray-900 bg-black/40 relative group/carousel select-none"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
             {isVideo ? (
               <video
                 src={activeMediaUrl}
@@ -163,9 +231,60 @@ export default function IssuePopup({
               <img
                 src={activeMediaUrl}
                 alt={issue.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover select-none pointer-events-none"
                 referrerPolicy="no-referrer"
               />
+            )}
+            
+            {/* Added By User Label Overlay */}
+            {activeMedia && (
+              <div className="absolute bottom-2 left-2 px-2 py-0.5 bg-[#0A0A0A]/85 backdrop-blur-md border border-gray-800 rounded-lg text-[9px] text-gray-300 font-mono z-10 select-none">
+                📸 Added by: <span className="text-[#39FF14] font-bold">{activeMedia.addedBy}</span>
+              </div>
+            )}
+
+            {/* Left/Right Carousel Control Overlays */}
+            {allMedia.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveMediaIndex((prev) => (prev - 1 + allMedia.length) % allMedia.length);
+                  }}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/75 border border-gray-800 hover:bg-black text-[#39FF14] hover:text-white flex items-center justify-center text-[10px] select-none cursor-pointer z-10 transition-all shadow-lg opacity-80 hover:opacity-100"
+                  title="Previous"
+                >
+                  ◀
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveMediaIndex((prev) => (prev + 1) % allMedia.length);
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/75 border border-gray-800 hover:bg-black text-[#39FF14] hover:text-white flex items-center justify-center text-[10px] select-none cursor-pointer z-10 transition-all shadow-lg opacity-80 hover:opacity-100"
+                  title="Next"
+                >
+                  ▶
+                </button>
+              </>
+            )}
+
+            {/* Dot indicators at bottom of carousel */}
+            {allMedia.length > 1 && (
+              <div className="absolute bottom-2 right-2 flex gap-1 z-10 bg-black/50 px-2 py-1 rounded-full backdrop-blur-xs select-none">
+                {allMedia.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); setActiveMediaIndex(idx); }}
+                    className={`w-1.5 h-1.5 rounded-full transition-all cursor-pointer ${
+                      activeMediaIndex === idx ? "bg-[#39FF14] w-3" : "bg-gray-500 hover:bg-gray-300"
+                    }`}
+                  />
+                ))}
+              </div>
             )}
             
             {/* AI verification seal badge if high confidence */}
@@ -178,23 +297,25 @@ export default function IssuePopup({
           </div>
         )}
 
-        {/* Thumbnail row if multiple files exist */}
-        {mediaUrls.length > 1 && (
+        {/* Aggregate Perspective thumbnail bar */}
+        {allMedia.length > 1 && (
           <div className="flex gap-1.5 overflow-x-auto py-1 scrollbar-thin">
-            {mediaUrls.map((url, idx) => {
-              const isUrlVideo = issue.mediaType === "video" || url.startsWith("data:video/");
+            {allMedia.map((mediaItem, idx) => {
+              const isUrlVideo = mediaItem.type === "video" || mediaItem.url.startsWith("data:video/");
               return (
                 <button
                   key={idx}
+                  type="button"
                   onClick={() => setActiveMediaIndex(idx)}
                   className={`w-12 h-12 rounded-lg border-2 overflow-hidden shrink-0 transition-all cursor-pointer ${
                     activeMediaIndex === idx ? "border-brand" : "border-gray-800 opacity-65 hover:opacity-100"
                   }`}
+                  title={`Added by ${mediaItem.addedBy}`}
                 >
                   {isUrlVideo ? (
                     <div className="w-full h-full bg-slate-950 flex items-center justify-center text-xs">📹</div>
                   ) : (
-                    <img src={url} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    <img src={mediaItem.url} className="w-full h-full object-cover select-none pointer-events-none" referrerPolicy="no-referrer" />
                   )}
                 </button>
               );
@@ -349,6 +470,25 @@ export default function IssuePopup({
           </div>
           <p className="text-[8px] text-gray-500 font-mono mt-0.5 uppercase">TRUST: <span className="text-brand font-bold">{issue.reporterTrustScore}</span></p>
         </div>
+      </div>
+
+      {/* 'I See This Too' Button */}
+      <div className="mb-3">
+        <button
+          onClick={() => onSeeThisToo?.(issue.id)}
+          className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 border cursor-pointer ${
+            issue.seeThisTooUsers?.includes(currentUserId)
+              ? "bg-[#39FF14]/15 border-brand text-brand shadow-[0_0_12px_rgba(57,255,20,0.25)]"
+              : "bg-[#141414] border-gray-800 text-gray-300 hover:border-gray-700 hover:text-white"
+          }`}
+          id={`see-this-too-btn-${issue.id}`}
+        >
+          <span className="text-sm">👁️</span>
+          <span>I See This Too</span>
+          <span className="font-mono text-[10px] px-2 py-0.5 bg-black/40 rounded-full text-[#39FF14]">
+            {issue.seeThisTooCount || 0}
+          </span>
+        </button>
       </div>
 
       {/* Reactions Panel */}

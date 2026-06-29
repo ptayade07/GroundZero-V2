@@ -312,6 +312,59 @@ export default function App() {
     triggerToast("Tap anywhere on the map to place complaint pin");
   };
 
+  // Confirmation handler for "I See This Too"
+  const handleSeeThisToo = async (issueId: string) => {
+    if (!user) {
+      triggerToast("Please authenticate to validate reports.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/issues/${issueId}/see-this-too`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.id })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        // Update issues local state array
+        setIssues(prev => prev.map(issue => issue.id === issueId ? data.issue : issue));
+        
+        // Update selected issue popup detail in place
+        if (selectedIssue?.id === issueId) {
+          setSelectedIssue(data.issue);
+        }
+
+        const isConfirmed = data.issue.seeThisTooUsers?.includes(user.id);
+        triggerToast(isConfirmed ? "Validation submitted! Pin glow synchronized." : "Your validation has been withdrawn.");
+      }
+    } catch (err) {
+      console.error("Error confirming issue:", err);
+    }
+  };
+
+  // Pre-filter issues strictly by time filter for the social feed
+  const issuesFilteredByTime = issues.filter(issue => {
+    let timeMatches = true;
+    if (timeFilter !== "all") {
+      const createdTime = new Date(issue.createdAt).getTime();
+      const now = Date.now();
+      const diffMs = now - createdTime;
+
+      if (timeFilter === "2hrs") {
+        timeMatches = diffMs <= 2 * 60 * 60 * 1000;
+      } else if (timeFilter === "today") {
+        const createdDate = new Date(issue.createdAt).toDateString();
+        const todayDate = new Date().toDateString();
+        timeMatches = createdDate === todayDate || diffMs <= 24 * 60 * 60 * 1000;
+      } else if (timeFilter === "week") {
+        timeMatches = diffMs <= 7 * 24 * 60 * 60 * 1000;
+      }
+    }
+    return timeMatches;
+  });
+
   // Filter issues based on UI selections
   const filteredIssues = issues.filter(issue => {
     const categoryMatches = categoryFilter === "all" || issue.category === categoryFilter;
@@ -331,7 +384,9 @@ export default function App() {
       if (timeFilter === "2hrs") {
         timeMatches = diffMs <= 2 * 60 * 60 * 1000;
       } else if (timeFilter === "today") {
-        timeMatches = diffMs <= 24 * 60 * 60 * 1000;
+        const createdDate = new Date(issue.createdAt).toDateString();
+        const todayDate = new Date().toDateString();
+        timeMatches = createdDate === todayDate || diffMs <= 24 * 60 * 60 * 1000;
       } else if (timeFilter === "week") {
         timeMatches = diffMs <= 7 * 24 * 60 * 60 * 1000;
       }
@@ -617,6 +672,7 @@ export default function App() {
                   onUpdateStatus={handleUpdateStatus} // Admin simulation tools!
                   onAddPerspective={handleAddPerspective}
                   onSelectPerspective={setSelectedIssue}
+                  onSeeThisToo={handleSeeThisToo}
                 />
               )}
             </AnimatePresence>
@@ -625,7 +681,7 @@ export default function App() {
           {/* View 2: Social Feed */}
           <div className={`w-full h-full absolute inset-0 overflow-y-auto px-4 py-6 ${view === "feed" ? "block" : "hidden"}`}>
             <SocialFeed
-              issues={issues}
+              issues={issuesFilteredByTime}
               currentUserId={user.id}
               onSelectIssue={(issue) => {
                 setSelectedIssue(issue);
@@ -633,6 +689,9 @@ export default function App() {
                 triggerToast(`Centering map on: ${issue.title}`);
               }}
               onReact={handleReactToIssue}
+              timeFilter={timeFilter}
+              setTimeFilter={setTimeFilter}
+              onSeeThisToo={handleSeeThisToo}
             />
           </div>
 

@@ -13,6 +13,9 @@ interface SocialFeedProps {
   currentUserId: string;
   onSelectIssue: (issue: Issue) => void;
   onReact: (issueId: string, reaction: ReactionType) => void;
+  timeFilter: "2hrs" | "today" | "week" | "all";
+  setTimeFilter: (filter: "2hrs" | "today" | "week" | "all") => void;
+  onSeeThisToo: (issueId: string) => void;
 }
 
 const CATEGORY_MAP: Record<Category, { label: string; emoji: string; bg: string; text: string }> = {
@@ -38,7 +41,10 @@ export default function SocialFeed({
   issues,
   currentUserId,
   onSelectIssue,
-  onReact
+  onReact,
+  timeFilter,
+  setTimeFilter,
+  onSeeThisToo
 }: SocialFeedProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<Category | "all">("all");
@@ -110,6 +116,32 @@ export default function SocialFeed({
             className="w-full pl-9 pr-4 py-2 text-xs bg-[#0A0A0A] border border-gray-900 hover:border-brand/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand transition-all font-sans"
             id="social-feed-search"
           />
+        </div>
+
+        {/* Dynamic Time Filter row synchronized with map view */}
+        <div className="flex gap-1 overflow-x-auto pb-0.5 scrollbar-none" id="social-feed-time-filters">
+          {(["2hrs", "today", "week", "all"] as const).map((opt) => {
+            const labels: Record<string, string> = {
+              "2hrs": "⏳ Last 2 Hours",
+              "today": "📅 Today",
+              "week": "🗓️ This Week",
+              "all": "🌐 All Time"
+            };
+            return (
+              <button
+                key={opt}
+                type="button"
+                onClick={() => setTimeFilter(opt)}
+                className={`px-2.5 py-1 text-[8.5px] font-black uppercase tracking-wider rounded border transition-all cursor-pointer whitespace-nowrap ${
+                  timeFilter === opt
+                    ? "bg-[#39FF14] border-[#39FF14] text-[#0A0A0A] font-black shadow-[0_0_8px_rgba(57,255,20,0.25)]"
+                    : "bg-[#0A0A0A] border-gray-900 text-gray-400 hover:text-white hover:border-gray-800"
+                }`}
+              >
+                {labels[opt]}
+              </button>
+            );
+          })}
         </div>
 
         {/* Category horizontal scrolling chips */}
@@ -240,6 +272,14 @@ export default function SocialFeed({
                   </div>
                 )}
 
+                {/* 'X people see this too' card badge */}
+                {(issue.seeThisTooCount ?? 0) > 0 && (
+                  <div className="flex items-center gap-1.5 px-2 py-0.5 bg-[#39FF14]/10 border border-[#39FF14]/20 rounded-md text-[9px] text-brand font-mono uppercase font-black w-fit select-none">
+                    <span>👁️</span>
+                    <span>{issue.seeThisTooCount} {issue.seeThisTooCount === 1 ? "citizen sees" : "citizens see"} this too</span>
+                  </div>
+                )}
+
                 {/* Reaction footer counts bar */}
                 <div className="flex items-center justify-between pt-1 border-t border-gray-900/40">
                   <div className="flex items-center gap-1 font-mono text-[9px] text-gray-500 uppercase">
@@ -248,6 +288,24 @@ export default function SocialFeed({
                   </div>
 
                   <div className="flex items-center gap-1">
+                    {/* I See This Too button */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSeeThisToo?.(issue.id);
+                      }}
+                      className={`px-1.5 py-0.5 rounded text-[10px] font-bold border flex items-center gap-0.5 transition-all cursor-pointer ${
+                        issue.seeThisTooUsers?.includes(currentUserId)
+                          ? "bg-[#39FF14]/20 text-[#39FF14] border-brand shadow-[0_0_8px_rgba(57,255,20,0.2)]"
+                          : "bg-[#141414] text-gray-400 border-gray-900 hover:border-gray-800"
+                      }`}
+                      title="I See This Too"
+                    >
+                      <span>👁️</span>
+                      <span className="text-[9px] font-mono">{issue.seeThisTooCount || 0}</span>
+                    </button>
+
                     {/* Verified ✅ count */}
                     <button
                       type="button"

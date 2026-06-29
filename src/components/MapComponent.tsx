@@ -340,13 +340,27 @@ export default function MapComponent({
           const isSelected = selectedIssue?.id === issue.id;
           const emoji = CATEGORY_EMOJIS[issue.category] || "📍";
 
+          const confirmCount = issue.seeThisTooCount || 0;
           const size = isSelected ? "w-8 h-8 text-base" : "w-7.5 h-7.5 text-sm";
           const pingSize = isSelected ? "h-11 w-11" : "h-9 w-9";
 
+          // Dynamic glow and pulse animations based on community confirmation counts
+          const glowMultiplier = 1 + Math.min(confirmCount * 0.2, 2.0); // up to 3x scale
+          const pingOpacity = Math.min(0.35 + (confirmCount * 0.08), 0.85);
+          const baseShadow = isSelected ? `0 0 16px ${color}` : `0 0 8px ${color}`;
+          
+          let shadowStyle = `box-shadow: ${baseShadow};`;
+          if (confirmCount > 0) {
+            const extraGlowRadius = Math.min(confirmCount * 3.5, 25);
+            const overlayOpacity = Math.min(0.3 + (confirmCount * 0.1), 0.9);
+            // Stack multiple shadow glows for intense, hyper-vibrant radial bloom
+            shadowStyle = `box-shadow: ${baseShadow}, 0 0 ${10 + extraGlowRadius}px rgba(57,255,20,${overlayOpacity}), 0 0 ${18 + extraGlowRadius * 1.5}px ${color};`;
+          }
+
           const pinHtml = `
             <div class="relative flex items-center justify-center">
-              <span class="animate-ping absolute inline-flex ${pingSize} rounded-full" style="background-color: ${color}; opacity: 0.35;"></span>
-              <div class="relative flex items-center justify-center ${size} rounded-full bg-[#0A0A0A] shadow-[0_0_12px_rgba(0,0,0,0.6)] border-2 transition-all duration-300" style="border-color: ${color};">
+              <span class="animate-ping absolute inline-flex ${pingSize} rounded-full" style="background-color: ${color}; transform: scale(${glowMultiplier}); opacity: ${pingOpacity};"></span>
+              <div class="relative flex items-center justify-center ${size} rounded-full bg-[#0A0A0A] border-2 transition-all duration-300" style="border-color: ${color}; ${shadowStyle}">
                 <span class="select-none leading-none">${emoji}</span>
               </div>
             </div>

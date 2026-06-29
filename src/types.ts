@@ -59,6 +59,9 @@ export interface Issue {
   reactions: Reactions;
   // Map of userId -> ReactionType
   userReactions?: Record<string, ReactionType>;
+  // I See This Too counter and users
+  seeThisTooCount?: number;
+  seeThisTooUsers?: string[];
   // AI-generated fields
   aiDescription?: string; // Gemini Vision image analysis
   isSpam?: boolean; // Spam flag
