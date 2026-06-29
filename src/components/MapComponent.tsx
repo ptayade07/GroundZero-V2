@@ -74,7 +74,7 @@ export default function MapComponent({
   const markersGroupRef = useRef<any>(null);
 
   // GPS and center coordinates
-  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 20.5937, lng: 78.9629 }); // Default to India center
+  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 51.5074, lng: -0.1278 }); // Default to London center
   const [hasGPS, setHasGPS] = useState(false);
 
   // Attempt to detect GPS location automatically on load
@@ -430,14 +430,14 @@ export default function MapComponent({
       { name: "Metro Center", lat: mapCenter.lat + 0.01, lng: mapCenter.lng + 0.04 },
       { name: "Tech District", lat: mapCenter.lat + 0.09, lng: mapCenter.lng + 0.07 },
     ] : [
-      { name: "City Center", lat: 28.6304, lng: 77.2177 },
-      { name: "Downtown Area", lat: 19.076, lng: 72.8777 },
-      { name: "Metro Grid", lat: 12.9718, lng: 77.6411 },
-      { name: "East Hub", lat: 13.0597, lng: 80.2374 },
-      { name: "West Sector", lat: 22.5484, lng: 88.3560 },
-      { name: "Tech Park", lat: 17.4401, lng: 78.3489 },
-      { name: "Bay Harbor", lat: 18.5362, lng: 73.8940 },
-      { name: "North Gate", lat: 23.0305, lng: 72.5178 },
+      { name: "City Center", lat: 51.5074, lng: -0.1278 },
+      { name: "Downtown Area", lat: 40.7128, lng: -74.0060 },
+      { name: "Metro Grid", lat: 48.8566, lng: 2.3522 },
+      { name: "East Hub", lat: 35.6762, lng: 139.6503 },
+      { name: "West Sector", lat: 37.7749, lng: -122.4194 },
+      { name: "Tech Park", lat: 52.5200, lng: 13.4050 },
+      { name: "Bay Harbor", lat: -33.8688, lng: 151.2093 },
+      { name: "North Gate", lat: 64.1466, lng: -21.9426 },
     ];
 
     let closest = "Sector Center";

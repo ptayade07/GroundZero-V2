@@ -64,6 +64,14 @@ function loadIssues(): Issue[] {
   }
 
   if (loaded.length > 0) {
+    // Fail-safe: If the existing issues.json contains old Mumbai coordinates, discard and force seed reset!
+    if (loaded.some(issue => issue.lat < 30 && issue.lng > 70)) {
+      console.log("Old Mumbai coordinate structure detected in issues.json. Resetting storage to new London/global coordinates seeds...");
+      loaded = [];
+    }
+  }
+
+  if (loaded.length > 0) {
     let upgraded = false;
     const mapped = loaded.map(issue => {
       const updated = { ...issue };
@@ -91,11 +99,11 @@ function loadIssues(): Issue[] {
       description: "Citizen reporter here. An officer at the municipal permits desk is refusing to process simple business registrations without an extra 'speed fee'. I have video recording of the conversation. Absolute abuse of power.",
       category: "Corruption",
       status: "Escalated",
-      lat: 19.076,
-      lng: 72.8777,
-      area: "Downtown Area",
+      lat: 51.5074,
+      lng: -0.1278,
+      area: "Central Square",
       reporterId: "user-6",
-      reporterName: "Vikram Malhotra",
+      reporterName: "Alex Mercer",
       reporterTrustScore: 78,
       isAnonymous: false,
       createdAt: new Date(Date.now() - 600000).toISOString(), // 10 mins ago
@@ -109,11 +117,11 @@ function loadIssues(): Issue[] {
       description: "The newly constructed pedestrian overpass near North District metro link has already developed major structural fractures. Half of the railing collapsed last night. Standard contractor negligence. Total tax money down the drain!",
       category: "Government Failure",
       status: "Escalated",
-      lat: 19.1197,
-      lng: 72.8468,
+      lat: 51.5456,
+      lng: -0.1345,
       area: "North District",
       reporterId: "user-9",
-      reporterName: "Meera Fernandez",
+      reporterName: "Elena Rostova",
       reporterTrustScore: 89,
       isAnonymous: false,
       createdAt: new Date(Date.now() - 3600000 * 2).toISOString(), // 2 hours ago
@@ -127,11 +135,11 @@ function loadIssues(): Issue[] {
       description: "Thousands of delivery and rideshare operators have blockaded the Central Square intersection demanding minimum wage and safety guarantees. Chanting is loud, traffic is completely stalled. Avoid the grid entirely.",
       category: "Protest / Rally",
       status: "Verified",
-      lat: 19.0180,
-      lng: 72.8430,
+      lat: 51.5074,
+      lng: -0.1278,
       area: "Central Square",
       reporterId: "user-2",
-      reporterName: "Rajesh Kumar",
+      reporterName: "John Doe",
       reporterTrustScore: 85,
       isAnonymous: false,
       createdAt: new Date(Date.now() - 3600000 * 4).toISOString(), // 4 hours ago
@@ -144,11 +152,11 @@ function loadIssues(): Issue[] {
       description: "Absolute cinema outside Cafe West! A major content creator and a film actor were having an aggressive verbal dispute regarding an unreleased project. Paparazzi are swarming the streets, block is completely packed!",
       category: "Local Drama",
       status: "Verified",
-      lat: 19.0654,
-      lng: 72.8251,
-      area: "West Quarter",
+      lat: 51.5135,
+      lng: -0.1585,
+      area: "West End",
       reporterId: "user-3",
-      reporterName: "Priya Sharma",
+      reporterName: "Sarah Smith",
       reporterTrustScore: 88,
       isAnonymous: false,
       createdAt: new Date(Date.now() - 3600000 * 6).toISOString(), // 6 hours ago
@@ -161,11 +169,11 @@ function loadIssues(): Issue[] {
       description: "Two SUV drivers have blocked the narrow Market Street lane for over 45 minutes, arguing over who got to the parking spot first. Sirens blaring, shopkeepers are trying to mediate, but neither is backing down!",
       category: "Argument / Dispute",
       status: "Reported",
-      lat: 19.0624,
-      lng: 72.8221,
+      lat: 51.5050,
+      lng: -0.1400,
       area: "Market Street Area",
       reporterId: "user-4",
-      reporterName: "Aarav Mehta",
+      reporterName: "Marcus Vance",
       reporterTrustScore: 75,
       isAnonymous: true,
       createdAt: new Date(Date.now() - 1800000).toISOString(), // 30 mins ago
@@ -178,11 +186,11 @@ function loadIssues(): Issue[] {
       description: "Fire alarms are blaring at Metro Center Galleria. Hundreds of shoppers are evacuating into the main street. Three fire engines are on the way. No visible smoke yet but police are cordon-routing the crowd.",
       category: "Breaking News",
       status: "Verified",
-      lat: 19.0728,
-      lng: 72.8826,
+      lat: 51.5012,
+      lng: -0.1150,
       area: "Metro Center",
       reporterId: "user-5",
-      reporterName: "Ananya Iyer",
+      reporterName: "David Miller",
       reporterTrustScore: 92,
       isAnonymous: false,
       createdAt: new Date(Date.now() - 3600000 * 8).toISOString(), // 8 hours ago
@@ -195,11 +203,11 @@ function loadIssues(): Issue[] {
       description: "A massive pothole has opened up right after the West Quarter traffic lights. Just saw a delivery bike lose its tire. It is a major hazard during high-speed traffic, please drive carefully!",
       category: "Pothole",
       status: "Reported",
-      lat: 19.0596,
-      lng: 72.8210,
+      lat: 51.5100,
+      lng: -0.1800,
       area: "West Quarter",
       reporterId: "user-7",
-      reporterName: "Siddharth Joshi",
+      reporterName: "Leo Woods",
       reporterTrustScore: 50,
       isAnonymous: true,
       createdAt: new Date(Date.now() - 3600000 * 12).toISOString(), // 12 hours ago
@@ -212,11 +220,11 @@ function loadIssues(): Issue[] {
       description: "High tide combined with heavy downpours has completely flooded the harbor promenade. Water is knee-deep and entering nearby cafes. Pedestrian walkway is closed by safety marshals.",
       category: "Flooding",
       status: "Verified",
-      lat: 18.9067,
-      lng: 72.8147,
+      lat: 51.4875,
+      lng: -0.0030,
       area: "South Harbor",
       reporterId: "user-9",
-      reporterName: "Meera Fernandez",
+      reporterName: "Elena Rostova",
       reporterTrustScore: 89,
       isAnonymous: false,
       createdAt: new Date(Date.now() - 3600000 * 24).toISOString(), // 1 day ago
@@ -229,11 +237,11 @@ function loadIssues(): Issue[] {
       description: "An electrical substation failure has caused a complete power outage across Tech District for the last 4 hours. No internet, streetlights are entirely dark, backup generators are working on low fuel.",
       category: "Power Cut",
       status: "Verified",
-      lat: 19.1176,
-      lng: 72.9060,
+      lat: 51.5262,
+      lng: -0.0782,
       area: "Tech District",
       reporterId: "user-8",
-      reporterName: "Rohan Sawant",
+      reporterName: "Michael Carter",
       reporterTrustScore: 98,
       isAnonymous: false,
       createdAt: new Date(Date.now() - 3600000 * 30).toISOString(), // 30 hours ago
@@ -246,11 +254,11 @@ function loadIssues(): Issue[] {
       description: "Dozens of plastic barrels containing green-colored residue have washed up or been dumped illegally at the north end of Sunset Beach. Strong chemical odor, environmental responders have been notified.",
       category: "Garbage",
       status: "Escalated",
-      lat: 19.0988,
-      lng: 72.8264,
+      lat: 51.4820,
+      lng: -0.1915,
       area: "Sunset Beach",
       reporterId: "user-8",
-      reporterName: "Rohan Sawant",
+      reporterName: "Michael Carter",
       reporterTrustScore: 98,
       isAnonymous: false,
       createdAt: new Date(Date.now() - 3600000 * 48).toISOString(), // 2 days ago
@@ -268,14 +276,14 @@ let activeIssues: Issue[] = loadIssues();
 
 // Simple in-memory user table initialized with seed reporters
 const activeUsers: Record<string, User> = {
-  "user-2": { id: "user-2", name: "Rajesh Kumar", email: "rajesh@groundzero.in", trustScore: 85 },
-  "user-3": { id: "user-3", name: "Priya Sharma", email: "priya@groundzero.in", trustScore: 88 },
-  "user-4": { id: "user-4", name: "Aarav Mehta", email: "aarav@groundzero.in", trustScore: 75 },
-  "user-5": { id: "user-5", name: "Ananya Iyer", email: "ananya@groundzero.in", trustScore: 92 },
-  "user-6": { id: "user-6", name: "Vikram Malhotra", email: "vikram@groundzero.in", trustScore: 58 },
-  "user-7": { id: "user-7", name: "Siddharth Joshi", email: "siddharth@groundzero.in", trustScore: 50 },
-  "user-8": { id: "user-8", name: "Rohan Sawant", email: "rohan@groundzero.in", trustScore: 98 },
-  "user-9": { id: "user-9", name: "Meera Fernandez", email: "meera@groundzero.in", trustScore: 89 },
+  "user-2": { id: "user-2", name: "John Doe", email: "john@groundzero.app", trustScore: 85 },
+  "user-3": { id: "user-3", name: "Sarah Smith", email: "sarah@groundzero.app", trustScore: 88 },
+  "user-4": { id: "user-4", name: "Marcus Vance", email: "marcus@groundzero.app", trustScore: 75 },
+  "user-5": { id: "user-5", name: "David Miller", email: "david@groundzero.app", trustScore: 92 },
+  "user-6": { id: "user-6", name: "Alex Mercer", email: "alex@groundzero.app", trustScore: 58 },
+  "user-7": { id: "user-7", name: "Leo Woods", email: "leo@groundzero.app", trustScore: 50 },
+  "user-8": { id: "user-8", name: "Michael Carter", email: "michael@groundzero.app", trustScore: 98 },
+  "user-9": { id: "user-9", name: "Elena Rostova", email: "elena@groundzero.app", trustScore: 89 },
 };
 
 // Helper to dynamically calculate any user's trust score based on reactions on their reports
@@ -315,14 +323,14 @@ function recalculateUserTrustScore(userId: string): number {
 // Map coordinates to neighborhood / area name
 function getAreaFromCoords(lat: number, lng: number): string {
   const points = [
-    { name: "South Harbor", lat: 18.9067, lng: 72.8147 },
-    { name: "Sunset Beach", lat: 18.9431, lng: 72.8230 },
-    { name: "Central Square", lat: 19.0180, lng: 72.8430 },
-    { name: "West End", lat: 19.0654, lng: 72.8251 },
-    { name: "Metro Center", lat: 19.0728, lng: 72.8826 },
-    { name: "Tech District", lat: 19.1176, lng: 72.9060 },
-    { name: "North District", lat: 19.1197, lng: 72.8468 },
-    { name: "Commercial District", lat: 19.1828, lng: 72.9612 },
+    { name: "South Harbor", lat: 51.4875, lng: -0.0030 },
+    { name: "Sunset Beach", lat: 51.4820, lng: -0.1915 },
+    { name: "Central Square", lat: 51.5074, lng: -0.1278 },
+    { name: "West End", lat: 51.5135, lng: -0.1585 },
+    { name: "Metro Center", lat: 51.5012, lng: -0.1150 },
+    { name: "Tech District", lat: 51.5262, lng: -0.0782 },
+    { name: "North District", lat: 51.5456, lng: -0.1345 },
+    { name: "Commercial District", lat: 51.5155, lng: -0.0922 },
   ];
 
   let closest = points[0];

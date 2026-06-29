@@ -669,7 +669,6 @@ export default function App() {
                   currentUserId={user.id}
                   onClose={() => setSelectedIssue(null)}
                   onReact={handleReactToIssue}
-                  onUpdateStatus={handleUpdateStatus} // Admin simulation tools!
                   onAddPerspective={handleAddPerspective}
                   onSelectPerspective={setSelectedIssue}
                   onSeeThisToo={handleSeeThisToo}

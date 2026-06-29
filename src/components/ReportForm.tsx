@@ -171,14 +171,14 @@ export default function ReportForm({
 
     // Default fallback neighborhoods (Worldwide/Generic seeds location-agnostic)
     return [
-      { name: "Central Square", lat: 19.0180, lng: 72.8430 },
-      { name: "West End", lat: 19.0654, lng: 72.8251 },
-      { name: "Metro Center", lat: 19.0728, lng: 72.8826 },
-      { name: "Tech District", lat: 19.1176, lng: 72.9060 },
-      { name: "South Harbor", lat: 18.9067, lng: 72.8147 },
-      { name: "North District", lat: 19.1197, lng: 72.8468 },
-      { name: "Sunset Beach", lat: 18.9431, lng: 72.8230 },
-      { name: "Commercial District", lat: 19.1828, lng: 72.9612 },
+      { name: "Central Square", lat: 51.5074, lng: -0.1278 },
+      { name: "West End", lat: 51.5135, lng: -0.1585 },
+      { name: "Metro Center", lat: 51.5012, lng: -0.1150 },
+      { name: "Tech District", lat: 51.5262, lng: -0.0782 },
+      { name: "South Harbor", lat: 51.4875, lng: -0.0030 },
+      { name: "North District", lat: 51.5456, lng: -0.1345 },
+      { name: "Sunset Beach", lat: 51.4820, lng: -0.1915 },
+      { name: "Commercial District", lat: 51.5155, lng: -0.0922 },
     ];
   };
 

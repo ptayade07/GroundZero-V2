@@ -14,7 +14,6 @@ interface IssuePopupProps {
   currentUserId: string;
   onClose: () => void;
   onReact: (issueId: string, reaction: ReactionType) => void;
-  onUpdateStatus?: (issueId: string, newStatus: Status) => void;
   onAddPerspective?: (parentIssueId: string) => void;
   onSelectPerspective?: (issue: Issue) => void;
   onSeeThisToo?: (issueId: string) => void;
@@ -52,12 +51,10 @@ export default function IssuePopup({
   currentUserId,
   onClose,
   onReact,
-  onUpdateStatus,
   onAddPerspective,
   onSelectPerspective,
   onSeeThisToo
 }: IssuePopupProps) {
-  const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
 
