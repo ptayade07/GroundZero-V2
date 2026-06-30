@@ -134,20 +134,20 @@ export default function UserProfile({
 
   return (
     <div
-      className="w-full max-w-lg mx-auto bg-[#0A0A0A]/95 border border-gray-900 rounded-xl p-4 md:p-6 text-white space-y-6 overflow-y-auto max-h-[85vh] scrollbar-none shadow-2xl"
+      className="w-full max-w-lg mx-auto bg-black border border-neutral-900 rounded-xl p-6 md:p-8 text-white space-y-6 overflow-y-auto max-h-[85vh] scrollbar-none"
       id="user-profile-view"
     >
       {/* Top Banner & Header info */}
-      <div className="flex items-start justify-between pb-4 border-b border-gray-900/60" id="profile-top-header">
+      <div className="flex items-start justify-between pb-6 border-b border-neutral-900" id="profile-top-header">
         <div className="flex items-center gap-4">
-          {/* Avatar with initials & glowing border */}
+          {/* Avatar with initials */}
           <div className="relative">
-            <div className="w-14 h-14 rounded-2xl bg-brand/10 border-2 border-brand flex items-center justify-center text-brand text-lg font-black font-mono shadow-[0_0_15px_rgba(57,255,20,0.15)] shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-neutral-950 border border-neutral-900 flex items-center justify-center text-white text-lg font-black font-mono shrink-0">
               {user.isAnonymous ? "🔒" : getInitials(user.name)}
             </div>
             {/* Status indicator */}
-            <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-brand border-2 border-[#0A0A0A] flex items-center justify-center" title="Online Grid Operations">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#0A0A0A] animate-pulse" />
+            <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-[#39FF14] border-2 border-black flex items-center justify-center" title="Online Grid Operations">
+              <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
             </span>
           </div>
 
@@ -168,7 +168,7 @@ export default function UserProfile({
 
         <button
           onClick={onLogout}
-          className="flex items-center gap-1 px-2.5 py-1.5 bg-[#141414] hover:bg-red-950/30 hover:text-red-400 border border-gray-900 hover:border-red-500/20 text-[9px] font-bold uppercase rounded-lg transition-all text-gray-400 cursor-pointer"
+          className="flex items-center gap-1 px-2.5 py-1.5 bg-black hover:bg-red-950/30 hover:text-red-400 border border-neutral-900 hover:border-red-500/20 text-[9px] font-bold uppercase rounded-lg transition-all text-gray-400 cursor-pointer"
           id="logout-btn"
         >
           <LogOut className="w-3 h-3" />
@@ -177,14 +177,14 @@ export default function UserProfile({
       </div>
 
       {/* Prominent Anonymous Mode Toggle */}
-      <div className="p-3 bg-[#111] border border-gray-900 rounded-xl flex items-center justify-between" id="anon-mode-toggle-card">
+      <div className="p-4 bg-neutral-950 border border-neutral-900 rounded-xl flex items-center justify-between" id="anon-mode-toggle-card">
         <div className="flex items-center gap-2.5">
           {user.isAnonymous ? (
-            <div className="p-2 bg-brand/10 rounded-lg text-brand border border-brand/20">
+            <div className="p-2 bg-neutral-900 rounded-lg text-white border border-neutral-850">
               <EyeOff className="w-4 h-4" />
             </div>
           ) : (
-            <div className="p-2 bg-gray-900 rounded-lg text-gray-500 border border-gray-800">
+            <div className="p-2 bg-neutral-950 rounded-lg text-gray-500 border border-neutral-900">
               <Eye className="w-4 h-4 text-gray-400" />
             </div>
           )}
@@ -203,8 +203,8 @@ export default function UserProfile({
           disabled={isUpdating}
           className={`px-3 py-1.5 rounded-lg text-[9px] font-mono uppercase font-black tracking-widest border transition-all cursor-pointer ${
             user.isAnonymous
-              ? "bg-brand text-[#0A0A0A] border-brand shadow-[0_0_10px_rgba(57,255,20,0.25)]"
-              : "bg-transparent text-gray-400 border-gray-800 hover:text-white"
+              ? "bg-[#39FF14] text-black border-[#39FF14]"
+              : "bg-transparent text-gray-400 border-neutral-900 hover:text-white"
           }`}
           id="toggle-anonymity-btn"
         >
@@ -215,10 +215,10 @@ export default function UserProfile({
       {/* Trust Score & Impact Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4" id="trust-impact-metrics">
         {/* Trust score dial */}
-        <div className="p-4 bg-[#111] border border-gray-900 rounded-xl flex items-center gap-4">
+        <div className="p-4 bg-neutral-950 border border-neutral-900 rounded-xl flex items-center gap-4">
           <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
             <svg className="w-full h-full transform -rotate-90">
-              <circle cx="32" cy="32" r="28" stroke="#1c1c1c" strokeWidth="5" fill="transparent" />
+              <circle cx="32" cy="32" r="28" stroke="#111" strokeWidth="5" fill="transparent" />
               <circle
                 cx="32"
                 cy="32"
@@ -235,7 +235,7 @@ export default function UserProfile({
           </div>
           <div>
             <div className="flex items-center gap-1 text-[10px] font-mono text-gray-400 uppercase font-black tracking-wider">
-              <Award className="w-3.5 h-3.5 text-brand" />
+              <Award className="w-3.5 h-3.5 text-gray-400" />
               Trust Score
             </div>
             <p className="text-[8px] text-gray-500 font-mono uppercase mt-0.5">
@@ -245,13 +245,13 @@ export default function UserProfile({
         </div>
 
         {/* My Impact card */}
-        <div className="p-4 bg-gradient-to-br from-[#111] to-[#141414] border border-gray-900 rounded-xl flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand shrink-0">
-            <Sparkles className="w-6 h-6 animate-pulse" />
+        <div className="p-4 bg-neutral-950 border border-neutral-900 rounded-xl flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-neutral-900 border border-neutral-850 flex items-center justify-center text-white shrink-0">
+            <Sparkles className="w-6 h-6" />
           </div>
           <div>
             <div className="text-[10px] font-mono text-gray-400 uppercase font-black tracking-wider flex items-center gap-1">
-              <Flame className="w-3.5 h-3.5 text-brand" />
+              <Flame className="w-3.5 h-3.5 text-gray-400" />
               My Impact
             </div>
             <p className="text-xl font-black text-white tracking-tight leading-none mt-1">
@@ -265,30 +265,30 @@ export default function UserProfile({
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-3 gap-3" id="profile-stats-row">
+      <div className="grid grid-cols-3 gap-0 border border-neutral-900 rounded-xl overflow-hidden bg-black" id="profile-stats-row">
         {/* Total Posts */}
-        <div className="p-3 bg-[#111]/60 border border-gray-900 rounded-xl text-center">
-          <p className="text-[9px] font-mono text-gray-500 uppercase tracking-widest leading-none mb-1">Posts</p>
+        <div className="p-3 bg-black border-r border-neutral-900 text-center">
+          <p className="text-[9px] font-mono text-gray-500 uppercase tracking-widest leading-none mb-1.5">Posts</p>
           <div className="flex items-center justify-center gap-1.5 text-white">
-            <FileText className="w-3.5 h-3.5 text-brand" />
+            <FileText className="w-3.5 h-3.5 text-gray-450" />
             <span className="text-sm font-black font-mono leading-none">{totalPosts}</span>
           </div>
         </div>
 
         {/* Reactions Received */}
-        <div className="p-3 bg-[#111]/60 border border-gray-900 rounded-xl text-center">
-          <p className="text-[9px] font-mono text-gray-500 uppercase tracking-widest leading-none mb-1">Reactions</p>
+        <div className="p-3 bg-black border-r border-neutral-900 text-center">
+          <p className="text-[9px] font-mono text-gray-500 uppercase tracking-widest leading-none mb-1.5">Reactions</p>
           <div className="flex items-center justify-center gap-1.5 text-white">
-            <ThumbsUp className="w-3.5 h-3.5 text-brand" />
+            <ThumbsUp className="w-3.5 h-3.5 text-gray-450" />
             <span className="text-sm font-black font-mono leading-none">{totalReactions}</span>
           </div>
         </div>
 
         {/* People Reached */}
-        <div className="p-3 bg-[#111]/60 border border-gray-900 rounded-xl text-center">
-          <p className="text-[9px] font-mono text-gray-500 uppercase tracking-widest leading-none mb-1">Reached</p>
+        <div className="p-3 bg-black text-center">
+          <p className="text-[9px] font-mono text-gray-500 uppercase tracking-widest leading-none mb-1.5">Reached</p>
           <div className="flex items-center justify-center gap-1.5 text-white">
-            <Users className="w-3.5 h-3.5 text-brand" />
+            <Users className="w-3.5 h-3.5 text-gray-450" />
             <span className="text-sm font-black font-mono leading-none">{peopleReached}</span>
           </div>
         </div>
@@ -298,7 +298,7 @@ export default function UserProfile({
       <div className="space-y-2.5" id="profile-civic-badges-row">
         <div className="flex items-center justify-between">
           <h3 className="text-[10px] font-black font-mono text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-brand" />
+            <ShieldCheck className="w-3.5 h-3.5 text-gray-400" />
             Earned Civic Badges
           </h3>
           <span className="text-[8px] text-gray-500 font-mono">GAMIFIED MILESTONES</span>
@@ -310,8 +310,8 @@ export default function UserProfile({
               key={badge.id}
               className={`p-2.5 border rounded-xl flex flex-col items-center text-center transition-all relative overflow-hidden ${
                 badge.earned
-                  ? "bg-[#111] border-brand/30 shadow-[0_0_10px_rgba(57,255,20,0.05)]"
-                  : "bg-[#0A0A0A] border-gray-900/60 opacity-40 select-none"
+                  ? "bg-neutral-950 border-neutral-850"
+                  : "bg-black border-neutral-900 opacity-30 select-none"
               }`}
               title={badge.description}
             >
@@ -319,7 +319,7 @@ export default function UserProfile({
               <span className={`text-xl mb-1 ${badge.earned ? "scale-100" : "grayscale filter"}`}>
                 {badge.icon}
               </span>
-              <p className={`text-[9px] font-black uppercase tracking-wider leading-tight ${badge.earned ? "text-brand" : "text-gray-500"}`}>
+              <p className={`text-[9px] font-black uppercase tracking-wider leading-tight ${badge.earned ? "text-white" : "text-gray-500"}`}>
                 {badge.title}
               </p>
               <p className="text-[7.5px] text-gray-500 font-mono leading-normal mt-0.5 line-clamp-2 uppercase">
@@ -328,7 +328,7 @@ export default function UserProfile({
 
               {/* Verified badge status banner */}
               {badge.earned && (
-                <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-brand rounded-bl-sm" />
+                <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#39FF14] rounded-bl-sm" />
               )}
             </div>
           ))}
@@ -336,15 +336,15 @@ export default function UserProfile({
       </div>
 
       {/* Trust Score rules explanation / guide */}
-      <div className="p-3 bg-brand/5 border border-brand/10 rounded-lg text-[9px] text-gray-400 space-y-1 font-sans">
-        <p className="font-bold text-brand flex items-center gap-1 text-[10px] uppercase font-mono">
+      <div className="p-4 bg-neutral-950 border border-neutral-900 rounded-lg text-[9px] text-gray-450 space-y-2 font-sans">
+        <p className="font-bold text-white flex items-center gap-1 text-[10px] uppercase font-mono">
           <HelpCircle className="w-3.5 h-3.5 shrink-0" />
           Trust Metric Operations
         </p>
         <ul className="list-disc pl-4 space-y-0.5 font-mono uppercase tracking-wide text-[8.5px]">
-          <li>Community logs <span className="text-green-400">+5 TS</span> for every "Verified ✅" reaction.</li>
-          <li>Submitting fake logs <span className="text-red-400">-12 TS</span> for "Cap 🧢" consensus.</li>
-          <li>Official Status updates <span className="text-brand">up to +25 TS</span> when issue is Resolved!</li>
+          <li>Community logs <span className="text-[#39FF14]">+5 TS</span> for every "Verified ✅" reaction.</li>
+          <li>Submitting fake logs <span className="text-red-500">-12 TS</span> for "Cap 🧢" consensus.</li>
+          <li>Official Status updates <span className="text-[#39FF14]">up to +25 TS</span> when issue is Resolved!</li>
         </ul>
       </div>
 
@@ -352,24 +352,24 @@ export default function UserProfile({
       <div className="space-y-3" id="reporter-history-section">
         <div className="flex items-center justify-between">
           <h3 className="text-[10px] font-black font-mono text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-            <FileText className="w-3.5 h-3.5 text-brand" />
+            <FileText className="w-3.5 h-3.5 text-gray-400" />
             My Stories ({userIssues.length})
           </h3>
           <span className="text-[8px] text-gray-500 font-mono">REPORT REGISTRY</span>
         </div>
 
-        <div className="space-y-2 max-h-56 overflow-y-auto pr-1 scrollbar-thin">
+        <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1 scrollbar-none">
           {userIssues.length === 0 ? (
-            <div className="p-6 bg-[#111] border border-gray-900 rounded-xl text-center text-gray-500 text-xs">
+            <div className="p-6 bg-black border border-neutral-900 rounded-xl text-center text-gray-500 text-xs">
               <p>You haven't filed any grid reports yet.</p>
-              <p className="text-[8px] text-gray-600 font-mono mt-1 uppercase">TAP 'REPORT ISSUE' IN FOOTER TO FILE AN INCIDENT</p>
+              <p className="text-[8px] text-gray-650 font-mono mt-1 uppercase">TAP 'REPORT ISSUE' IN FOOTER TO FILE AN INCIDENT</p>
             </div>
           ) : (
             userIssues.map((issue) => (
               <div
                 key={issue.id}
                 onClick={() => onSelectIssue(issue)}
-                className="p-3 bg-[#111] hover:bg-[#141414] border border-gray-900 hover:border-brand/20 rounded-xl flex items-center justify-between cursor-pointer transition-all gap-2"
+                className="py-4 px-1 bg-black border-b border-neutral-900 hover:bg-neutral-950/40 flex items-center justify-between cursor-pointer transition-all gap-2"
                 id={`history-item-${issue.id}`}
               >
                 <div className="flex flex-col gap-1 min-w-0">
@@ -420,7 +420,7 @@ export default function UserProfile({
                       : issue.status === "Escalated"
                       ? "bg-red-500/10 text-red-400 border-red-500/20"
                       : issue.status === "Verified"
-                      ? "bg-brand/10 text-brand border-brand/20"
+                      ? "bg-[#39FF14]/10 text-[#39FF14] border-[#39FF14]/20"
                       : "bg-blue-500/10 text-blue-400 border-blue-500/20"
                   }`}>
                     {issue.status}

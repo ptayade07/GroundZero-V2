@@ -15,14 +15,24 @@ import UserProfile from "./components/UserProfile";
 import SocialFeed from "./components/SocialFeed";
 import Onboarding from "./components/Onboarding";
 import SearchPage from "./components/SearchPage";
-import { Map, Plus, BarChart3, User as UserIcon, ShieldAlert, Navigation, Layers, AlertCircle, Sparkles, Check, ChevronDown, ListFilter, SlidersHorizontal, MessageSquare, Search } from "lucide-react";
+import { Map, Plus, BarChart3, User as UserIcon, ShieldAlert, Navigation, Layers, AlertCircle, Sparkles, Check, ChevronDown, ListFilter, SlidersHorizontal, MessageSquare, Search, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
   // State managers
   const [user, setUser] = useState<User | null>(null);
   const [showLanding, setShowLanding] = useState(true);
-  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const onboardingCompleted = localStorage.getItem("gz_onboarding_completed") === "true";
+        return !onboardingCompleted;
+      } catch (e) {
+        return false;
+      }
+    }
+    return false;
+  });
   const [view, setView] = useState<"map" | "feed" | "search" | "report" | "profile">("map");
   const [issues, setIssues] = useState<Issue[]>([]);
   const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
@@ -121,11 +131,6 @@ export default function App() {
         setUser(parsed);
         setShowLanding(false);
         refreshUserTrustScore(parsed.id);
-
-        const onboardingCompleted = localStorage.getItem("gz_onboarding_completed") === "true";
-        if (!onboardingCompleted) {
-          setShowOnboarding(true);
-        }
       } catch (e) {
         localStorage.removeItem("gz_citizen");
       }
@@ -162,13 +167,7 @@ export default function App() {
         setUser(data.user);
         localStorage.setItem("gz_citizen", JSON.stringify(data.user));
         triggerToast(`Welcome to GroundZero Grid, ${data.user.name}!`);
-        
-        const onboardingCompleted = localStorage.getItem("gz_onboarding_completed") === "true";
-        if (!onboardingCompleted) {
-          setShowOnboarding(true);
-        } else {
-          setView("map");
-        }
+        setView("map");
       }
     } catch (err: any) {
       setErrorMessage(err.message || "Connection refused to GroundZero central server.");
@@ -396,6 +395,17 @@ export default function App() {
     return categoryMatches && statusMatches && searchMatches && timeMatches;
   });
 
+  if (showOnboarding) {
+    return (
+      <Onboarding
+        onComplete={() => {
+          localStorage.setItem("gz_onboarding_completed", "true");
+          setShowOnboarding(false);
+        }}
+      />
+    );
+  }
+
   if (!user) {
     if (showLanding) {
       return (
@@ -424,18 +434,6 @@ export default function App() {
         </div>
       );
     }
-  }
-
-  if (showOnboarding) {
-    return (
-      <Onboarding
-        onComplete={() => {
-          localStorage.setItem("gz_onboarding_completed", "true");
-          setShowOnboarding(false);
-          setView("map");
-        }}
-      />
-    );
   }
 
   return (
@@ -507,7 +505,7 @@ export default function App() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search radar reports..."
-                  className="w-full pl-3 pr-8 py-2 text-xs bg-[#0A0A0A]/95 border border-gray-800 hover:border-brand/40 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-brand shadow-lg backdrop-blur"
+                  className="w-full pl-3 pr-8 py-2 text-xs bg-black border border-neutral-900 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-[#39FF14]/50 backdrop-blur"
                   id="radar-search-input"
                 />
                 {searchQuery && (
@@ -535,8 +533,8 @@ export default function App() {
                       onClick={() => setTimeFilter(opt)}
                       className={`px-2.5 py-1 rounded-full text-[9px] font-mono tracking-wider font-bold shrink-0 transition-all cursor-pointer border ${
                         timeFilter === opt
-                          ? "bg-[#39FF14] text-[#0A0A0A] border-[#39FF14] shadow-[0_0_6px_rgba(57,255,20,0.3)]"
-                          : "bg-[#0A0A0A]/95 text-gray-500 border-gray-800/80 hover:text-white"
+                          ? "bg-[#39FF14] text-black border-[#39FF14]"
+                          : "bg-black text-gray-500 border-neutral-900 hover:text-white"
                       }`}
                     >
                       {label}
@@ -551,7 +549,7 @@ export default function App() {
                 <select
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value as any)}
-                  className="px-2 py-1 bg-[#0A0A0A]/95 border border-gray-800 rounded-md text-[10px] text-gray-300 font-mono outline-none shadow focus:border-brand/50"
+                  className="px-2 py-1 bg-black border border-neutral-900 rounded-md text-[10px] text-gray-300 font-mono outline-none focus:border-[#39FF14]/50"
                 >
                   <option value="all">ALL SECTORS</option>
                   <option value="flood">🌊 FLOODS</option>
@@ -568,7 +566,7 @@ export default function App() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value as any)}
-                  className="px-2 py-1 bg-[#0A0A0A]/95 border border-gray-800 rounded-md text-[10px] text-gray-300 font-mono outline-none shadow focus:border-brand/50"
+                  className="px-2 py-1 bg-black border border-neutral-900 rounded-md text-[10px] text-gray-300 font-mono outline-none focus:border-[#39FF14]/50"
                 >
                   <option value="all">ALL STATUS</option>
                   <option value="Reported">REPORTED</option>
@@ -580,8 +578,8 @@ export default function App() {
                 {/* Toggle Drawer button */}
                 <button
                   onClick={() => setShowFeedDrawer(!showFeedDrawer)}
-                  className={`px-2 py-1 bg-[#0A0A0A]/95 border rounded-md text-[10px] font-mono flex items-center gap-1 shrink-0 ${
-                    showFeedDrawer ? "border-brand text-brand" : "border-gray-800 text-gray-400 hover:text-white"
+                  className={`px-2 py-1 bg-black border rounded-md text-[10px] font-mono flex items-center gap-1 shrink-0 ${
+                    showFeedDrawer ? "border-[#39FF14] text-[#39FF14]" : "border-neutral-900 text-gray-400 hover:text-white"
                   }`}
                 >
                   <span>FEED LIST ({filteredIssues.length})</span>
@@ -596,16 +594,18 @@ export default function App() {
                   initial={{ opacity: 0, x: -300 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -300 }}
-                  className="absolute top-18 bottom-4 left-4 z-30 w-72 bg-[#0A0A0A]/95 border border-gray-800 rounded-xl shadow-2xl p-3 flex flex-col backdrop-blur max-h-[72vh] md:max-h-[80vh]"
+                  className="absolute top-18 bottom-4 left-4 z-30 w-72 bg-black border border-neutral-900 rounded-xl p-3 flex flex-col backdrop-blur max-h-[72vh] md:max-h-[80vh]"
                   id="feed-list-drawer"
                 >
-                  <div className="flex items-center justify-between border-b border-gray-800 pb-2 mb-2">
+                  <div className="flex items-center justify-between border-b border-neutral-900 pb-2 mb-2">
                     <span className="text-[10px] font-mono font-bold text-gray-400 uppercase">CIVIC COMPLAINT FEED</span>
                     <button
                       onClick={() => setShowFeedDrawer(false)}
-                      className="text-xs text-gray-500 hover:text-brand font-bold"
+                      className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all shrink-0 cursor-pointer"
+                      id="close-feed-drawer-btn"
+                      title="Close Feed"
                     >
-                      CLOSE
+                      <X className="w-4 h-4" />
                     </button>
                   </div>
 
@@ -620,8 +620,8 @@ export default function App() {
                             setSelectedIssue(issue);
                             setShowFeedDrawer(false); // Close feed to show map pin zoom
                           }}
-                          className={`p-2 bg-[#0A0A0A] hover:bg-[#141414] border rounded-lg cursor-pointer transition-all flex flex-col gap-1 ${
-                            selectedIssue?.id === issue.id ? "border-brand bg-[#141414]" : "border-gray-800/60"
+                          className={`p-2 bg-black hover:bg-neutral-950 border rounded-lg cursor-pointer transition-all flex flex-col gap-1 ${
+                            selectedIssue?.id === issue.id ? "border-[#39FF14] bg-neutral-950" : "border-neutral-900"
                           }`}
                         >
                           <div className="flex items-center justify-between">
@@ -735,12 +735,12 @@ export default function App() {
 
           {/* View 4: Profile & Dashboard combined */}
           <div className={`w-full h-full absolute inset-0 overflow-y-auto px-4 py-6 ${view === "profile" ? "block" : "hidden"}`}>
-            <div className="max-w-lg mx-auto mb-4 bg-[#0A0A0A]/90 border border-gray-800 rounded-xl p-1 flex">
+            <div className="max-w-lg mx-auto mb-4 bg-black border border-neutral-900 rounded-xl p-1 flex">
               <button
                 onClick={() => setProfileSubTab("registry")}
                 className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
                   profileSubTab === "registry"
-                    ? "bg-brand text-[#0A0A0A] shadow font-black"
+                    ? "bg-[#39FF14] text-black font-black"
                     : "text-gray-400 hover:text-white"
                 }`}
                 id="profile-subtab-registry"
@@ -751,7 +751,7 @@ export default function App() {
                 onClick={() => setProfileSubTab("dashboard")}
                 className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
                   profileSubTab === "dashboard"
-                    ? "bg-brand text-[#0A0A0A] shadow font-black"
+                    ? "bg-[#39FF14] text-black font-black"
                     : "text-gray-400 hover:text-white"
                 }`}
                 id="profile-subtab-dashboard"
@@ -781,7 +781,7 @@ export default function App() {
 
       {/* Global Bottom Navigation bar */}
       {user && (
-        <nav className="px-4 py-2 bg-[#0A0A0A]/95 border-t border-gray-900 flex items-center justify-around shrink-0 z-50 shadow-lg backdrop-blur">
+        <nav className="px-4 py-2 bg-black border-t border-neutral-900 flex items-center justify-around shrink-0 z-50 backdrop-blur">
           {/* Map Feed tab */}
           <button
             onClick={() => {
@@ -789,7 +789,7 @@ export default function App() {
               setIsSelectingLocationMode(false);
             }}
             className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all ${
-              view === "map" ? "text-brand scale-105 bg-brand/5 font-extrabold" : "text-gray-400 hover:text-white"
+              view === "map" ? "text-[#39FF14] font-extrabold" : "text-gray-400 hover:text-white"
             }`}
             id="nav-map-btn"
           >
@@ -804,7 +804,7 @@ export default function App() {
               setIsSelectingLocationMode(false);
             }}
             className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all ${
-              view === "feed" ? "text-brand scale-105 bg-brand/5 font-extrabold" : "text-gray-400 hover:text-white"
+              view === "feed" ? "text-[#39FF14] font-extrabold" : "text-gray-400 hover:text-white"
             }`}
             id="nav-feed-btn"
           >
@@ -819,7 +819,7 @@ export default function App() {
               setIsSelectingLocationMode(false);
             }}
             className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all ${
-              view === "search" ? "text-brand scale-105 bg-brand/5 font-extrabold" : "text-gray-400 hover:text-white"
+              view === "search" ? "text-[#39FF14] font-extrabold" : "text-gray-400 hover:text-white"
             }`}
             id="nav-search-btn"
           >
@@ -834,7 +834,7 @@ export default function App() {
               setIsSelectingLocationMode(false);
             }}
             className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all ${
-              view === "report" ? "text-brand scale-105 bg-brand/5 font-extrabold" : "text-gray-400 hover:text-white"
+              view === "report" ? "text-[#39FF14] font-extrabold" : "text-gray-400 hover:text-white"
             }`}
             id="nav-report-btn"
           >
@@ -849,7 +849,7 @@ export default function App() {
               setIsSelectingLocationMode(false);
             }}
             className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all ${
-              view === "profile" ? "text-brand scale-105 bg-brand/5 font-extrabold" : "text-gray-400 hover:text-white"
+              view === "profile" ? "text-[#39FF14] font-extrabold" : "text-gray-400 hover:text-white"
             }`}
             id="nav-profile-btn"
           >
@@ -868,8 +868,8 @@ export default function App() {
             exit={{ opacity: 0, y: 50 }}
             className="absolute bottom-20 left-4 right-4 z-50 max-w-sm mx-auto pointer-events-none"
           >
-            <div className="px-3 py-2.5 bg-brand border border-brand text-[#0A0A0A] text-xs font-black rounded-xl shadow-2xl flex items-center gap-2 backdrop-blur">
-              <Sparkles className="w-4 h-4 text-[#0A0A0A] animate-pulse" />
+            <div className="px-3 py-2.5 bg-[#39FF14] border border-[#39FF14] text-black text-xs font-black rounded-xl flex items-center gap-2 backdrop-blur">
+              <Sparkles className="w-4 h-4 text-black animate-pulse" />
               <span>{toastMessage}</span>
             </div>
           </motion.div>

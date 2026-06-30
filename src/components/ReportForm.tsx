@@ -342,36 +342,36 @@ export default function ReportForm({
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto bg-[#0A0A0A]/95 border border-gray-900 rounded-xl shadow-xl overflow-hidden p-4 md:p-6 text-white" id="report-creation-view">
-      <div className="flex items-center gap-2 mb-4">
+    <div className="w-full max-w-lg mx-auto bg-black border border-neutral-900 rounded-xl shadow-xl overflow-hidden p-6 md:p-8 text-white" id="report-creation-view">
+      <div className="flex items-center gap-2 mb-6">
         <button
           type="button"
           onClick={onCancel}
-          className="p-1.5 rounded-lg bg-[#141414] text-gray-400 hover:text-brand transition-all mr-1 cursor-pointer"
+          className="p-1.5 rounded-lg bg-neutral-900 text-gray-400 hover:text-white transition-all mr-1 cursor-pointer"
           id="report-back-btn"
         >
           <ArrowLeft className="w-4 h-4" />
         </button>
         <div>
-          <h2 className="text-base font-extrabold text-brand tracking-tight uppercase">What's happening around you?</h2>
-          <p className="text-[10px] text-gray-400 font-mono">BE THE REPORTER IN YOUR NEIGHBORHOOD</p>
+          <h2 className="text-base font-extrabold text-white tracking-tight uppercase">What's happening around you?</h2>
+          <p className="text-[10px] text-gray-500 font-mono">BE THE REPORTER IN YOUR NEIGHBORHOOD</p>
         </div>
       </div>
 
       {/* Linked Incident Banner if pre-linked parent post is active */}
       {parentIssue && (
-        <div className="mb-4 p-3 bg-brand/10 border border-brand/30 rounded-xl flex items-center justify-between text-xs animate-pulse">
+        <div className="mb-6 p-4 bg-neutral-950 border border-neutral-850 rounded-xl flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
             <span className="text-sm">🔗</span>
             <div>
-              <p className="font-bold text-brand">Linked to Incident</p>
-              <p className="text-[10px] text-gray-300 line-clamp-1">"{parentIssue.title}"</p>
+              <p className="font-bold text-white">Linked to Incident</p>
+              <p className="text-[10px] text-gray-400 line-clamp-1">"{parentIssue.title}"</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClearParentIssue}
-            className="px-2 py-1 bg-gray-900 hover:bg-gray-800 text-gray-300 rounded text-[9px] font-bold uppercase tracking-wider cursor-pointer"
+            className="px-2.5 py-1 bg-neutral-900 hover:bg-neutral-850 text-gray-300 rounded text-[9px] font-bold uppercase tracking-wider cursor-pointer"
           >
             Unlink
           </button>
@@ -397,10 +397,10 @@ export default function ReportForm({
 
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="w-full h-24 border border-dashed border-gray-800 rounded-lg flex flex-col items-center justify-center bg-[#0A0A0A] hover:border-brand/50 cursor-pointer transition-all gap-1 text-gray-400"
+            className="w-full h-24 border border-dashed border-neutral-800 rounded-lg flex flex-col items-center justify-center bg-black hover:border-neutral-700 cursor-pointer transition-all gap-1 text-gray-400"
             id="upload-placeholder-box"
           >
-            <Camera className="w-6 h-6 text-gray-500 hover:text-brand transition-all" />
+            <Camera className="w-6 h-6 text-gray-500 hover:text-white transition-all" />
             <span className="text-xs font-semibold">Upload Photos or Video / Capture</span>
             <span className="text-[9px] text-gray-600 font-mono">Max 5 Photos or 1 Video clip (Max 25MB video, 8MB photo)</span>
           </div>
@@ -445,20 +445,20 @@ export default function ReportForm({
           )}
 
           {isAiVisionLoading && (
-            <div className="flex items-center gap-1.5 mt-2.5 p-2 bg-brand/5 border border-brand/10 rounded-lg text-brand text-[10px] font-mono uppercase tracking-wide animate-pulse">
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-brand" />
+            <div className="flex items-center gap-1.5 mt-2.5 p-3.5 bg-neutral-950 border border-neutral-900 rounded-lg text-gray-300 text-[10px] font-mono uppercase tracking-wide animate-pulse">
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-gray-400" />
               <span>👁️ Gemini Vision is inspecting uploaded evidence...</span>
             </div>
           )}
 
           {aiVisionResult && (
-            <div className="mt-2.5 p-3 bg-[#111111] border border-brand/20 rounded-lg space-y-1.5" id="gemini-vision-card">
+            <div className="mt-2.5 p-4 bg-neutral-950 border border-neutral-900 rounded-lg space-y-2" id="gemini-vision-card">
               <p className="text-[11px] text-gray-300 font-sans leading-relaxed">
-                👁️ <span className="font-semibold text-brand">AI sees:</span> {aiVisionResult.description}
+                👁️ <span className="font-semibold text-white">AI sees:</span> {aiVisionResult.description}
               </p>
-              <div className="flex items-center gap-1.5 text-[9px] font-mono uppercase text-gray-400">
+              <div className="flex items-center gap-1.5 text-[9px] font-mono uppercase text-gray-500">
                 <span>✅ Auto-suggested category:</span>
-                <span className="px-2 py-0.5 bg-brand text-[#0A0A0A] rounded font-black">{aiVisionResult.suggestedCategory}</span>
+                <span className="px-2 py-0.5 bg-[#39FF14] text-black rounded font-black">{aiVisionResult.suggestedCategory}</span>
               </div>
             </div>
           )}
@@ -480,8 +480,8 @@ export default function ReportForm({
                 }}
                 className={`px-3 py-1.5 rounded-full border text-xs font-semibold shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
                   category === item.value
-                    ? "bg-brand text-[#0A0A0A] border-brand font-black"
-                    : "bg-[#141414] text-gray-400 border-gray-800 hover:border-gray-700 hover:text-white"
+                    ? "bg-[#39FF14] text-black border-[#39FF14] font-black"
+                    : "bg-black text-gray-400 border-neutral-900 hover:border-neutral-750 hover:text-white"
                 }`}
                 id={`manual-cat-${item.value}`}
               >
@@ -493,12 +493,12 @@ export default function ReportForm({
         </div>
 
         {/* AI Auto-categorize switch */}
-        <div className="flex items-center justify-between p-2.5 bg-brand/5 border border-brand/20 rounded-lg">
+        <div className="flex items-center justify-between p-4 bg-neutral-950 border border-neutral-900 rounded-lg">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-brand animate-pulse" />
+            <Sparkles className="w-4 h-4 text-gray-400" />
             <div>
-              <p className="text-xs font-bold text-brand">Gemini AI Auto-Categorizer</p>
-              <p className="text-[9px] text-gray-400">Classifies categories & crafts specific titles instantly</p>
+              <p className="text-xs font-bold text-white">Gemini AI Auto-Categorizer</p>
+              <p className="text-[9px] text-gray-500">Classifies categories & crafts specific titles instantly</p>
             </div>
           </div>
           <button
@@ -506,10 +506,10 @@ export default function ReportForm({
             onClick={() => {
               setUseAI(!useAI);
             }}
-            className={`w-10 h-6 rounded-full p-0.5 transition-colors cursor-pointer ${useAI ? "bg-brand" : "bg-gray-800"}`}
+            className={`w-10 h-6 rounded-full p-0.5 transition-colors cursor-pointer ${useAI ? "bg-[#39FF14]" : "bg-gray-800"}`}
             id="ai-categorize-toggle"
           >
-            <div className={`w-5 h-5 rounded-full bg-[#0A0A0A] transition-transform ${useAI ? "translate-x-4" : "translate-x-0"}`} />
+            <div className={`w-5 h-5 rounded-full bg-black transition-transform ${useAI ? "translate-x-4" : "translate-x-0"}`} />
           </button>
         </div>
 
@@ -523,7 +523,7 @@ export default function ReportForm({
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
             placeholder="Tell your story. What did you see, hear, or experience? Be the reporter."
-            className="w-full px-3 py-2 text-xs bg-[#0A0A0A] border border-gray-900 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-brand/60 font-sans resize-none"
+            className="w-full px-3 py-2 text-xs bg-black border border-neutral-900 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-neutral-700 font-sans resize-none"
             id="report-desc-textarea"
           />
 
@@ -541,7 +541,7 @@ export default function ReportForm({
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className="mt-3 p-4 bg-emerald-950/20 border-2 border-emerald-500/30 rounded-xl space-y-3 relative overflow-hidden"
+                className="mt-3 p-4 bg-neutral-950 border border-neutral-900 rounded-xl space-y-3 relative overflow-hidden"
                 id="gemini-ai-analysis-card"
               >
                 {/* Corner Glow */}
@@ -571,7 +571,7 @@ export default function ReportForm({
                       setSuccessMsg(`Applied suggested category "${aiAnalysisResult.category}" & dynamic headline!`);
                       setTimeout(() => setSuccessMsg(""), 3000);
                     }}
-                    className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-black text-[10px] font-mono font-black uppercase rounded-lg transition-all flex items-center gap-1 shadow-lg shadow-emerald-500/10 cursor-pointer"
+                    className="px-3 py-1.5 bg-[#39FF14] hover:bg-[#39FF14]/90 text-black text-[10px] font-mono font-black uppercase rounded-lg transition-all flex items-center gap-1 cursor-pointer"
                   >
                     <Check className="w-3.5 h-3.5 text-black shrink-0" />
                     <span>Use this</span>
@@ -584,7 +584,7 @@ export default function ReportForm({
                       setSuccessMsg("Manual override active. Please pick category & enter headline manually.");
                       setTimeout(() => setSuccessMsg(""), 3000);
                     }}
-                    className="px-3 py-1.5 bg-[#141414] hover:bg-[#1a1a1a] text-gray-300 hover:text-white border border-gray-800 text-[10px] font-mono font-bold uppercase rounded-lg transition-all cursor-pointer"
+                    className="px-3 py-1.5 bg-black hover:bg-neutral-900 text-gray-300 hover:text-white border border-neutral-900 text-[10px] font-mono font-bold uppercase rounded-lg transition-all cursor-pointer"
                   >
                     Edit manually
                   </button>
@@ -617,8 +617,8 @@ export default function ReportForm({
                 onClick={onEnterLocationSelectionMode}
                 className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                   selectedLocation
-                    ? "bg-[#141414] text-brand border-brand/50"
-                    : "bg-brand text-[#0A0A0A] border-brand hover:bg-brand/90 font-black"
+                    ? "bg-neutral-950 text-[#39FF14] border-neutral-800"
+                    : "bg-[#39FF14] text-black border-[#39FF14] hover:bg-[#39FF14]/90 font-black"
                 }`}
                 id="select-on-map-btn"
               >
@@ -630,11 +630,11 @@ export default function ReportForm({
                 type="button"
                 onClick={handleAutoGPS}
                 disabled={locationStatus === "detecting"}
-                className="flex items-center justify-center gap-1 px-3 py-2 bg-[#141414] border border-gray-800 hover:border-gray-700 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition-all disabled:opacity-50 cursor-pointer"
+                className="flex items-center justify-center gap-1 px-3 py-2 bg-neutral-950 border border-neutral-900 hover:border-neutral-850 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition-all disabled:opacity-50 cursor-pointer"
                 id="gps-trigger-btn"
               >
                 {locationStatus === "detecting" ? (
-                  <Loader2 className="w-3.5 h-3.5 animate-spin text-brand" />
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-gray-400" />
                 ) : (
                   <Navigation className="w-3.5 h-3.5" />
                 )}
@@ -644,7 +644,7 @@ export default function ReportForm({
 
             {/* Displaying selected location */}
             {selectedLocation ? (
-              <div className="px-2.5 py-1.5 bg-green-500/10 border border-green-500/30 rounded text-[10px] text-green-400 flex items-center gap-1.5 font-mono">
+              <div className="px-2.5 py-1.5 bg-neutral-950 border border-neutral-900 rounded text-[10px] text-gray-300 flex items-center gap-1.5 font-mono">
                 <Check className="w-3.5 h-3.5 shrink-0" />
                 <span>Locked Coords: ({selectedLocation.lat.toFixed(4)}, {selectedLocation.lng.toFixed(4)}) at {selectedLocation.area}</span>
               </div>
@@ -654,7 +654,7 @@ export default function ReportForm({
                 <select
                   value={manualArea}
                   onChange={handleManualAreaSelect}
-                  className="w-full px-2.5 py-1.5 text-xs bg-[#0A0A0A] border border-gray-900 rounded text-gray-300 focus:outline-none"
+                  className="w-full px-2.5 py-1.5 text-xs bg-neutral-950 border border-neutral-900 rounded text-gray-300 focus:outline-none"
                   id="neighborhood-manual-select"
                 >
                   <option value="">-- Choose Ward Neighborhood --</option>
@@ -668,7 +668,7 @@ export default function ReportForm({
         </div>
 
         {/* Step 5: Anonymous Toggle */}
-        <div className="flex items-center justify-between p-2.5 bg-[#0A0A0A] border border-gray-900 rounded-lg text-xs">
+        <div className="flex items-center justify-between p-4 bg-neutral-950 border border-neutral-900 rounded-lg text-xs">
           <div className="flex items-center gap-2">
             <EyeOff className="w-4 h-4 text-gray-400" />
             <div>
@@ -679,10 +679,10 @@ export default function ReportForm({
           <button
             type="button"
             onClick={() => setIsAnonymous(!isAnonymous)}
-            className={`w-10 h-6 rounded-full p-0.5 transition-colors cursor-pointer ${isAnonymous ? "bg-brand" : "bg-gray-800"}`}
+            className={`w-10 h-6 rounded-full p-0.5 transition-colors cursor-pointer ${isAnonymous ? "bg-[#39FF14]" : "bg-gray-800"}`}
             id="anonymous-report-toggle"
           >
-            <div className={`w-5 h-5 rounded-full bg-[#0A0A0A] transition-transform ${isAnonymous ? "translate-x-4" : "translate-x-0"}`} />
+            <div className={`w-5 h-5 rounded-full bg-black transition-transform ${isAnonymous ? "translate-x-4" : "translate-x-0"}`} />
           </button>
         </div>
 
@@ -716,12 +716,12 @@ export default function ReportForm({
           <button
             type="submit"
             disabled={isPending}
-            className="flex-[2] py-2.5 bg-brand hover:bg-brand/90 text-[#0A0A0A] rounded-lg text-xs font-black transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-brand/25 cursor-pointer"
+            className="flex-[2] py-2.5 bg-[#39FF14] hover:bg-[#39FF14]/90 text-black rounded-lg text-xs font-black transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-brand/25 cursor-pointer"
             id="report-submit-btn"
           >
             {isPending ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin text-[#0A0A0A]" />
+                <Loader2 className="w-4 h-4 animate-spin text-black" />
                 <span>{useAI ? "Gemini Auto-Detecting..." : "Logging to Radar..."}</span>
               </>
             ) : (

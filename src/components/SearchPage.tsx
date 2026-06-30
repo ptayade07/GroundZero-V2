@@ -121,7 +121,7 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
     <div className="max-w-lg mx-auto flex flex-col gap-5 pb-16" id="search-page-container">
       {/* Title Header */}
       <div className="flex items-center gap-2 mt-2">
-        <div className="p-2 bg-brand/10 border border-brand/20 rounded-xl">
+        <div className="p-2 bg-neutral-950 border border-neutral-900 rounded-xl">
           <Search className="w-5 h-5 text-brand" />
         </div>
         <div>
@@ -138,7 +138,7 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search reports, locations, reporters..."
-          className="w-full pl-10 pr-4 py-2.5 bg-[#0A0A0A]/90 border border-gray-800 rounded-xl text-xs text-white placeholder-gray-500 font-mono tracking-tight outline-none shadow-inner focus:border-brand/40 focus:ring-1 focus:ring-brand/20 transition-all"
+          className="w-full pl-10 pr-4 py-2.5 bg-black border border-neutral-900 rounded-xl text-xs text-white placeholder-gray-500 font-mono tracking-tight outline-none shadow-inner focus:border-neutral-700 transition-all"
           id="search-input-field"
         />
         {query && (
@@ -162,8 +162,8 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
             onClick={() => setActiveCategory(null)}
             className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 border transition-all ${
               !activeCategory
-                ? "bg-brand border-brand text-[#0A0A0A]"
-                : "bg-[#0A0A0A]/50 border-gray-800 text-gray-400 hover:text-white"
+                ? "bg-[#39FF14] border-[#39FF14] text-black animate-pulse"
+                : "bg-black border-neutral-900 text-gray-400 hover:text-white hover:border-neutral-700"
             }`}
           >
             All Sectors
@@ -177,7 +177,7 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
                 onClick={() => handleCategoryPillClick(cat)}
                 className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 border transition-all flex items-center gap-1 ${
                   isActive
-                    ? "bg-brand border-brand text-[#0A0A0A]"
+                    ? "bg-[#39FF14] border-[#39FF14] text-black"
                     : `${style.bg} ${style.border} ${style.text} hover:opacity-80`
                 }`}
               >
@@ -206,7 +206,7 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
                 <div
                   key={issue.id}
                   onClick={() => onSelectIssue(issue)}
-                  className="p-3 bg-[#0A0A0A]/70 hover:bg-[#141414]/90 border border-gray-900 hover:border-brand/30 rounded-xl cursor-pointer transition-all flex items-start gap-3 group"
+                  className="py-4 px-1 bg-black border-b border-neutral-900 hover:bg-neutral-950/40 cursor-pointer transition-all flex items-start gap-4 group"
                 >
                   <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 border border-gray-800/50">
                     <img
@@ -246,7 +246,7 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
                       ) : null}
                     </div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-brand self-center transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-white self-center transition-colors" />
                 </div>
               );
             })}
@@ -261,7 +261,7 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
         </span>
 
         {filteredIssues.length === 0 ? (
-          <div className="text-center py-12 bg-[#0A0A0A]/50 border border-gray-900 rounded-2xl flex flex-col items-center gap-2">
+          <div className="text-center py-12 bg-black border border-neutral-900 rounded-2xl flex flex-col items-center gap-2">
             <Search className="w-6 h-6 text-gray-700 animate-pulse" />
             <p className="text-xs text-gray-500 font-mono italic">No matches found. Try widening your criteria.</p>
           </div>
@@ -274,7 +274,7 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
                 <motion.div
                   key={issue.id}
                   onClick={() => onSelectIssue(issue)}
-                  className="aspect-square relative rounded-xl overflow-hidden border border-gray-950 bg-[#0A0A0A] group cursor-pointer"
+                  className="aspect-square relative rounded-xl overflow-hidden border border-neutral-900 bg-black group cursor-pointer"
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2, delay: Math.min(idx * 0.03, 0.3) }}

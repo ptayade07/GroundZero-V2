@@ -74,8 +74,8 @@ export default function AnalyticsDashboard({ metrics }: AnalyticsDashboardProps)
   if (!metrics) {
     return (
       <div className="flex flex-col items-center justify-center p-12 text-gray-400 gap-2">
-        <Activity className="w-8 h-8 animate-spin text-brand" />
-        <p className="text-xs font-mono uppercase tracking-widest text-brand">Compiling radar metrics...</p>
+        <Activity className="w-8 h-8 animate-spin text-[#39FF14]" />
+        <p className="text-xs font-mono uppercase tracking-widest text-[#39FF14]">Compiling radar metrics...</p>
       </div>
     );
   }
@@ -90,10 +90,10 @@ export default function AnalyticsDashboard({ metrics }: AnalyticsDashboardProps)
   );
 
   return (
-    <div className="w-full max-w-lg mx-auto bg-[#0A0A0A]/95 border border-gray-900 rounded-xl p-4 md:p-6 text-white space-y-6 overflow-y-auto max-h-[85vh] scrollbar-none" id="analytics-dashboard-view">
+    <div className="w-full max-w-lg mx-auto bg-black border border-neutral-900 rounded-xl p-4 md:p-6 text-white space-y-6 overflow-y-auto max-h-[85vh] scrollbar-none" id="analytics-dashboard-view">
       {/* Title */}
       <div>
-        <h2 className="text-base font-extrabold text-brand tracking-tight flex items-center gap-2">
+        <h2 className="text-base font-extrabold text-[#39FF14] tracking-tight flex items-center gap-2">
           <Activity className="w-4 h-4" />
           MUNICIPAL IMPACT RADAR
         </h2>
@@ -102,12 +102,12 @@ export default function AnalyticsDashboard({ metrics }: AnalyticsDashboardProps)
 
       {/* Grid: 3 core counters */}
       <div className="grid grid-cols-3 gap-2 text-center">
-        <div className="p-3 bg-[#0A0A0A] border border-gray-900 rounded-lg">
+        <div className="p-3 bg-black border border-neutral-900 rounded-lg">
           <p className="text-xl font-black text-white font-mono">{metrics.totalIssues}</p>
           <p className="text-[8px] text-gray-500 font-mono uppercase tracking-wide mt-1">TOTAL FILED</p>
         </div>
-        <div className="p-3 bg-brand/5 border border-brand/20 rounded-lg">
-          <p className="text-xl font-black text-brand font-mono">{metrics.unresolvedCount}</p>
+        <div className="p-3 bg-[#39FF14]/5 border border-[#39FF14]/20 rounded-lg">
+          <p className="text-xl font-black text-[#39FF14] font-mono">{metrics.unresolvedCount}</p>
           <p className="text-[8px] text-gray-400 font-mono uppercase tracking-wide mt-1">ACTIVE ISSUES</p>
         </div>
         <div className="p-3 bg-green-950/20 border border-green-500/30 rounded-lg">
@@ -117,7 +117,7 @@ export default function AnalyticsDashboard({ metrics }: AnalyticsDashboardProps)
       </div>
 
       {/* Circle resolution meter */}
-      <div className="flex items-center gap-4 p-4 bg-[#0A0A0A] border border-gray-900 rounded-xl">
+      <div className="flex items-center gap-4 p-4 bg-black border border-neutral-900 rounded-xl">
         <div className="relative w-16 h-16 shrink-0">
           <svg className="w-full h-full transform -rotate-90">
             <circle
@@ -157,13 +157,13 @@ export default function AnalyticsDashboard({ metrics }: AnalyticsDashboardProps)
       <div className="space-y-3" id="category-chart-section">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-bold font-mono text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-            <BarChart3 className="w-3.5 h-3.5 text-brand" />
+            <BarChart3 className="w-3.5 h-3.5 text-white" />
             OUTRAGE BY CATEGORY
           </h3>
           <span className="text-[8px] text-gray-500 font-mono">SECTOR METRICS</span>
         </div>
 
-        <div className="space-y-2.5 p-3.5 bg-[#0A0A0A] border border-gray-900 rounded-xl">
+        <div className="space-y-2.5 p-3.5 bg-black border border-neutral-900 rounded-xl">
           {(Object.entries(metrics.byCategory) as [Category, number][]).map(([cat, count]) => {
             const pct = metrics.totalIssues > 0 ? (count / metrics.totalIssues) * 100 : 0;
             const barColor = CATEGORY_COLORS[cat];
@@ -196,7 +196,7 @@ export default function AnalyticsDashboard({ metrics }: AnalyticsDashboardProps)
       <div className="space-y-3" id="area-heatmap-section">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-bold font-mono text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-            <Map className="w-3.5 h-3.5 text-brand" />
+            <Map className="w-3.5 h-3.5 text-white" />
             WARD HEATMAPS & LOCALITIES
           </h3>
           <span className="text-[8px] text-gray-500 font-mono">BY WARD AREA</span>
@@ -210,7 +210,7 @@ export default function AnalyticsDashboard({ metrics }: AnalyticsDashboardProps)
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search nearby neighborhoods (e.g., West End)..."
-            className="w-full pl-8 pr-3 py-1.5 text-[11px] bg-[#0A0A0A] border border-gray-900 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-brand/50"
+            className="w-full pl-8 pr-3 py-1.5 text-[11px] bg-black border border-neutral-900 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-[#39FF14]/50"
             id="ward-search-input"
           />
         </div>
@@ -224,7 +224,7 @@ export default function AnalyticsDashboard({ metrics }: AnalyticsDashboardProps)
               const areaResolvedPct = areaTotal > 0 ? (areaStats.resolved / areaTotal) * 100 : 0;
 
               return (
-                <div key={areaName} className="p-2.5 bg-[#0A0A0A] border border-gray-900 rounded-lg flex flex-col gap-1.5">
+                <div key={areaName} className="p-2.5 bg-black border border-neutral-900 rounded-lg flex flex-col gap-1.5">
                   <div className="flex items-center justify-between text-[11px]">
                     <span className="font-bold text-white tracking-tight">{areaName}</span>
                     <span className="text-[9px] text-gray-400 font-mono">
@@ -236,7 +236,7 @@ export default function AnalyticsDashboard({ metrics }: AnalyticsDashboardProps)
                   <div className="flex w-full h-2 bg-[#141414] rounded-full overflow-hidden">
                     {areaStats.resolved > 0 && (
                       <div
-                        className="h-full bg-brand"
+                        className="h-full bg-[#39FF14]"
                         style={{ width: `${(areaStats.resolved / areaTotal) * 100}%` }}
                         title={`Resolved: ${areaStats.resolved}`}
                       />
@@ -252,7 +252,7 @@ export default function AnalyticsDashboard({ metrics }: AnalyticsDashboardProps)
 
                   <div className="flex justify-between items-center text-[8px] text-gray-500 font-mono uppercase tracking-wide">
                     <span>MUNICIPAL CLEANUP INDEX</span>
-                    <span className={areaResolvedPct >= 70 ? "text-brand font-bold" : areaResolvedPct >= 40 ? "text-yellow-500 font-bold" : "text-red-500 font-bold"}>
+                    <span className={areaResolvedPct >= 70 ? "text-[#39FF14] font-bold" : areaResolvedPct >= 40 ? "text-yellow-500 font-bold" : "text-red-500 font-bold"}>
                       {Math.round(areaResolvedPct)}% RECOVERY
                     </span>
                   </div>
@@ -264,8 +264,8 @@ export default function AnalyticsDashboard({ metrics }: AnalyticsDashboardProps)
       </div>
 
       {/* Bottom disclaimer */}
-      <div className="p-2.5 bg-[#0A0A0A] border border-gray-900 rounded-lg text-center text-[9px] text-gray-600 flex items-center gap-1.5 justify-center">
-        <Flame className="w-3.5 h-3.5 text-brand animate-pulse" />
+      <div className="p-2.5 bg-black border border-neutral-900 rounded-lg text-center text-[9px] text-gray-600 flex items-center gap-1.5 justify-center">
+        <Flame className="w-3.5 h-3.5 text-[#39FF14] animate-pulse" />
         <span>GroundZero dashboard refreshes automatically as local ward officers resolve issues.</span>
       </div>
     </div>

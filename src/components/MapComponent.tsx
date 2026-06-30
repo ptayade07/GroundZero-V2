@@ -479,14 +479,14 @@ export default function MapComponent({
   };
 
   return (
-    <div className="relative w-full h-full bg-[#0A0A0A] overflow-hidden select-none" id="map-container-wrapper">
+    <div className="relative w-full h-full bg-black overflow-hidden select-none" id="map-container-wrapper">
       {/* Map view controls in top right */}
-      <div className="absolute top-4 right-4 z-[1000] flex items-center gap-1 bg-[#0A0A0A]/95 p-1 rounded-lg border border-gray-900/80 shadow-2xl backdrop-blur" id="map-view-controls">
+      <div className="absolute top-4 right-4 z-[1000] flex items-center gap-1 bg-neutral-950 p-1.5 rounded-lg border border-neutral-900 shadow-none backdrop-blur" id="map-view-controls">
         <button
           onClick={() => setViewMode("street")}
           className={`px-2.5 py-1 text-[9px] font-mono tracking-wider transition-all cursor-pointer rounded-md uppercase font-black border ${
             viewMode === "street"
-              ? "bg-[#39FF14] text-[#0A0A0A] border-[#39FF14] shadow-[0_0_8px_rgba(57,255,20,0.4)]"
+              ? "bg-[#39FF14] text-black border-[#39FF14]"
               : "bg-black text-gray-500 border-transparent hover:text-white"
           }`}
           id="btn-street-mode"
@@ -497,7 +497,7 @@ export default function MapComponent({
           onClick={() => setViewMode("satellite")}
           className={`px-2.5 py-1 text-[9px] font-mono tracking-wider transition-all cursor-pointer rounded-md uppercase font-black border ${
             viewMode === "satellite"
-              ? "bg-[#39FF14] text-[#0A0A0A] border-[#39FF14] shadow-[0_0_8px_rgba(57,255,20,0.4)]"
+              ? "bg-[#39FF14] text-black border-[#39FF14]"
               : "bg-black text-gray-500 border-transparent hover:text-white"
           }`}
           id="btn-satellite-mode"
@@ -526,7 +526,7 @@ export default function MapComponent({
       {/* Leaflet Core Map Component */}
       <div className="w-full h-full relative" id="leaflet-map-view">
         {!leafletLoaded && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[#0A0A0A] text-gray-400">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black text-gray-400">
             <Loader2 className="w-8 h-8 animate-spin text-[#39FF14]" />
             <p className="text-xs font-mono">Launching OpenStreetMap Engine...</p>
           </div>
@@ -537,8 +537,8 @@ export default function MapComponent({
       {/* Elegant Compass / Legend Footer (Floating and Collapsible) */}
       <div className="absolute bottom-4 left-4 z-[1000] flex flex-col items-start gap-1.5" id="map-legend-container">
         {isLegendOpen ? (
-          <div className="flex flex-col gap-1.5 p-2.5 bg-[#0A0A0A]/95 border border-gray-900 rounded-lg text-[9px] text-gray-400 backdrop-blur min-w-[145px] shadow-2xl">
-            <div className="flex items-center justify-between w-full pb-1 border-b border-gray-800 gap-4">
+          <div className="flex flex-col gap-1.5 p-3 bg-neutral-950 border border-neutral-900 rounded-lg text-[9px] text-gray-400 backdrop-blur min-w-[145px] shadow-none">
+            <div className="flex items-center justify-between w-full pb-1 border-b border-neutral-900 gap-4">
               <p className="font-bold text-gray-300 font-sans tracking-wide">RADAR LEGEND</p>
               <button 
                 onClick={() => setIsLegendOpen(false)}
@@ -547,7 +547,7 @@ export default function MapComponent({
                 ✕
               </button>
             </div>
-            <div className="flex flex-col gap-1 font-mono max-h-36 overflow-y-auto pr-1 scrollbar-thin w-full">
+            <div className="flex flex-col gap-1 font-mono max-h-36 overflow-y-auto pr-1 scrollbar-none w-full">
               {(Object.keys(CATEGORY_COLORS) as Category[]).map(cat => (
                 <div key={cat} className="flex items-center gap-1.5 text-[8.5px]">
                   <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: CATEGORY_COLORS[cat].hex }} />
@@ -559,7 +559,7 @@ export default function MapComponent({
         ) : (
           <button
             onClick={() => setIsLegendOpen(true)}
-            className="w-8 h-8 rounded-lg bg-[#0A0A0A]/95 border border-gray-900 flex items-center justify-center text-gray-400 hover:text-[#39FF14] hover:border-[#39FF14]/30 shadow-lg backdrop-blur cursor-pointer transition-all"
+            className="w-8 h-8 rounded-lg bg-neutral-950 border border-neutral-900 flex items-center justify-center text-gray-400 hover:text-[#39FF14] hover:border-neutral-700 shadow-none backdrop-blur cursor-pointer transition-all"
             title="Show Radar Legend"
             id="toggle-legend-btn"
           >

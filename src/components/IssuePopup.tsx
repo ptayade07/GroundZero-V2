@@ -169,7 +169,7 @@ export default function IssuePopup({
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 100 }}
-      className="absolute bottom-20 left-4 right-4 z-40 bg-[#0A0A0A]/95 border border-brand/40 rounded-2xl shadow-2xl shadow-brand/10 p-4 backdrop-blur-md max-w-md mx-auto max-h-[75vh] overflow-y-auto"
+      className="absolute bottom-20 left-4 right-4 z-40 bg-neutral-950 border border-neutral-900 rounded-2xl p-4 backdrop-blur-md max-w-md mx-auto max-h-[75vh] overflow-y-auto"
       id={`issue-popup-${issue.id}`}
     >
       {/* Spam detection alert ribbon */}
@@ -193,7 +193,7 @@ export default function IssuePopup({
           <h3 className="text-sm font-black text-white tracking-tight mt-1.5">{issue.title}</h3>
           <div className="flex items-center gap-2 text-[10px] text-gray-400 mt-1 font-mono">
             <span className="flex items-center gap-1">
-              <MapPin className="w-3 h-3 text-brand" />
+              <MapPin className="w-3 h-3 text-gray-400" />
               {issue.area}
             </span>
             <span>•</span>
@@ -203,7 +203,7 @@ export default function IssuePopup({
 
         <button
           onClick={onClose}
-          className="p-1.5 rounded-lg bg-[#141414] text-gray-400 hover:text-white transition-all shrink-0 cursor-pointer"
+          className="p-1.5 rounded-lg bg-black text-gray-400 hover:text-white transition-all shrink-0 cursor-pointer"
           id="close-popup-btn"
         >
           <X className="w-4 h-4" />
@@ -235,7 +235,7 @@ export default function IssuePopup({
             
             {/* Added By User Label Overlay */}
             {activeMedia && (
-              <div className="absolute bottom-2 left-2 px-2 py-0.5 bg-[#0A0A0A]/85 backdrop-blur-md border border-gray-800 rounded-lg text-[9px] text-gray-300 font-mono z-10 select-none">
+              <div className="absolute bottom-2 left-2 px-2 py-0.5 bg-black/90 backdrop-blur-md border border-neutral-900 rounded-lg text-[9px] text-gray-300 font-mono z-10 select-none">
                 📸 Added by: <span className="text-[#39FF14] font-bold">{activeMedia.addedBy}</span>
               </div>
             )}
@@ -286,7 +286,7 @@ export default function IssuePopup({
             
             {/* AI verification seal badge if high confidence */}
             {issue.status !== "Reported" && (
-              <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-0.5 bg-brand text-[#0A0A0A] rounded-full text-[8px] font-black uppercase shadow-lg z-10">
+              <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-0.5 bg-[#39FF14] text-black rounded-full text-[8px] font-black uppercase z-10">
                 <Sparkles className="w-2.5 h-2.5" />
                 VERIFIED SOURCE
               </div>
@@ -305,7 +305,7 @@ export default function IssuePopup({
                   type="button"
                   onClick={() => setActiveMediaIndex(idx)}
                   className={`w-12 h-12 rounded-lg border-2 overflow-hidden shrink-0 transition-all cursor-pointer ${
-                    activeMediaIndex === idx ? "border-brand" : "border-gray-800 opacity-65 hover:opacity-100"
+                    activeMediaIndex === idx ? "border-[#39FF14]" : "border-neutral-900 opacity-65 hover:opacity-100"
                   }`}
                   title={`Added by ${mediaItem.addedBy}`}
                 >
@@ -326,9 +326,9 @@ export default function IssuePopup({
       </div>
 
       {/* Grouped Perspectives Block */}
-      <div className="mb-3 p-3 bg-zinc-950/80 border border-gray-900 rounded-xl">
+      <div className="mb-3 p-4 bg-neutral-950 border border-neutral-900 rounded-xl">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-bold text-brand uppercase tracking-wider font-mono">
+          <span className="text-[10px] font-bold text-white uppercase tracking-wider font-mono">
             📢 {reporterCount} {reporterCount === 1 ? 'person reported this' : 'people reported this'}
           </span>
         </div>
@@ -342,8 +342,8 @@ export default function IssuePopup({
                 onClick={() => onSelectPerspective?.(sib)}
                 className={`w-full p-2 rounded-lg border text-left transition-all flex flex-col cursor-pointer ${
                   sib.id === issue.id
-                    ? "bg-brand/10 border-brand/35 text-white"
-                    : "bg-[#0A0A0A] border-gray-800/80 text-gray-400 hover:border-gray-700 hover:text-gray-200"
+                    ? "bg-neutral-900 border-neutral-800 text-white"
+                    : "bg-black border-neutral-900 text-gray-400 hover:border-neutral-850 hover:text-gray-200"
                 }`}
               >
                 <div className="flex justify-between items-center text-[9px] w-full font-semibold gap-1">
@@ -355,7 +355,7 @@ export default function IssuePopup({
                             : `Anonymous Citizen #` + (Math.abs(sib.id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0)) % 9000 + 1000))
                         : sib.reporterName}
                     </span>
-                    <span className="text-[7.5px] px-1 bg-black border border-brand/20 text-brand font-mono rounded font-black tracking-tight shrink-0">
+                    <span className="text-[7.5px] px-1 bg-black border border-neutral-800 text-white font-mono rounded font-black tracking-tight shrink-0">
                       🛡️ {sib.reporterTrustScore}
                     </span>
                   </div>
@@ -372,10 +372,10 @@ export default function IssuePopup({
 
       {/* Gemini Vision AI analysis explanation box */}
       {issue.aiDescription && (
-        <div className="mb-3 p-2.5 bg-gradient-to-r from-brand/5 to-brand/10 border border-brand/20 rounded-xl">
+        <div className="mb-3 p-4 bg-neutral-950 border border-neutral-900 rounded-xl">
           <div className="flex items-center gap-1 mb-1">
-            <Sparkles className="w-3.5 h-3.5 text-brand animate-pulse" />
-            <span className="text-[9px] font-black tracking-wider text-brand uppercase font-mono">GEMINI CO-PILOT radar</span>
+            <Sparkles className="w-3.5 h-3.5 text-[#39FF14]" />
+            <span className="text-[9px] font-black tracking-wider text-white uppercase font-mono">GEMINI CO-PILOT radar</span>
           </div>
           <p className="text-[10px] text-gray-400 italic leading-snug font-mono">
             "{issue.aiDescription}"
@@ -384,7 +384,7 @@ export default function IssuePopup({
       )}
 
       {/* Progress & Verification info */}
-      <div className="flex flex-col gap-2 p-2.5 bg-[#0A0A0A]/90 border border-gray-900 rounded-xl mb-3">
+      <div className="flex flex-col gap-2 p-2.5 bg-neutral-950 border border-neutral-900 rounded-xl mb-3">
         {/* Status row */}
         <div className="flex items-center justify-between">
           <span className="text-[9px] text-gray-500 uppercase tracking-wider font-mono">GRID STATUS</span>
@@ -412,22 +412,22 @@ export default function IssuePopup({
                 <div className="flex flex-col items-center flex-1">
                   <div className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[7px] font-bold ${
                     isLatest
-                      ? "bg-brand text-[#0A0A0A] animate-pulse"
+                      ? "bg-[#39FF14] text-black"
                       : isActive
-                      ? "bg-brand/20 text-brand border border-brand/30"
-                      : "bg-[#0A0A0A] text-gray-600 border border-gray-800"
+                      ? "bg-neutral-900 text-white border border-neutral-800"
+                      : "bg-black text-gray-600 border border-neutral-900"
                   }`}>
                     {idx + 1}
                   </div>
                   <span className={`text-[7px] mt-1 font-mono uppercase tracking-wide ${
-                    isActive ? "text-brand" : "text-gray-600"
+                    isActive ? "text-[#39FF14]" : "text-gray-600"
                   }`}>
                     {step}
                   </span>
                 </div>
                 {idx < 3 && (
                   <div className={`h-[1px] flex-1 -mt-3.5 ${
-                    idx < currentIdx ? "bg-brand" : "bg-gray-800"
+                    idx < currentIdx ? "bg-[#39FF14]" : "bg-neutral-900"
                   }`} />
                 )}
               </React.Fragment>
@@ -437,9 +437,9 @@ export default function IssuePopup({
       </div>
 
       {/* Submitter Details */}
-      <div className="flex items-center justify-between pb-3 mb-3 border-b border-gray-900 text-[10px]">
+      <div className="flex items-center justify-between pb-3 mb-3 border-b border-neutral-900 text-[10px]">
         <div className="flex items-center gap-1.5">
-          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#141414] to-[#0A0A0A] flex items-center justify-center text-brand border border-gray-800 text-[10px] font-black">
+          <div className="w-6 h-6 rounded-full bg-neutral-950 flex items-center justify-center text-white border border-neutral-900 text-[10px] font-black">
             {issue.isAnonymous ? "👤" : "⚡"}
           </div>
           <div>
@@ -451,7 +451,7 @@ export default function IssuePopup({
                       : `Anonymous Citizen #` + (Math.abs(issue.id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0)) % 9000 + 1000))
                   : issue.reporterName}
               </p>
-              <span className="text-[8px] px-1 bg-[#141414] border border-brand/20 text-brand font-mono rounded font-black tracking-tight shrink-0">
+              <span className="text-[8px] px-1 bg-neutral-900 border border-neutral-850 text-white font-mono rounded font-black tracking-tight shrink-0">
                 🛡️ {issue.reporterTrustScore}
               </span>
             </div>
@@ -465,7 +465,7 @@ export default function IssuePopup({
               {badge.label}
             </span>
           </div>
-          <p className="text-[8px] text-gray-500 font-mono mt-0.5 uppercase">TRUST: <span className="text-brand font-bold">{issue.reporterTrustScore}</span></p>
+          <p className="text-[8px] text-gray-500 font-mono mt-0.5 uppercase">TRUST: <span className="text-white font-bold">{issue.reporterTrustScore}</span></p>
         </div>
       </div>
 
@@ -475,14 +475,16 @@ export default function IssuePopup({
           onClick={() => onSeeThisToo?.(issue.id)}
           className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 border cursor-pointer ${
             issue.seeThisTooUsers?.includes(currentUserId)
-              ? "bg-[#39FF14]/15 border-brand text-brand shadow-[0_0_12px_rgba(57,255,20,0.25)]"
-              : "bg-[#141414] border-gray-800 text-gray-300 hover:border-gray-700 hover:text-white"
+              ? "bg-[#39FF14] text-black border-[#39FF14]"
+              : "bg-black border-neutral-900 text-gray-300 hover:border-neutral-800 hover:text-white"
           }`}
           id={`see-this-too-btn-${issue.id}`}
         >
           <span className="text-sm">👁️</span>
           <span>I See This Too</span>
-          <span className="font-mono text-[10px] px-2 py-0.5 bg-black/40 rounded-full text-[#39FF14]">
+          <span className={`font-mono text-[10px] px-2 py-0.5 rounded-full ${
+            issue.seeThisTooUsers?.includes(currentUserId) ? "bg-black/20 text-black" : "bg-neutral-900 text-[#39FF14]"
+          }`}>
             {issue.seeThisTooCount || 0}
           </span>
         </button>
@@ -498,8 +500,8 @@ export default function IssuePopup({
             onClick={() => onReact(issue.id, "verified")}
             className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-semibold transition-all cursor-pointer ${
               userReaction === "verified"
-                ? "bg-emerald-600/20 text-emerald-400 border-emerald-500 shadow-sm shadow-emerald-500/10"
-                : "bg-[#141414] text-gray-300 border-gray-800/80 hover:border-gray-700"
+                ? "bg-emerald-600/20 text-emerald-400 border-emerald-500 shadow-none"
+                : "bg-black text-gray-300 border-neutral-900 hover:border-neutral-800"
             }`}
             id={`reaction-verified-${issue.id}`}
             title="Real Report"
@@ -513,8 +515,8 @@ export default function IssuePopup({
             onClick={() => onReact(issue.id, "cap")}
             className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-semibold transition-all cursor-pointer ${
               userReaction === "cap"
-                ? "bg-red-600/20 text-red-400 border-red-500 shadow-sm shadow-red-500/10"
-                : "bg-[#141414] text-gray-300 border-gray-800/80 hover:border-gray-700"
+                ? "bg-red-600/20 text-red-400 border-red-500 shadow-none"
+                : "bg-black text-gray-300 border-neutral-900 hover:border-neutral-800"
             }`}
             id={`reaction-cap-${issue.id}`}
             title="Fake / Cap Report"
@@ -528,8 +530,8 @@ export default function IssuePopup({
             onClick={() => onReact(issue.id, "big_issue")}
             className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-semibold transition-all cursor-pointer ${
               userReaction === "big_issue"
-                ? "bg-brand/20 text-brand border border-brand shadow-sm shadow-brand/10"
-                : "bg-[#141414] text-gray-300 border-gray-800/80 hover:border-gray-700"
+                ? "bg-amber-600/20 text-amber-400 border-amber-500 shadow-none"
+                : "bg-black text-gray-300 border-neutral-900 hover:border-neutral-800"
             }`}
             id={`reaction-bigissue-${issue.id}`}
             title="Needs Attention ASAP"
@@ -543,8 +545,8 @@ export default function IssuePopup({
             onClick={() => onReact(issue.id, "bruh")}
             className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-semibold transition-all cursor-pointer ${
               userReaction === "bruh"
-                ? "bg-teal-600/20 text-teal-400 border-teal-500 shadow-sm shadow-teal-500/10"
-                : "bg-[#141414] text-gray-300 border-gray-800/80 hover:border-gray-700"
+                ? "bg-teal-600/20 text-teal-400 border-teal-500 shadow-none"
+                : "bg-black text-gray-300 border-neutral-900 hover:border-neutral-800"
             }`}
             id={`reaction-bruh-${issue.id}`}
             title="Wow / Bruh moment"
@@ -559,7 +561,7 @@ export default function IssuePopup({
       {onAddPerspective && (
         <button
           onClick={() => onAddPerspective(parentId)}
-          className="w-full mt-3 py-2 bg-gradient-to-r from-brand to-brand/85 hover:from-brand/90 hover:to-brand/75 text-[#0A0A0A] font-black uppercase text-xs rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
+          className="w-full mt-3 py-2.5 bg-[#39FF14] text-black font-black uppercase text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
           id="add-angle-btn"
         >
           <span>📸 Add Another Angle / Perspective</span>

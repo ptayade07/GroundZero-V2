@@ -44,7 +44,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
   return (
     <div
-      className="w-full h-screen bg-[#0A0A0A] flex flex-col justify-between p-6 text-white relative overflow-hidden"
+      className="w-full h-screen bg-black flex flex-col justify-between p-6 text-white relative overflow-hidden"
       id="onboarding-container"
     >
       {/* Background neon green grids/glows */}
@@ -54,7 +54,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       {/* Header Info */}
       <div className="flex justify-between items-center z-10 py-2 shrink-0">
         <div className="flex items-center gap-1.5">
-          <span className="px-1.5 py-0.5 bg-brand text-[#0A0A0A] text-[10px] font-mono font-black rounded tracking-widest uppercase">
+          <span className="px-1.5 py-0.5 bg-[#39FF14] text-black text-[10px] font-mono font-black rounded tracking-widest uppercase">
             GRID
           </span>
           <span className="text-[10px] text-gray-500 font-mono tracking-widest uppercase">
@@ -64,7 +64,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
         {currentSlide < slides.length - 1 && (
           <button
             onClick={handleSkip}
-            className="text-xs font-mono text-gray-500 hover:text-brand tracking-widest uppercase transition-colors cursor-pointer"
+            className="text-xs font-mono text-gray-500 hover:text-[#39FF14] tracking-widest uppercase transition-colors cursor-pointer"
             id="onboarding-skip-btn"
           >
             Skip
@@ -86,14 +86,14 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
           >
             {/* Big Icon Container with Pulse Glow */}
             <div className="relative">
-              <div className="absolute inset-0 bg-brand/10 rounded-full blur-2xl animate-pulse pointer-events-none" />
-              <div className="w-24 h-24 rounded-3xl bg-[#111111] border-2 border-brand/20 flex items-center justify-center text-5xl shadow-[0_0_40px_rgba(57,255,20,0.1)] relative z-10 select-none">
+              <div className="absolute inset-0 bg-[#39FF14]/5 rounded-full blur-2xl pointer-events-none" />
+              <div className="w-24 h-24 rounded-3xl bg-[#111111] border-2 border-neutral-900 flex items-center justify-center text-5xl relative z-10 select-none">
                 {slides[currentSlide].icon}
               </div>
             </div>
 
             {/* Tag / Category */}
-            <span className="text-[10px] font-mono font-black text-brand tracking-[0.25em] uppercase">
+            <span className="text-[10px] font-mono font-black text-[#39FF14] tracking-[0.25em] uppercase">
               {slides[currentSlide].tag}
             </span>
 
@@ -119,7 +119,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
               key={index}
               onClick={() => setCurrentSlide(index)}
               className={`h-2 rounded-full transition-all duration-300 ${
-                currentSlide === index ? "w-6 bg-brand shadow-[0_0_10px_rgba(57,255,20,0.4)]" : "w-2 bg-gray-800"
+                currentSlide === index ? "w-6 bg-[#39FF14]" : "w-2 bg-gray-800"
               }`}
               title={`Slide ${index + 1}`}
             />
@@ -131,7 +131,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
           {currentSlide === slides.length - 1 ? (
             <button
               onClick={handleNext}
-              className="w-full py-4 bg-brand text-[#0A0A0A] font-black font-mono text-sm uppercase tracking-widest rounded-xl transition-all duration-300 hover:bg-[#39FF14] hover:scale-[1.02] shadow-[0_0_25px_rgba(57,255,20,0.3)] flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-4 bg-[#39FF14] text-black font-black font-mono text-sm uppercase tracking-widest rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
               id="onboarding-get-started-btn"
             >
               <span>Get Started</span>
@@ -140,7 +140,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
           ) : (
             <button
               onClick={handleNext}
-              className="w-full py-4 bg-[#111111] hover:bg-[#151515] text-white hover:text-brand border border-gray-800 hover:border-brand/30 font-black font-mono text-sm uppercase tracking-widest rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-4 bg-[#111111] hover:bg-[#151515] text-white hover:text-[#39FF14] border border-neutral-900 hover:border-[#39FF14]/30 font-black font-mono text-sm uppercase tracking-widest rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
               id="onboarding-next-btn"
             >
               <span>Next Sector</span>

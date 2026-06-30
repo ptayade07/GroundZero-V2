@@ -5,7 +5,7 @@
 
 import React, { useState } from "react";
 import { Issue, Category, ReactionType } from "../types";
-import { Search, MapPin, Sparkles, Eye, ShieldCheck, HelpCircle } from "lucide-react";
+import { Search, MapPin, Sparkles, Eye, ShieldCheck, HelpCircle, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface SocialFeedProps {
@@ -36,6 +36,25 @@ const CATEGORY_MAP: Record<Category, { label: string; emoji: string; bg: string;
   "Weather": { label: "Weather", emoji: "☁️", bg: "bg-sky-500/20 border-sky-500/30", text: "text-sky-400", gradient: "from-[#0c4a6e] via-[#042238] to-[#00060d]" },
   "War / Conflict": { label: "Conflict", emoji: "💥", bg: "bg-gray-800/40 border-gray-700/30", text: "text-gray-400", gradient: "from-[#1c1917] via-[#0c0a09] to-black" },
   "Other": { label: "Other", emoji: "❓", bg: "bg-gray-700/20 border-gray-700/30", text: "text-gray-400", gradient: "from-[#18181b] via-[#09090b] to-black" }
+};
+
+const CATEGORY_SOLID_BG: Record<Category, string> = {
+  "Civic Issue": "bg-indigo-950",
+  "Pothole": "bg-amber-950",
+  "Flooding": "bg-blue-950",
+  "Power Cut": "bg-yellow-950",
+  "Garbage": "bg-neutral-900",
+  "Corruption": "bg-red-950",
+  "Government Failure": "bg-rose-950",
+  "Protest / Rally": "bg-pink-950",
+  "Local Drama": "bg-teal-950",
+  "Argument / Dispute": "bg-orange-950",
+  "Harassment": "bg-red-950",
+  "Breaking News": "bg-cyan-950",
+  "Village Problem": "bg-green-950",
+  "Weather": "bg-sky-950",
+  "War / Conflict": "bg-neutral-900",
+  "Other": "bg-neutral-900"
 };
 
 export default function SocialFeed({
@@ -146,9 +165,9 @@ export default function SocialFeed({
                     <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black via-black/85 to-transparent pointer-events-none" />
                   </>
                 ) : (
-                  <div className={`absolute inset-0 bg-gradient-to-b ${catConfig.gradient} flex flex-col items-center justify-center p-8 select-none`}>
+                  <div className={`absolute inset-0 ${CATEGORY_SOLID_BG[issue.category] || "bg-neutral-900"} flex flex-col items-center justify-center p-12 select-none`}>
                     {/* Centered category emoji as clean background accent with high-end scale effect */}
-                    <div className="text-[120px] font-black opacity-15 transform group-hover:scale-110 transition-transform duration-1000 ease-out">
+                    <div className="text-[120px] font-black opacity-10 transform group-hover:scale-110 transition-transform duration-1000 ease-out">
                       {catConfig.emoji}
                     </div>
                   </div>
@@ -211,8 +230,8 @@ export default function SocialFeed({
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
                       issue.seeThisTooUsers?.includes(currentUserId)
-                        ? "bg-[#39FF14] border-[#39FF14] text-[#0A0A0A] shadow-[0_0_12px_rgba(57,255,20,0.55)]"
-                        : "bg-black/60 border-gray-800 text-white hover:border-brand/40"
+                        ? "bg-[#39FF14] border-[#39FF14] text-black shadow-[0_0_12px_rgba(57,255,20,0.55)]"
+                        : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
                       <span className="text-base">👁️</span>
                     </div>
@@ -235,8 +254,8 @@ export default function SocialFeed({
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
                       userReaction === "verified"
-                        ? "bg-green-600 border-green-500 text-white shadow-[0_0_10px_rgba(34,197,94,0.5)]"
-                        : "bg-black/60 border-gray-800 text-white hover:border-brand/40"
+                        ? "bg-[#39FF14] border-[#39FF14] text-black shadow-[0_0_10px_rgba(57,255,20,0.5)]"
+                        : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
                       <span className="text-base">✅</span>
                     </div>
@@ -260,7 +279,7 @@ export default function SocialFeed({
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
                       userReaction === "cap"
                         ? "bg-red-600 border-red-500 text-white shadow-[0_0_10px_rgba(239,68,68,0.5)]"
-                        : "bg-black/60 border-gray-800 text-white hover:border-brand/40"
+                        : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
                       <span className="text-base">🧢</span>
                     </div>
@@ -283,8 +302,8 @@ export default function SocialFeed({
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
                       userReaction === "big_issue"
-                        ? "bg-brand border-brand text-[#0A0A0A] shadow-[0_0_10px_rgba(57,255,20,0.5)]"
-                        : "bg-black/60 border-gray-800 text-white hover:border-brand/40"
+                        ? "bg-brand border-brand text-black shadow-[0_0_10px_rgba(57,255,20,0.5)]"
+                        : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
                       <span className="text-base">🔥</span>
                     </div>
@@ -308,7 +327,7 @@ export default function SocialFeed({
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
                       userReaction === "bruh"
                         ? "bg-teal-600 border-teal-500 text-white shadow-[0_0_10px_rgba(13,148,136,0.5)]"
-                        : "bg-black/60 border-gray-800 text-white hover:border-brand/40"
+                        : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
                       <span className="text-base">💀</span>
                     </div>
@@ -346,7 +365,7 @@ export default function SocialFeed({
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 220 }}
-              className="absolute inset-x-0 bottom-0 max-h-[80%] bg-[#0A0A0A] border-t border-gray-800 rounded-t-2xl z-40 px-5 py-6 flex flex-col gap-4 overflow-y-auto pointer-events-auto shadow-2xl text-left"
+              className="absolute inset-x-0 bottom-0 max-h-[80%] bg-black border-t border-neutral-900 rounded-t-2xl z-40 px-6 py-8 flex flex-col gap-6 overflow-y-auto pointer-events-auto shadow-2xl text-left"
               id="details-bottom-sheet"
             >
               {/* Top drag handle indicator */}
@@ -364,14 +383,16 @@ export default function SocialFeed({
                 </div>
                 <button
                   onClick={() => setSelectedDetailPost(null)}
-                  className="px-3 py-1.5 bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white rounded-lg text-[10px] font-mono font-black uppercase transition-all shrink-0"
+                  className="p-1.5 rounded-lg bg-neutral-900 text-gray-400 hover:text-white transition-all shrink-0 cursor-pointer"
+                  id="close-bottom-sheet-btn"
+                  title="Close Detail Panel"
                 >
-                  CLOSE
+                  <X className="w-4 h-4" />
                 </button>
               </div>
 
               {/* Local Info panel */}
-              <div className="p-3 bg-black/40 border border-gray-900 rounded-xl space-y-2 text-xs">
+              <div className="p-4 bg-black border-b border-neutral-900 space-y-3.5 text-xs">
                 <div className="flex justify-between items-center text-[11px]">
                   <span className="text-gray-500 font-mono uppercase">📍 Area Sector:</span>
                   <span className="text-brand font-bold uppercase font-mono">{selectedDetailPost.area}</span>
@@ -405,7 +426,7 @@ export default function SocialFeed({
                 <span className="text-[10px] font-mono font-bold text-gray-500 uppercase tracking-widest block">
                   Detailed Complaint Description
                 </span>
-                <p className="text-xs text-gray-300 leading-relaxed font-sans bg-black/20 p-3.5 rounded-xl border border-gray-900 whitespace-pre-wrap">
+                <p className="text-xs text-gray-300 leading-relaxed font-sans bg-black p-4 whitespace-pre-wrap">
                   {selectedDetailPost.description}
                 </p>
               </div>
@@ -416,7 +437,7 @@ export default function SocialFeed({
                   <span className="text-[10px] font-mono font-black text-brand uppercase tracking-widest flex items-center gap-1">
                     <Sparkles className="w-3.5 h-3.5 text-brand" /> AI Analysis Insight
                   </span>
-                  <p className="text-xs text-gray-400 bg-brand/5 p-3 rounded-xl border border-brand/10 italic leading-relaxed">
+                  <p className="text-xs text-gray-400 bg-neutral-950 p-4 border border-neutral-900 italic leading-relaxed">
                     "{selectedDetailPost.aiDescription}"
                   </p>
                 </div>
@@ -429,7 +450,7 @@ export default function SocialFeed({
                     setSelectedDetailPost(null);
                     onSelectIssue(selectedDetailPost); // Center map and show popup
                   }}
-                  className="flex-1 py-3 bg-brand text-[#0A0A0A] rounded-xl text-xs font-black uppercase tracking-wider shadow-md hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5"
+                  className="flex-1 py-3 bg-brand text-black rounded-xl text-xs font-black uppercase tracking-wider shadow-md hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5"
                 >
                   <MapPin className="w-4 h-4" /> View on Local Radar Map
                 </button>
