@@ -14,7 +14,8 @@ import AnalyticsDashboard from "./components/AnalyticsDashboard";
 import UserProfile from "./components/UserProfile";
 import SocialFeed from "./components/SocialFeed";
 import Onboarding from "./components/Onboarding";
-import { Map, Plus, BarChart3, User as UserIcon, ShieldAlert, Navigation, Layers, AlertCircle, Sparkles, Check, ChevronDown, ListFilter, SlidersHorizontal, MessageSquare } from "lucide-react";
+import SearchPage from "./components/SearchPage";
+import { Map, Plus, BarChart3, User as UserIcon, ShieldAlert, Navigation, Layers, AlertCircle, Sparkles, Check, ChevronDown, ListFilter, SlidersHorizontal, MessageSquare, Search } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
@@ -22,7 +23,7 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [showLanding, setShowLanding] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [view, setView] = useState<"map" | "feed" | "report" | "profile">("map");
+  const [view, setView] = useState<"map" | "feed" | "search" | "report" | "profile">("map");
   const [issues, setIssues] = useState<Issue[]>([]);
   const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
   const [dashboardMetrics, setDashboardMetrics] = useState<DashboardMetrics | null>(null);
@@ -694,6 +695,19 @@ export default function App() {
             />
           </div>
 
+          {/* View: Search Page */}
+          <div className={`w-full h-full absolute inset-0 overflow-y-auto px-4 py-6 ${view === "search" ? "block" : "hidden"}`}>
+            <SearchPage
+              issues={issues}
+              currentUserId={user.id}
+              onSelectIssue={(issue) => {
+                setSelectedIssue(issue);
+                setView("map"); // Swaps to map to focus and show info popup
+                triggerToast(`Centering map on: ${issue.title}`);
+              }}
+            />
+          </div>
+
           {/* View 3: Report Form */}
           <div className={`w-full h-full absolute inset-0 overflow-y-auto px-4 py-6 ${view === "report" ? "block" : "hidden"}`}>
             <ReportForm
@@ -793,6 +807,21 @@ export default function App() {
           >
             <MessageSquare className="w-5 h-5" />
             <span className="text-[8px] font-mono uppercase tracking-wide">Civic Tea</span>
+          </button>
+
+          {/* Search Tab */}
+          <button
+            onClick={() => {
+              setView("search");
+              setIsSelectingLocationMode(false);
+            }}
+            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all ${
+              view === "search" ? "text-brand scale-105 bg-brand/5 font-extrabold" : "text-gray-400 hover:text-white"
+            }`}
+            id="nav-search-btn"
+          >
+            <Search className="w-5 h-5" />
+            <span className="text-[8px] font-mono uppercase tracking-wide">Search</span>
           </button>
 
           {/* Report Tab */}
