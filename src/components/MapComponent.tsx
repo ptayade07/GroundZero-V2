@@ -587,7 +587,7 @@ export default function MapComponent({
               {(Object.keys(CATEGORY_COLORS) as Category[]).map(cat => (
                 <div key={cat} className="flex items-center gap-1.5 text-[8.5px]">
                   <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: CATEGORY_COLORS[cat].hex }} />
-                  <span className="truncate">{CATEGORY_EMOJIS[cat]} {cat}</span>
+                  <span className="truncate">{cat}</span>
                 </div>
               ))}
             </div>

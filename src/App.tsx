@@ -393,14 +393,38 @@ export default function App() {
   const filteredIssues = issues.filter(issue => {
     const categoryMatches = categoryFilter === "all" || issue.category === categoryFilter;
     const statusMatches = statusFilter === "all" || issue.status === statusFilter;
-    const searchMatches = searchQuery === "" ||
-      issue.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      issue.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      issue.area.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const query = searchQuery.trim().toLowerCase();
+    let searchMatches = false;
 
-    // Time filter matching
+    if (query === "") {
+      searchMatches = true;
+    } else {
+      const textMatch = issue.title.toLowerCase().includes(query) ||
+        issue.description.toLowerCase().includes(query) ||
+        issue.area.toLowerCase().includes(query);
+
+      let keywordTimeMatch = false;
+      const createdTime = new Date(issue.createdAt).getTime();
+      const now = Date.now();
+      const diffMs = now - createdTime;
+
+      if (query === "today") {
+        const createdDate = new Date(issue.createdAt).toDateString();
+        const todayDate = new Date().toDateString();
+        keywordTimeMatch = createdDate === todayDate || diffMs <= 24 * 60 * 60 * 1000;
+      } else if (query === "2hrs" || query === "2 hours" || query === "2h" || query === "recent") {
+        keywordTimeMatch = diffMs <= 2 * 60 * 60 * 1000;
+      } else if (query === "week" || query === "this week" || query === "7 days") {
+        keywordTimeMatch = diffMs <= 7 * 24 * 60 * 60 * 1000;
+      }
+
+      searchMatches = textMatch || keywordTimeMatch;
+    }
+
+    // Default manual time filter logic
     let timeMatches = true;
-    if (timeFilter !== "all") {
+    if (timeFilter !== "all" && query === "") {
       const createdTime = new Date(issue.createdAt).getTime();
       const now = Date.now();
       const diffMs = now - createdTime;
@@ -500,9 +524,6 @@ export default function App() {
                   <span className="animate-pulse">LIVE</span>
                 </span>
               </div>
-              <p className="text-[8px] text-gray-500 font-mono leading-none tracking-widest uppercase mt-0.5">
-                LIVE HYPERLOCAL CITIZEN GRID
-              </p>
             </div>
           </div>
  
@@ -573,16 +594,19 @@ export default function App() {
           {/* View 1: Feed & Map (Google Maps Engine) */}
           <div className={`w-full h-full absolute inset-0 ${view === "map" ? "block" : "hidden"}`}>
             {/* Filter Floating controls on Map */}
-            <div className="absolute top-4 left-4 z-30 flex flex-col gap-2 max-w-xs right-20">
+            <div className="absolute top-4 left-4 z-30 flex flex-col gap-2 w-auto max-w-[calc(100%-120px)] md:max-w-xs">
               
               {/* Search Bar */}
-              <div className="relative">
+              <div className="relative flex items-center">
+                <Search className={`absolute left-2.5 w-3.5 h-3.5 ${
+                  theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
+                }`} />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search radar reports..."
-                  className={`w-full pl-3 pr-8 py-2 text-xs border rounded-lg outline-none focus:outline-none backdrop-blur transition-all ${
+                  placeholder="Search..."
+                  className={`w-full pl-8 pr-8 py-2 text-xs border rounded-lg outline-none focus:outline-none backdrop-blur transition-all ${
                     theme === 'dark' 
                       ? 'bg-black border-neutral-900 text-white placeholder-gray-600 focus:border-[#39FF14]/50' 
                       : 'bg-white/90 border-gray-200 text-neutral-900 placeholder-gray-400 focus:border-[#2ECC0F]/50 shadow-xs'
@@ -592,42 +616,13 @@ export default function App() {
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery("")}
-                    className={`absolute right-2 top-2 text-xs font-bold transition-all ${
+                    className={`absolute right-2 text-xs font-bold transition-all ${
                       theme === 'dark' ? 'text-gray-500 hover:text-white' : 'text-gray-400 hover:text-black'
                     }`}
                   >
                     ×
                   </button>
                 )}
-              </div>
-
-              {/* Time filter row below search bar */}
-              <div className="flex gap-1 overflow-x-auto pb-0.5 scrollbar-none" id="radar-time-filters">
-                {(["2hrs", "today", "week", "all"] as const).map((opt) => {
-                  const label = {
-                    "2hrs": "Last 2hrs",
-                    "today": "Today",
-                    "week": "This Week",
-                    "all": "All Time"
-                  }[opt];
-                  return (
-                    <button
-                      key={opt}
-                      onClick={() => setTimeFilter(opt)}
-                      className={`px-2.5 py-1 rounded-full text-[9px] font-mono tracking-wider font-bold shrink-0 transition-all cursor-pointer border ${
-                        timeFilter === opt
-                          ? theme === 'dark'
-                            ? "bg-[#39FF14] text-black border-[#39FF14]"
-                            : "bg-[#2ECC0F] text-white border-[#2ECC0F] shadow-xs"
-                          : theme === 'dark'
-                            ? "bg-black text-gray-500 border-neutral-900 hover:text-white"
-                            : "bg-white text-gray-500 border-gray-200 hover:text-black shadow-xs"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  );
-                })}
               </div>
 
               {/* Filters Collapse Row */}
@@ -812,6 +807,8 @@ export default function App() {
               setTimeFilter={setTimeFilter}
               onSeeThisToo={handleSeeThisToo}
               onNavigateToSearch={() => setView("search")}
+              onRefreshIssues={fetchIssues}
+              onTriggerToast={triggerToast}
             />
           </div>
 

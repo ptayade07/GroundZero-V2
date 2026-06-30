@@ -33,7 +33,10 @@ import {
   User,
   AlertTriangle,
   Check,
-  Flag
+  Flag,
+  Heart,
+  Share2,
+  Send
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -48,6 +51,8 @@ interface SocialFeedProps {
   onNavigateToSearch?: () => void;
   theme?: "light" | "dark";
   onToggleTheme?: () => void;
+  onRefreshIssues?: () => void;
+  onTriggerToast?: (msg: string) => void;
 }
 
 const CATEGORY_MAP: Record<Category, { label: string; icon: React.ComponentType<any>; bg: string; text: string; gradient: string }> = {
@@ -117,9 +122,14 @@ export default function SocialFeed({
   onSeeThisToo,
   onNavigateToSearch,
   theme = "dark",
-  onToggleTheme
+  onToggleTheme,
+  onRefreshIssues,
+  onTriggerToast
 }: SocialFeedProps) {
   const [selectedDetailPost, setSelectedDetailPost] = useState<Issue | null>(null);
+  const [activeCommentsPost, setActiveCommentsPost] = useState<Issue | null>(null);
+  const [commentText, setCommentText] = useState("");
+  const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
 
   const timeAgo = (dateStr: string) => {
     try {
@@ -338,10 +348,53 @@ export default function SocialFeed({
                   </div>
                 </div>
 
-                {/* 3. Overlaid TikTok-style vertical icon column on the right side */}
+                {/* 3. Overlaid TikTok-style vertical icon column on the right side (Heart, Eye/SeeToo, MessageCircle, Share) */}
                 <div className="absolute bottom-8 right-3.5 z-10 flex flex-col items-center gap-4 pointer-events-auto">
                   
-                  {/* Eye - 'I See This Too' Button */}
+                  {/* HEART (LIKE) */}
+                  <button
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      try {
+                        const res = await fetch(`/api/issues/${issue.id}/like`, {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ userId: currentUserId })
+                        });
+                        if (res.ok) {
+                          onRefreshIssues?.();
+                          onTriggerToast?.("Like reaction updated!");
+                        }
+                      } catch (err) {
+                        console.error("Error liking issue:", err);
+                      }
+                    }}
+                    className="flex flex-col items-center gap-0.5 group active:scale-95 transition-transform"
+                    title="Like report"
+                    id={`tiktok-like-${issue.id}`}
+                  >
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
+                      issue.likedUsers?.includes(currentUserId)
+                        ? "bg-red-500 border-red-500 text-white shadow-[0_0_12px_rgba(239,68,68,0.55)]"
+                        : isCardLight
+                          ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
+                          : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
+                    }`}>
+                      <Heart className={`w-5 h-5 ${issue.likedUsers?.includes(currentUserId) ? "fill-white" : ""}`} />
+                    </div>
+                    <span className={`text-[9px] font-mono font-black ${
+                      isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
+                    }`}>
+                      {issue.likesCount || 0}
+                    </span>
+                    <span className={`text-[7px] font-mono font-extrabold uppercase tracking-tighter leading-none text-center ${
+                      isCardLight ? 'text-gray-500' : 'text-gray-400'
+                    }`}>
+                      LIKE
+                    </span>
+                  </button>
+
+                  {/* EYE (SEE TOO) */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -374,131 +427,62 @@ export default function SocialFeed({
                     </span>
                   </button>
 
-                  {/* Verified */}
+                  {/* COMMENT */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      onReact(issue.id, "verified");
+                      setActiveCommentsPost(issue);
                     }}
                     className="flex flex-col items-center gap-0.5 group active:scale-95 transition-transform"
-                    id={`tiktok-react-verified-${issue.id}`}
+                    title="View Comments"
+                    id={`tiktok-comment-${issue.id}`}
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
-                      userReaction === "verified"
+                      activeCommentsPost?.id === issue.id
                         ? isCardLight
-                          ? "bg-[#2ECC0F] border-[#2ECC0F] text-white shadow-md"
-                          : "bg-[#39FF14] border-[#39FF14] text-black shadow-[0_0_10px_rgba(57,255,20,0.5)]"
+                          ? "bg-blue-500 border-blue-500 text-white shadow-md"
+                          : "bg-blue-600 border-blue-600 text-white shadow-[0_0_12px_rgba(59,130,246,0.55)]"
                         : isCardLight
                           ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
                           : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
-                      <Check className="w-5 h-5" />
+                      <MessageCircle className="w-5 h-5" />
                     </div>
                     <span className={`text-[9px] font-mono font-black ${
                       isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
                     }`}>
-                      {issue.reactions.verified || 0}
+                      {issue.comments?.length || 0}
                     </span>
                     <span className={`text-[7px] font-mono font-extrabold uppercase tracking-tighter leading-none text-center ${
                       isCardLight ? 'text-gray-500' : 'text-gray-400'
                     }`}>
-                      VOUCH
+                      COMMENT
                     </span>
                   </button>
 
-                  {/* Cap */}
+                  {/* SHARE */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      onReact(issue.id, "cap");
+                      const reportUrl = `${window.location.origin}/#report-${issue.id}`;
+                      navigator.clipboard.writeText(reportUrl);
+                      onTriggerToast?.("Report share link copied to clipboard!");
                     }}
                     className="flex flex-col items-center gap-0.5 group active:scale-95 transition-transform"
-                    id={`tiktok-react-cap-${issue.id}`}
+                    title="Share report"
+                    id={`tiktok-share-${issue.id}`}
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
-                      userReaction === "cap"
-                        ? isCardLight
-                          ? "bg-red-500 border-red-500 text-white shadow-md"
-                          : "bg-red-600 border-red-500 text-white shadow-[0_0_10px_rgba(239,68,68,0.5)]"
-                        : isCardLight
-                          ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
-                          : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
+                      isCardLight
+                        ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
+                        : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
-                      <Flag className="w-5 h-5" />
+                      <Share2 className="w-5 h-5" />
                     </div>
                     <span className={`text-[9px] font-mono font-black ${
                       isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
                     }`}>
-                      {issue.reactions.cap || 0}
-                    </span>
-                    <span className={`text-[7px] font-mono font-extrabold uppercase tracking-tighter leading-none text-center ${
-                      isCardLight ? 'text-gray-500' : 'text-gray-400'
-                    }`}>
-                      CAP
-                    </span>
-                  </button>
-
-                  {/* Big Issue */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onReact(issue.id, "big_issue");
-                    }}
-                    className="flex flex-col items-center gap-0.5 group active:scale-95 transition-transform"
-                    id={`tiktok-react-big-${issue.id}`}
-                  >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
-                      userReaction === "big_issue"
-                        ? isCardLight
-                          ? "bg-[#2ECC0F] border-[#2ECC0F] text-white shadow-md"
-                          : "bg-brand border-brand text-black shadow-[0_0_10px_rgba(57,255,20,0.5)]"
-                        : isCardLight
-                          ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
-                          : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
-                    }`}>
-                      <Flame className="w-5 h-5" />
-                    </div>
-                    <span className={`text-[9px] font-mono font-black ${
-                      isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
-                    }`}>
-                      {issue.reactions.big_issue || 0}
-                    </span>
-                    <span className={`text-[7px] font-mono font-extrabold uppercase tracking-tighter leading-none text-center ${
-                      isCardLight ? 'text-gray-500' : 'text-gray-400'
-                    }`}>
-                      HOT
-                    </span>
-                  </button>
-
-                  {/* Bruh */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onReact(issue.id, "bruh");
-                    }}
-                    className="flex flex-col items-center gap-0.5 group active:scale-95 transition-transform"
-                    id={`tiktok-react-bruh-${issue.id}`}
-                  >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
-                      userReaction === "bruh"
-                        ? isCardLight
-                          ? "bg-teal-600 border-teal-500 text-white shadow-md"
-                          : "bg-teal-600 border-teal-500 text-white shadow-[0_0_10px_rgba(13,148,136,0.5)]"
-                        : isCardLight
-                          ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
-                          : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
-                    }`}>
-                      <AlertTriangle className="w-5 h-5" />
-                    </div>
-                    <span className={`text-[9px] font-mono font-black ${
-                      isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
-                    }`}>
-                      {issue.reactions.bruh || 0}
-                    </span>
-                    <span className={`text-[7px] font-mono font-extrabold uppercase tracking-tighter leading-none text-center ${
-                      isCardLight ? 'text-gray-500' : 'text-gray-400'
-                    }`}>
-                      BRUH
+                      SHARE
                     </span>
                   </button>
 
@@ -631,6 +615,218 @@ export default function SocialFeed({
                 </button>
               </div>
 
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* 4. Comments Drawer / Panel Overlay */}
+      <AnimatePresence>
+        {activeCommentsPost && (
+          <>
+            {/* Backdrop filter */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setActiveCommentsPost(null)}
+              className="absolute inset-0 bg-black/75 z-40 pointer-events-auto"
+            />
+            {/* Drawer */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 220 }}
+              className={`absolute top-0 right-0 w-full sm:w-96 h-full z-50 border-l flex flex-col pointer-events-auto shadow-2xl ${
+                theme === 'dark' ? 'bg-neutral-950 border-neutral-900 text-white' : 'bg-white border-gray-200 text-neutral-900'
+              }`}
+              id="comments-drawer-panel"
+            >
+              {/* Header */}
+              <div className={`p-4 border-b flex items-center justify-between ${
+                theme === 'dark' ? 'border-neutral-900 bg-black' : 'border-gray-100 bg-gray-50'
+              }`}>
+                <div className="flex flex-col text-left">
+                  <span className="text-[9px] font-mono font-bold text-gray-500 uppercase tracking-widest">CIVIC TALK GRID</span>
+                  <span className="text-xs font-bold truncate max-w-[200px] uppercase">{activeCommentsPost.title}</span>
+                </div>
+                <button
+                  onClick={() => setActiveCommentsPost(null)}
+                  className={`p-1.5 rounded-lg transition-all shrink-0 cursor-pointer ${
+                    theme === 'dark' ? 'bg-neutral-900 text-gray-400 hover:text-white' : 'bg-gray-100 text-gray-500 hover:text-black'
+                  }`}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Comments List Content */}
+              <div className="flex flex-col h-full overflow-hidden">
+                
+                {/* 1. Comment Bar & Emoji Selector Container (Top) */}
+                <div className={`p-4 border-b flex flex-col gap-3 ${
+                  theme === 'dark' ? 'bg-neutral-950/80' : 'bg-gray-50/50'
+                }`}>
+                  
+                  {/* Emoji options block (Top of the comments bar) */}
+                  <div className="flex flex-col gap-1 items-start">
+                    <span className="text-[8px] font-mono text-gray-500 uppercase tracking-wider">SELECT COMPLAINT VOUCH EFFECT</span>
+                    <div className="flex gap-1.5 overflow-x-auto w-full pb-0.5 scrollbar-none">
+                      {[
+                        { code: "verified", label: "VERIFIED", icon: Check, colorClass: "text-emerald-500 bg-emerald-500/10 border-emerald-500/35" },
+                        { code: "cap", label: "CAP", icon: Flag, colorClass: "text-red-500 bg-red-500/10 border-red-500/35" },
+                        { code: "big_issue", label: "BIG ISSUE", icon: Flame, colorClass: "text-amber-500 bg-amber-500/10 border-amber-500/35" },
+                        { code: "bruh", label: "BRUH", icon: AlertTriangle, colorClass: "text-teal-500 bg-teal-500/10 border-teal-500/35" }
+                      ].map((em) => {
+                        const isSelected = selectedEmoji === em.code;
+                        return (
+                          <button
+                            key={em.code}
+                            type="button"
+                            onClick={() => setSelectedEmoji(selectedEmoji === em.code ? null : em.code)}
+                            className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-mono tracking-wider font-black uppercase border transition-all cursor-pointer ${
+                              isSelected
+                                ? (theme === 'dark'
+                                  ? "bg-[#39FF14] text-black border-[#39FF14] shadow-[0_0_8px_rgba(57,255,20,0.4)]"
+                                  : "bg-[#2ECC0F] text-white border-[#2ECC0F] shadow-xs")
+                                : (theme === 'dark'
+                                  ? "bg-black border-neutral-900 text-gray-400 hover:text-white"
+                                  : "bg-white border-gray-250 text-gray-700 hover:border-gray-400 shadow-xs")
+                            }`}
+                          >
+                            <em.icon className={`w-3 h-3 ${isSelected ? "" : em.colorClass.split(" ")[0]}`} />
+                            <span>{em.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Input field and send button */}
+                  <form
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      if (!commentText.trim()) return;
+
+                      try {
+                        const res = await fetch(`/api/issues/${activeCommentsPost.id}/comments`, {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            userId: currentUserId,
+                            userName: "Citizen Reporter",
+                            text: commentText.trim(),
+                            emoji: selectedEmoji || undefined
+                          })
+                        });
+
+                        if (res.ok) {
+                          const data = await res.json();
+                          // Update comments state locally and refresh parent
+                          activeCommentsPost.comments = data.issue.comments;
+                          activeCommentsPost.reactions = data.issue.reactions;
+                          setCommentText("");
+                          setSelectedEmoji(null);
+                          onRefreshIssues?.();
+                          onTriggerToast?.("Comment broadcasted into operations grid!");
+                        }
+                      } catch (err) {
+                        console.error("Error submitting comment:", err);
+                      }
+                    }}
+                    className="relative flex items-center"
+                  >
+                    <input
+                      type="text"
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      placeholder="Contribute information / spill details..."
+                      className={`w-full pl-3 pr-10 py-2 text-xs border rounded-xl outline-none focus:outline-none transition-all ${
+                        theme === 'dark'
+                          ? 'bg-black border-neutral-900 text-white placeholder-gray-600 focus:border-[#39FF14]/50'
+                          : 'bg-white border-gray-250 text-neutral-900 placeholder-gray-400 focus:border-[#2ECC0F]/50 shadow-xs'
+                      }`}
+                    />
+                    <button
+                      type="submit"
+                      disabled={!commentText.trim()}
+                      className={`absolute right-1.5 p-1.5 rounded-lg transition-all ${
+                        commentText.trim()
+                          ? (theme === 'dark' ? 'text-[#39FF14] hover:bg-neutral-900' : 'text-[#2ECC0F] hover:bg-gray-100')
+                          : 'text-gray-500 opacity-50 cursor-not-allowed'
+                      }`}
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                    </button>
+                  </form>
+                </div>
+
+                {/* 2. Comments List Scrollable Container (Below) */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-none text-left">
+                  {!activeCommentsPost.comments || activeCommentsPost.comments.length === 0 ? (
+                    <div className="text-center py-12 text-gray-500 flex flex-col items-center gap-1">
+                      <MessageSquare className="w-6 h-6 text-gray-600 mb-1" />
+                      <p className="text-[10px] font-mono uppercase font-bold">GRID SILENCE</p>
+                      <p className="text-[9px] font-mono text-gray-600">No verified testimonials broadcasted yet.</p>
+                    </div>
+                  ) : (
+                    [...activeCommentsPost.comments]
+                      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                      .map((comm) => {
+                        return (
+                          <div
+                            key={comm.id}
+                            className={`p-3 border rounded-xl flex flex-col gap-1.5 ${
+                              theme === 'dark' ? 'bg-black border-neutral-900/60' : 'bg-gray-50/80 border-gray-150 shadow-2xs'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="flex items-center gap-1.5">
+                                <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-black uppercase ${
+                                  theme === 'dark' ? 'bg-neutral-900 text-white border border-neutral-800' : 'bg-gray-200 text-neutral-800 border border-gray-300'
+                                }`}>
+                                  {comm.userName ? comm.userName[0] : "C"}
+                                </div>
+                                <span className={`text-[10px] font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-neutral-900'}`}>
+                                  {comm.userName || "Anonymous Citizen"}
+                                </span>
+                              </div>
+                              <span className="text-[8px] text-gray-500 font-mono">
+                                {timeAgo(comm.createdAt)}
+                              </span>
+                            </div>
+
+                            <p className={`text-xs ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} leading-snug break-words`}>
+                              {comm.text}
+                            </p>
+
+                            {comm.emoji && (
+                              <div className="flex items-center gap-1 mt-0.5">
+                                <span className={`text-[8.5px] px-1.5 py-0.2 rounded font-mono font-black border uppercase tracking-wider shrink-0 flex items-center gap-1 ${
+                                  comm.emoji === "verified" || comm.emoji === "✅"
+                                    ? "text-emerald-500 border-emerald-500/20 bg-emerald-500/5"
+                                    : comm.emoji === "cap" || comm.emoji === "🧢"
+                                    ? "text-red-500 border-red-500/20 bg-red-500/5"
+                                    : comm.emoji === "big_issue" || comm.emoji === "🔥"
+                                    ? "text-amber-500 border-amber-500/20 bg-amber-500/5"
+                                    : "text-teal-500 border-teal-500/20 bg-teal-500/5"
+                                }`}>
+                                  {comm.emoji === "verified" || comm.emoji === "✅" ? <Check className="w-2.5 h-2.5" /> :
+                                   comm.emoji === "cap" || comm.emoji === "🧢" ? <Flag className="w-2.5 h-2.5" /> :
+                                   comm.emoji === "big_issue" || comm.emoji === "🔥" ? <Flame className="w-2.5 h-2.5" /> :
+                                   <AlertTriangle className="w-2.5 h-2.5" />}
+                                  <span>{comm.emoji.toUpperCase()}</span>
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })
+                  )}
+                </div>
+
+              </div>
             </motion.div>
           </>
         )}

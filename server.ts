@@ -83,6 +83,26 @@ function loadIssues(): Issue[] {
         updated.seeThisTooUsers = [];
         upgraded = true;
       }
+      if (updated.likesCount === undefined) {
+        updated.likesCount = issue.id === "seed-1" ? 8 : (issue.id === "seed-2" ? 15 : 3);
+        upgraded = true;
+      }
+      if (updated.likedUsers === undefined) {
+        updated.likedUsers = [];
+        upgraded = true;
+      }
+      if (updated.comments === undefined) {
+        updated.comments = [
+          {
+            id: "seed-comment-1",
+            userId: "user-3",
+            userName: "Sarah Jenkins",
+            text: "This is absolutely unacceptable. Town Hall needs a complete investigation!",
+            createdAt: new Date(Date.now() - 300000).toISOString()
+          }
+        ];
+        upgraded = true;
+      }
       return updated;
     });
     if (upgraded) {
@@ -755,6 +775,91 @@ async function startServer() {
     }
 
     issue.seeThisTooCount = issue.seeThisTooUsers.length;
+
+    saveIssues(activeIssues);
+
+    res.json({
+      success: true,
+      issue
+    });
+  });
+
+  // Like endpoint: toggles like for a user on an issue
+  app.post("/api/issues/:id/like", (req, res) => {
+    const { id } = req.params;
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ error: "Missing userId" });
+    }
+
+    const issue = activeIssues.find(i => i.id === id);
+    if (!issue) {
+      return res.status(404).json({ error: "Issue not found" });
+    }
+
+    if (!issue.likedUsers) {
+      issue.likedUsers = [];
+    }
+
+    const index = issue.likedUsers.indexOf(userId);
+    if (index > -1) {
+      issue.likedUsers.splice(index, 1);
+    } else {
+      issue.likedUsers.push(userId);
+    }
+
+    issue.likesCount = issue.likedUsers.length;
+
+    saveIssues(activeIssues);
+
+    res.json({
+      success: true,
+      issue
+    });
+  });
+
+  // Comments endpoint: adds a comment and optional emoji reaction
+  app.post("/api/issues/:id/comments", (req, res) => {
+    const { id } = req.params;
+    const { userId, userName, text, emoji } = req.body;
+
+    if (!userId || !userName || !text) {
+      return res.status(400).json({ error: "Missing userId, userName, or text" });
+    }
+
+    const issue = activeIssues.find(i => i.id === id);
+    if (!issue) {
+      return res.status(404).json({ error: "Issue not found" });
+    }
+
+    if (!issue.comments) {
+      issue.comments = [];
+    }
+
+    const newComment = {
+      id: "comment-" + Math.random().toString(36).substring(2, 9),
+      userId,
+      userName,
+      text,
+      createdAt: new Date().toISOString(),
+      emoji: emoji || undefined
+    };
+
+    issue.comments.push(newComment);
+
+    // If they selected an emoji reaction, increment that reaction on the issue as well!
+    if (emoji) {
+      if (emoji === "✅" || emoji === "verified") {
+        issue.reactions.verified = (issue.reactions.verified || 0) + 1;
+      } else if (emoji === "🧢" || emoji === "cap") {
+        issue.reactions.cap = (issue.reactions.cap || 0) + 1;
+      } else if (emoji === "🔥" || emoji === "big_issue") {
+        issue.reactions.big_issue = (issue.reactions.big_issue || 0) + 1;
+      } else if (emoji === "💀" || emoji === "bruh") {
+        issue.reactions.bruh = (issue.reactions.bruh || 0) + 1;
+      }
+    }
 
     saveIssues(activeIssues);
 

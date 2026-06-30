@@ -39,6 +39,15 @@ export interface Reactions {
   bruh: number;
 }
 
+export interface Comment {
+  id: string;
+  userId: string;
+  userName: string;
+  text: string;
+  createdAt: string;
+  emoji?: string;
+}
+
 export interface Issue {
   id: string;
   title: string;
@@ -63,6 +72,11 @@ export interface Issue {
   // I See This Too counter and users
   seeThisTooCount?: number;
   seeThisTooUsers?: string[];
+  // Likes support
+  likesCount?: number;
+  likedUsers?: string[];
+  // Comments list
+  comments?: Comment[];
   // AI-generated fields
   aiDescription?: string; // Gemini Vision image analysis
   isSpam?: boolean; // Spam flag

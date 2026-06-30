@@ -202,7 +202,7 @@ export default function IssuePopup({
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 100 }}
-      className={`absolute bottom-20 left-4 right-4 z-40 border rounded-2xl p-4 backdrop-blur-md max-w-md mx-auto max-h-[75vh] overflow-y-auto ${
+      className={`absolute bottom-20 left-4 right-4 z-40 border rounded-2xl p-4 backdrop-blur-md max-w-md mx-auto max-h-[60vh] overflow-y-auto ${
         theme === 'dark' ? 'bg-neutral-950 border-neutral-900 text-white' : 'bg-white border-gray-200 shadow-xl text-neutral-900'
       }`}
       id={`issue-popup-${issue.id}`}
