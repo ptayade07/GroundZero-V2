@@ -15,7 +15,7 @@ import UserProfile from "./components/UserProfile";
 import SocialFeed from "./components/SocialFeed";
 import Onboarding from "./components/Onboarding";
 import SearchPage from "./components/SearchPage";
-import { Map, Plus, BarChart3, User as UserIcon, ShieldAlert, Navigation, Layers, AlertCircle, Sparkles, Check, ChevronDown, ListFilter, SlidersHorizontal, MessageSquare, Search, X, Sun, Moon } from "lucide-react";
+import { Map, Plus, BarChart3, User as UserIcon, ShieldAlert, Navigation, Layers, AlertCircle, Sparkles, Check, ChevronDown, ListFilter, SlidersHorizontal, MessageSquare, Search, X, Sun, Moon, Eye, EyeOff } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
@@ -525,20 +525,31 @@ export default function App() {
             {user ? (
               <div
                 onClick={() => setView("profile")}
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs cursor-pointer transition-all font-mono border ${
+                className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs cursor-pointer transition-all font-mono border ${
                   theme === 'dark' 
                     ? 'bg-[#0A0A0A] border-gray-800 text-white hover:border-brand/40' 
                     : 'bg-white border-gray-250 text-neutral-850 hover:border-[#2ECC0F]/40 shadow-xs'
                 }`}
                 id="top-profile-badge"
               >
-                <span className={`text-[10px] animate-pulse ${theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}`}>●</span>
-                <span className={`font-sans font-medium line-clamp-1 max-w-[80px] text-[10px] ${
-                  theme === 'dark' ? 'text-gray-400' : 'text-neutral-700'
+                {/* Profile picture or icon */}
+                <div className={`w-5 h-5 rounded-full overflow-hidden flex items-center justify-center shrink-0 border ${
+                  theme === 'dark' ? 'bg-neutral-900 border-neutral-800' : 'bg-gray-100 border-gray-200'
                 }`}>
-                  {user.isAnonymous ? "Anonymous" : user.name.split(" ")[0]}
-                </span>
-                <span className={`px-1 py-0.2 rounded text-[8px] font-bold ${
+                  {user.isAnonymous ? (
+                    <EyeOff className="w-3 h-3 text-gray-400" />
+                  ) : user.avatarUrl ? (
+                    user.avatarUrl.startsWith("data:") || user.avatarUrl.startsWith("http") ? (
+                      <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    ) : (
+                      <span className="text-[10px] leading-none select-none">{user.avatarUrl}</span>
+                    )
+                  ) : (
+                    <UserIcon className="w-3 h-3 text-gray-500" />
+                  )}
+                </div>
+
+                <span className={`px-1.5 py-0.5 rounded-full text-[8px] font-bold ${
                   theme === 'dark' ? 'bg-brand/10 text-brand' : 'bg-[#2ECC0F]/10 text-[#2ECC0F]'
                 }`}>
                   {user.trustScore} TS
@@ -632,22 +643,22 @@ export default function App() {
                   }`}
                 >
                   <option value="all">ALL SECTORS</option>
-                  <option value="Civic Issue">🏢 CIVIC ISSUES</option>
-                  <option value="Pothole">🕳️ POTHOLES</option>
-                  <option value="Flooding">🌊 FLOODS</option>
-                  <option value="Power Cut">🔌 POWER CUTS</option>
-                  <option value="Garbage">🗑️ GARBAGE</option>
-                  <option value="Corruption">💼 CORRUPTION</option>
-                  <option value="Government Failure">🏛️ GOVT FAILURE</option>
-                  <option value="Protest / Rally">📣 PROTESTS</option>
-                  <option value="Local Drama">🍵 LOCAL DRAMA</option>
-                  <option value="Argument / Dispute">🗣️ DISPUTES</option>
-                  <option value="Harassment">⚠️ HARASSMENT</option>
-                  <option value="Breaking News">📰 BREAKING NEWS</option>
-                  <option value="Village Problem">🏡 VILLAGE PROBS</option>
-                  <option value="Weather">☁️ WEATHER</option>
-                  <option value="War / Conflict">💥 CONFLICTS</option>
-                  <option value="Other">❓ OTHER</option>
+                  <option value="Civic Issue">CIVIC ISSUES</option>
+                  <option value="Pothole">POTHOLES</option>
+                  <option value="Flooding">FLOODS</option>
+                  <option value="Power Cut">POWER CUTS</option>
+                  <option value="Garbage">GARBAGE</option>
+                  <option value="Corruption">CORRUPTION</option>
+                  <option value="Government Failure">GOVT FAILURE</option>
+                  <option value="Protest / Rally">PROTESTS</option>
+                  <option value="Local Drama">LOCAL DRAMA</option>
+                  <option value="Argument / Dispute">DISPUTES</option>
+                  <option value="Harassment">HARASSMENT</option>
+                  <option value="Breaking News">BREAKING NEWS</option>
+                  <option value="Village Problem">VILLAGE PROBS</option>
+                  <option value="Weather">WEATHER</option>
+                  <option value="War / Conflict">CONFLICTS</option>
+                  <option value="Other">OTHER</option>
                 </select>
 
                 {/* Status Filter selector */}
@@ -747,7 +758,7 @@ export default function App() {
                           <h4 className={`text-xs font-bold leading-tight line-clamp-1 ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>{issue.title}</h4>
                           <p className={`text-[10px] line-clamp-1 leading-snug ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{issue.description}</p>
                           <div className="flex items-center justify-between text-[8px] text-gray-500 font-mono mt-0.5">
-                            <span>✅ {issue.reactions.verified} vouches</span>
+                            <span className="flex items-center gap-0.5"><Check className="w-2.5 h-2.5 text-emerald-500" /> {issue.reactions.verified} vouches</span>
                             <span className={`uppercase font-bold ${theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}`}>{issue.status}</span>
                           </div>
                         </div>
@@ -848,7 +859,7 @@ export default function App() {
             }`}>
               <button
                 onClick={() => setProfileSubTab("registry")}
-                className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer ${
+                className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                   profileSubTab === "registry"
                     ? theme === "dark"
                       ? "bg-[#39FF14] text-black font-black"
@@ -859,11 +870,12 @@ export default function App() {
                 }`}
                 id="profile-subtab-registry"
               >
-                👤 My Profile
+                <UserIcon className="w-3.5 h-3.5" />
+                <span>My Profile</span>
               </button>
               <button
                 onClick={() => setProfileSubTab("dashboard")}
-                className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer ${
+                className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                   profileSubTab === "dashboard"
                     ? theme === "dark"
                       ? "bg-[#39FF14] text-black font-black"
@@ -874,7 +886,8 @@ export default function App() {
                 }`}
                 id="profile-subtab-dashboard"
               >
-                📊 Impact Dashboard
+                <BarChart3 className="w-3.5 h-3.5" />
+                <span>Impact Dashboard</span>
               </button>
             </div>
 

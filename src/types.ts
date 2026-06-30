@@ -29,6 +29,7 @@ export interface User {
   name: string;
   trustScore: number;
   isAnonymous?: boolean;
+  avatarUrl?: string;
 }
 
 export interface Reactions {

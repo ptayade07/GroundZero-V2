@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Sparkles, ArrowRight, ShieldAlert } from "lucide-react";
+import { Sparkles, ArrowRight, ShieldAlert, MapPin, CheckCircle, Zap } from "lucide-react";
 
 interface OnboardingProps {
   onComplete: () => void;
@@ -12,19 +12,19 @@ export default function Onboarding({ onComplete, theme = "dark" }: OnboardingPro
 
   const slides = [
     {
-      icon: "📍",
+      icon: <MapPin className={`w-10 h-10 ${theme === 'dark' ? 'text-[#39FF14]' : 'text-[#2ECC0F]'}`} />,
       title: "Be the Reporter",
       description: "See something happening around you? Post it. Photo, video, or text. You are on the ground — we are not.",
       tag: "REAL-TIME BROADCASTS"
     },
     {
-      icon: "✅",
+      icon: <CheckCircle className={`w-10 h-10 ${theme === 'dark' ? 'text-[#39FF14]' : 'text-[#2ECC0F]'}`} />,
       title: "Verify the Truth",
-      description: "Community decides what is real. Cap it if it is fake. Vouch it if you see it too. No editor needed.",
+      description: "Community decides what is real. Flag any fake info as CAP. Vouch it if you see it too. No editor needed.",
       tag: "CROWD VERIFICATION"
     },
     {
-      icon: "⚡",
+      icon: <Zap className={`w-10 h-10 ${theme === 'dark' ? 'text-[#39FF14]' : 'text-[#2ECC0F]'}`} />,
       title: "Hold Power Accountable",
       description: "Corruption, government failures, local injustice — post it anonymously. Your voice has reach. Their secrets do not.",
       tag: "DECRYPTED OPERATIONS"

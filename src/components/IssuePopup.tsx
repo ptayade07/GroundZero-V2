@@ -5,7 +5,38 @@
 
 import React, { useState } from "react";
 import { Issue, Status, Category, ReactionType } from "../types";
-import { X, Calendar, MapPin, User, ShieldCheck, AlertCircle, Sparkles, CheckCircle, ShieldAlert, AlertTriangle } from "lucide-react";
+import {
+  X,
+  Calendar,
+  MapPin,
+  User,
+  ShieldCheck,
+  AlertCircle,
+  Sparkles,
+  CheckCircle,
+  ShieldAlert,
+  AlertTriangle,
+  Building,
+  Construction,
+  Waves,
+  Zap,
+  Trash2,
+  Scale,
+  Landmark,
+  Megaphone,
+  MessageCircle,
+  MessageSquare,
+  Newspaper,
+  Home,
+  Cloud,
+  Flame,
+  HelpCircle,
+  Eye,
+  Camera,
+  Video,
+  Check,
+  Flag
+} from "lucide-react";
 import { motion } from "motion/react";
 
 interface IssuePopupProps {
@@ -20,23 +51,23 @@ interface IssuePopupProps {
   theme?: "light" | "dark";
 }
 
-const CATEGORY_STYLES: Record<Category, { label: string; emoji: string; bg: string; text: string; border: string }> = {
-  "Civic Issue": { label: "Civic Issue", emoji: "🏢", bg: "bg-indigo-950/50", text: "text-indigo-400", border: "border-indigo-500/30" },
-  "Pothole": { label: "Pothole Crater", emoji: "🕳️", bg: "bg-orange-950/50", text: "text-orange-400", border: "border-orange-500/30" },
-  "Flooding": { label: "Flooding", emoji: "🌊", bg: "bg-blue-950/50", text: "text-blue-400", border: "border-blue-500/30" },
-  "Power Cut": { label: "Power Blackout", emoji: "🔌", bg: "bg-yellow-950/50", text: "text-yellow-400", border: "border-yellow-500/30" },
-  "Garbage": { label: "Garbage Pile", emoji: "🗑️", bg: "bg-amber-950/50", text: "text-amber-500", border: "border-amber-700/30" },
-  "Corruption": { label: "Corruption", emoji: "💼", bg: "bg-red-950/50", text: "text-red-400", border: "border-red-500/30" },
-  "Government Failure": { label: "Government Failure", emoji: "🏛️", bg: "bg-red-950/60", text: "text-red-500", border: "border-red-700/30" },
-  "Protest / Rally": { label: "Protest / Rally", emoji: "📣", bg: "bg-pink-950/50", text: "text-pink-400", border: "border-pink-500/30" },
-  "Local Drama": { label: "Local Drama", emoji: "🍵", bg: "bg-teal-950/50", text: "text-teal-400", border: "border-teal-500/30" },
-  "Argument / Dispute": { label: "Argument / Dispute", emoji: "🗣️", bg: "bg-rose-950/50", text: "text-rose-400", border: "border-rose-500/30" },
-  "Harassment": { label: "Harassment", emoji: "⚠️", bg: "bg-red-950/50", text: "text-red-500", border: "border-red-600/30" },
-  "Breaking News": { label: "Breaking News", emoji: "📰", bg: "bg-cyan-950/50", text: "text-cyan-400", border: "border-cyan-500/30" },
-  "Village Problem": { label: "Village Problem", emoji: "🏡", bg: "bg-green-950/50", text: "text-green-400", border: "border-green-500/30" },
-  "Weather": { label: "Weather Conditions", emoji: "☁️", bg: "bg-sky-950/50", text: "text-sky-400", border: "border-sky-500/30" },
-  "War / Conflict": { label: "War / Conflict", emoji: "💥", bg: "bg-gray-950/80", text: "text-gray-300", border: "border-gray-700/30" },
-  "Other": { label: "Other", emoji: "❓", bg: "bg-gray-900/50", text: "text-gray-400", border: "border-gray-500/30" }
+const CATEGORY_STYLES: Record<Category, { label: string; icon: React.ComponentType<any>; bg: string; text: string; border: string }> = {
+  "Civic Issue": { label: "Civic Issue", icon: Building, bg: "bg-indigo-950/50", text: "text-indigo-400", border: "border-indigo-500/30" },
+  "Pothole": { label: "Pothole Crater", icon: Construction, bg: "bg-orange-950/50", text: "text-orange-400", border: "border-orange-500/30" },
+  "Flooding": { label: "Flooding", icon: Waves, bg: "bg-blue-950/50", text: "text-blue-400", border: "border-blue-500/30" },
+  "Power Cut": { label: "Power Blackout", icon: Zap, bg: "bg-yellow-950/50", text: "text-yellow-400", border: "border-yellow-500/30" },
+  "Garbage": { label: "Garbage Pile", icon: Trash2, bg: "bg-amber-950/50", text: "text-amber-500", border: "border-amber-700/30" },
+  "Corruption": { label: "Corruption", icon: Scale, bg: "bg-red-950/50", text: "text-red-400", border: "border-red-500/30" },
+  "Government Failure": { label: "Government Failure", icon: Landmark, bg: "bg-red-950/60", text: "text-red-500", border: "border-red-700/30" },
+  "Protest / Rally": { label: "Protest / Rally", icon: Megaphone, bg: "bg-pink-950/50", text: "text-pink-400", border: "border-pink-500/30" },
+  "Local Drama": { label: "Local Drama", icon: MessageCircle, bg: "bg-teal-950/50", text: "text-teal-400", border: "border-teal-500/30" },
+  "Argument / Dispute": { label: "Argument / Dispute", icon: MessageSquare, bg: "bg-rose-950/50", text: "text-rose-400", border: "border-rose-500/30" },
+  "Harassment": { label: "Harassment", icon: ShieldAlert, bg: "bg-red-950/50", text: "text-red-500", border: "border-red-600/30" },
+  "Breaking News": { label: "Breaking News", icon: Newspaper, bg: "bg-cyan-950/50", text: "text-cyan-400", border: "border-cyan-500/30" },
+  "Village Problem": { label: "Village Problem", icon: Home, bg: "bg-green-950/50", text: "text-green-400", border: "border-green-500/30" },
+  "Weather": { label: "Weather Conditions", icon: Cloud, bg: "bg-sky-950/50", text: "text-sky-400", border: "border-sky-500/30" },
+  "War / Conflict": { label: "War / Conflict", icon: Flame, bg: "bg-gray-950/80", text: "text-gray-300", border: "border-gray-700/30" },
+  "Other": { label: "Other", icon: HelpCircle, bg: "bg-gray-900/50", text: "text-gray-400", border: "border-gray-500/30" }
 };
 
 const STATUS_DETAILS: Record<Status, { label: string; colorClass: string; icon: any; desc: string }> = {
@@ -180,7 +211,7 @@ export default function IssuePopup({
       {issue.isSpam && (
         <div className="mb-3 px-3 py-1.5 bg-red-950/50 border border-red-500/40 rounded-lg text-[10px] text-red-400 flex items-center gap-1.5 font-semibold">
           <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-red-500 animate-pulse" />
-          <span>⚠️ AI SPAM WARNING: Flagged as suspicious / gibberish ({issue.spamReasoning})</span>
+          <span>AI SPAM WARNING: Flagged as suspicious / gibberish ({issue.spamReasoning})</span>
         </div>
       )}
 
@@ -188,15 +219,15 @@ export default function IssuePopup({
       <div className="flex items-start justify-between gap-2 mb-3">
         <div>
           <div className="flex items-center gap-1.5 flex-wrap">
-               <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide border ${
+               <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide border ${
               theme === "dark" 
                 ? `${catStyle.bg} ${catStyle.text} ${catStyle.border}` 
                 : "bg-gray-100 border-gray-300 text-neutral-800"
             }`}>
-              <span>{catStyle.emoji}</span>
+              {React.createElement(catStyle.icon, { className: "w-3 h-3 shrink-0" })}
               <span>{catStyle.label}</span>
             </span>
-            <span className="text-[10px] text-gray-500 font-mono">REACH: {issue.reporterTrustScore >= 70 ? "🔥 HIGH" : "⚡ NORMAL"}</span>
+            <span className="text-[10px] text-gray-500 font-mono">REACH: {issue.reporterTrustScore >= 70 ? "HIGH" : "NORMAL"}</span>
           </div>
           <h3 className={`text-sm font-black tracking-tight mt-1.5 ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>{issue.title}</h3>
           <div className="flex items-center gap-2 text-[10px] text-gray-400 mt-1 font-mono">
@@ -330,7 +361,7 @@ export default function IssuePopup({
                   title={`Added by ${mediaItem.addedBy}`}
                 >
                   {isUrlVideo ? (
-                    <div className="w-full h-full bg-slate-950 flex items-center justify-center text-xs">📹</div>
+                    <div className="w-full h-full bg-slate-950 flex items-center justify-center"><Video className="w-4 h-4 text-gray-400" /></div>
                   ) : (
                     <img src={mediaItem.url} className="w-full h-full object-cover select-none pointer-events-none" referrerPolicy="no-referrer" />
                   )}
@@ -339,17 +370,18 @@ export default function IssuePopup({
             })}
           </div>
         )}
-
+ 
          <p className={`text-xs leading-relaxed font-sans font-normal mt-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
           {issue.description}
         </p>
       </div>
-
+ 
       {/* Grouped Perspectives Block */}
       <div className={`mb-3 p-4 border rounded-xl ${theme === 'dark' ? 'bg-neutral-950 border-neutral-900' : 'bg-gray-50 border-gray-200'}`}>
         <div className="flex items-center justify-between">
-          <span className={`text-[10px] font-bold uppercase tracking-wider font-mono ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>
-            📢 {reporterCount} {reporterCount === 1 ? 'person reported this' : 'people reported this'}
+          <span className={`text-[10px] font-bold uppercase tracking-wider font-mono flex items-center gap-1.5 ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>
+            <Megaphone className="w-3.5 h-3.5" />
+            <span>{reporterCount} {reporterCount === 1 ? 'person reported this' : 'people reported this'}</span>
           </span>
         </div>
         
@@ -375,10 +407,11 @@ export default function IssuePopup({
                             : `Anonymous Citizen #` + (Math.abs(sib.id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0)) % 9000 + 1000))
                         : sib.reporterName}
                     </span>
-                    <span className={`text-[7.5px] px-1 border font-mono rounded font-black tracking-tight shrink-0 ${
+                    <span className={`text-[7.5px] px-1 border font-mono rounded font-black tracking-tight shrink-0 flex items-center gap-0.5 ${
                       theme === 'dark' ? 'border-neutral-800 bg-neutral-900 text-white' : 'border-gray-300 bg-neutral-800 text-white'
                     }`}>
-                      🛡️ {sib.reporterTrustScore}
+                      <ShieldCheck className="w-2.5 h-2.5 text-emerald-400" />
+                      <span>{sib.reporterTrustScore}</span>
                     </span>
                   </div>
                   <span className="text-[8px] text-gray-500 font-mono font-normal shrink-0">{timeAgo(sib.createdAt)}</span>
@@ -474,7 +507,7 @@ export default function IssuePopup({
           <div className={`w-6 h-6 rounded-full flex items-center justify-center border text-[10px] font-black ${
             theme === 'dark' ? 'bg-neutral-950 text-white border-neutral-900' : 'bg-gray-100 text-neutral-900 border-gray-200'
           }`}>
-            {issue.isAnonymous ? "👤" : "⚡"}
+            {issue.isAnonymous ? <User className="w-3.5 h-3.5 text-gray-400" /> : <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />}
           </div>
           <div>
             <div className="flex items-center gap-1.5 flex-wrap">
@@ -485,10 +518,11 @@ export default function IssuePopup({
                       : `Anonymous Citizen #` + (Math.abs(issue.id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0)) % 9000 + 1000))
                   : issue.reporterName}
               </p>
-              <span className={`text-[8px] px-1 border font-mono rounded font-black tracking-tight shrink-0 ${
+              <span className={`text-[8px] px-1 border font-mono rounded font-black tracking-tight shrink-0 flex items-center gap-0.5 ${
                 theme === 'dark' ? 'bg-neutral-900 border-neutral-850 text-white' : 'bg-gray-50 border-gray-300 text-neutral-800'
               }`}>
-                🛡️ {issue.reporterTrustScore}
+                <ShieldCheck className="w-2.5 h-2.5 text-emerald-400" />
+                <span>{issue.reporterTrustScore}</span>
               </span>
             </div>
             <p className="text-gray-500 font-mono text-[8px] uppercase">OPERATIVE</p>
@@ -516,7 +550,7 @@ export default function IssuePopup({
           }`}
           id={`see-this-too-btn-${issue.id}`}
         >
-          <span className="text-sm">👁️</span>
+          <Eye className="w-4 h-4 shrink-0" />
           <span>I See This Too</span>
           <span className={`font-mono text-[10px] px-2 py-0.5 rounded-full ${
             issue.seeThisTooUsers?.includes(currentUserId) 
@@ -536,7 +570,7 @@ export default function IssuePopup({
           {/* Reaction 1: Verified (✅) */}
           <button
             onClick={() => onReact(issue.id, "verified")}
-            className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-semibold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[11px] font-semibold transition-all cursor-pointer ${
               userReaction === "verified"
                 ? "bg-emerald-600/20 text-emerald-400 border-emerald-500 shadow-none"
                 : (theme === 'dark' ? "bg-black text-gray-300 border-neutral-900 hover:border-neutral-800" : "bg-white text-gray-700 border-gray-250 hover:border-gray-400 shadow-xs")
@@ -544,7 +578,8 @@ export default function IssuePopup({
             id={`reaction-verified-${issue.id}`}
             title="Real Report"
           >
-            <span>✅ Verified</span>
+            <Check className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
+            <span>Verified</span>
             <span className={`font-mono text-[9px] px-1 rounded ${
               theme === 'dark' ? 'bg-black/30 text-white' : 'bg-neutral-100 text-neutral-700'
             }`}>{issue.reactions.verified || 0}</span>
@@ -553,7 +588,7 @@ export default function IssuePopup({
           {/* Reaction 2: Cap (🧢) */}
           <button
             onClick={() => onReact(issue.id, "cap")}
-            className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-semibold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[11px] font-semibold transition-all cursor-pointer ${
               userReaction === "cap"
                 ? "bg-red-600/20 text-red-400 border-red-500 shadow-none"
                 : (theme === 'dark' ? "bg-black text-gray-300 border-neutral-900 hover:border-neutral-800" : "bg-white text-gray-700 border-gray-250 hover:border-gray-400 shadow-xs")
@@ -561,7 +596,8 @@ export default function IssuePopup({
             id={`reaction-cap-${issue.id}`}
             title="Fake / Cap Report"
           >
-            <span>🧢 Cap</span>
+            <Flag className="w-3.5 h-3.5 shrink-0 text-red-500" />
+            <span>Cap</span>
             <span className={`font-mono text-[9px] px-1 rounded ${
               theme === 'dark' ? 'bg-black/30 text-white' : 'bg-neutral-100 text-neutral-700'
             }`}>{issue.reactions.cap || 0}</span>
@@ -570,7 +606,7 @@ export default function IssuePopup({
           {/* Reaction 3: Big Issue (🔥) */}
           <button
             onClick={() => onReact(issue.id, "big_issue")}
-            className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-semibold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[11px] font-semibold transition-all cursor-pointer ${
               userReaction === "big_issue"
                 ? "bg-amber-600/20 text-amber-400 border-amber-500 shadow-none"
                 : (theme === 'dark' ? "bg-black text-gray-300 border-neutral-900 hover:border-neutral-800" : "bg-white text-gray-700 border-gray-250 hover:border-gray-400 shadow-xs")
@@ -578,7 +614,8 @@ export default function IssuePopup({
             id={`reaction-bigissue-${issue.id}`}
             title="Needs Attention ASAP"
           >
-            <span>🔥 Big Issue</span>
+            <Flame className="w-3.5 h-3.5 shrink-0 text-amber-500" />
+            <span>Big Issue</span>
             <span className={`font-mono text-[9px] px-1 rounded ${
               theme === 'dark' ? 'bg-black/30 text-white' : 'bg-neutral-100 text-neutral-700'
             }`}>{issue.reactions.big_issue || 0}</span>
@@ -587,7 +624,7 @@ export default function IssuePopup({
           {/* Reaction 4: Bruh (💀) */}
           <button
             onClick={() => onReact(issue.id, "bruh")}
-            className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-semibold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[11px] font-semibold transition-all cursor-pointer ${
               userReaction === "bruh"
                 ? "bg-teal-600/20 text-teal-400 border-teal-500 shadow-none"
                 : (theme === 'dark' ? "bg-black text-gray-300 border-neutral-900 hover:border-neutral-800" : "bg-white text-gray-700 border-gray-250 hover:border-gray-400 shadow-xs")
@@ -595,7 +632,8 @@ export default function IssuePopup({
             id={`reaction-bruh-${issue.id}`}
             title="Wow / Bruh moment"
           >
-            <span>💀 Bruh</span>
+            <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-teal-400" />
+            <span>Bruh</span>
             <span className={`font-mono text-[9px] px-1 rounded ${
               theme === 'dark' ? 'bg-black/30 text-white' : 'bg-neutral-100 text-neutral-700'
             }`}>{issue.reactions.bruh || 0}</span>
@@ -612,7 +650,8 @@ export default function IssuePopup({
           }`}
           id="add-angle-btn"
         >
-          <span>📸 Add Another Angle / Perspective</span>
+          <Camera className="w-4 h-4 shrink-0" />
+          <span>Add Another Angle / Perspective</span>
         </button>
       )}
 

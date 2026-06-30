@@ -795,15 +795,20 @@ async function startServer() {
     });
   });
 
-  // Update user details (e.g. toggle anonymity)
+  // Update user details (e.g. toggle anonymity or update profile picture)
   app.post("/api/users/:id/update", (req, res) => {
     const { id } = req.params;
-    const { isAnonymous } = req.body;
+    const { isAnonymous, avatarUrl } = req.body;
     const user = activeUsers[id];
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    user.isAnonymous = !!isAnonymous;
+    if (isAnonymous !== undefined) {
+      user.isAnonymous = !!isAnonymous;
+    }
+    if (avatarUrl !== undefined) {
+      user.avatarUrl = avatarUrl;
+    }
     res.json({
       success: true,
       user

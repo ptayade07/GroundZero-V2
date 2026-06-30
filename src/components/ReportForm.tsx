@@ -5,7 +5,36 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Category } from "../types";
-import { Camera, MapPin, Sparkles, Check, Loader2, AlertCircle, EyeOff, ShieldAlert, ArrowLeft, Navigation } from "lucide-react";
+import {
+  Camera,
+  MapPin,
+  Sparkles,
+  Check,
+  Loader2,
+  AlertCircle,
+  EyeOff,
+  ShieldAlert,
+  ArrowLeft,
+  Navigation,
+  Building,
+  Construction,
+  Waves,
+  Zap,
+  Trash2,
+  Scale,
+  Landmark,
+  Megaphone,
+  MessageCircle,
+  MessageSquare,
+  Newspaper,
+  Home,
+  Cloud,
+  Flame,
+  HelpCircle,
+  Eye,
+  Cpu,
+  Link
+} from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface ReportFormProps {
@@ -31,23 +60,23 @@ interface ReportFormProps {
   theme?: "light" | "dark";
 }
 
-const CATEGORY_ITEMS: { value: Category; label: string; icon: string; desc: string; color: string }[] = [
-  { value: "Civic Issue", label: "Civic Issue", icon: "🏢", desc: "General civic, public safety or infrastructure problems", color: "border-indigo-500/20 hover:border-indigo-500 bg-indigo-950/20" },
-  { value: "Pothole", label: "Pothole Crater", icon: "🕳️", desc: "Damaged tarmac, road pits, or broken paths", color: "border-orange-500/20 hover:border-orange-500 bg-orange-950/20" },
-  { value: "Flooding", label: "Flooding & Waterlog", icon: "🌊", desc: "Monsoon floods, waterlogging, or choked drains", color: "border-blue-500/20 hover:border-blue-500 bg-blue-950/20" },
-  { value: "Power Cut", label: "Power Cut / Outage", icon: "🔌", desc: "Electricity cuts, blackouts, or broken streetlights", color: "border-yellow-500/20 hover:border-yellow-500 bg-yellow-950/20" },
-  { value: "Garbage", label: "Garbage & Waste", icon: "🗑️", desc: "Accumulated trash, dirty dumps, or overflowing bins", color: "border-amber-700/20 hover:border-amber-700 bg-amber-950/20" },
-  { value: "Corruption", label: "Corruption & Graft", icon: "💼", desc: "Bribery, misuse of power, or shady transactions", color: "border-red-500/20 hover:border-red-500 bg-red-950/20" },
-  { value: "Government Failure", label: "Government Failure", icon: "🏛️", desc: "Neglect of civic infrastructure, offices or services", color: "border-red-700/20 hover:border-red-700 bg-red-950/25" },
-  { value: "Protest / Rally", label: "Protest / Rally", icon: "📣", desc: "Demonstrations, rallies, assemblies, or blockades", color: "border-pink-500/20 hover:border-pink-500 bg-pink-950/20" },
-  { value: "Local Drama", label: "Local Drama / Chaos", icon: "🍵", desc: "Gossip, public chaos, street fights, or neighbor drama", color: "border-teal-500/20 hover:border-teal-500 bg-teal-950/20" },
-  { value: "Argument / Dispute", label: "Argument / Dispute", icon: "🗣️", desc: "Public disagreements, disputes, or screaming matches", color: "border-rose-500/20 hover:border-rose-500 bg-rose-950/20" },
-  { value: "Harassment", label: "Harassment", icon: "⚠️", desc: "Unsafe environment, catcalling, or intimidation", color: "border-red-600/20 hover:border-red-600 bg-red-950/20" },
-  { value: "Breaking News", label: "Breaking News", icon: "📰", desc: "Live incidents, unfolding updates, or emergency announcements", color: "border-cyan-500/20 hover:border-cyan-500 bg-cyan-950/20" },
-  { value: "Village Problem", label: "Village Problem", icon: "🏡", desc: "Rural or localized community issues", color: "border-green-500/20 hover:border-green-500 bg-green-950/20" },
-  { value: "Weather", label: "Weather Conditions", icon: "☁️", desc: "Heavy rain, storms, extreme heat, or dense fog", color: "border-sky-500/20 hover:border-sky-500 bg-sky-950/20" },
-  { value: "War / Conflict", label: "War / Conflict", icon: "💥", desc: "Active clashes, structural damage, or violent skirmishes", color: "border-gray-700/20 hover:border-gray-500 bg-gray-950/20" },
-  { value: "Other", label: "Other Issues", icon: "❓", desc: "Any other hyperlocal issues or bulletins", color: "border-gray-500/20 hover:border-gray-500 bg-gray-950/20" }
+const CATEGORY_ITEMS: { value: Category; label: string; icon: React.ComponentType<any>; desc: string; color: string }[] = [
+  { value: "Civic Issue", label: "Civic Issue", icon: Building, desc: "General civic, public safety or infrastructure problems", color: "border-indigo-500/20 hover:border-indigo-500 bg-indigo-950/20" },
+  { value: "Pothole", label: "Pothole Crater", icon: Construction, desc: "Damaged tarmac, road pits, or broken paths", color: "border-orange-500/20 hover:border-orange-500 bg-orange-950/20" },
+  { value: "Flooding", label: "Flooding & Waterlog", icon: Waves, desc: "Monsoon floods, waterlogging, or choked drains", color: "border-blue-500/20 hover:border-blue-500 bg-blue-950/20" },
+  { value: "Power Cut", label: "Power Cut / Outage", icon: Zap, desc: "Electricity cuts, blackouts, or broken streetlights", color: "border-yellow-500/20 hover:border-yellow-500 bg-yellow-950/20" },
+  { value: "Garbage", label: "Garbage & Waste", icon: Trash2, desc: "Accumulated trash, dirty dumps, or overflowing bins", color: "border-amber-700/20 hover:border-amber-700 bg-amber-950/20" },
+  { value: "Corruption", label: "Corruption & Graft", icon: Scale, desc: "Bribery, misuse of power, or shady transactions", color: "border-red-500/20 hover:border-red-500 bg-red-950/20" },
+  { value: "Government Failure", label: "Government Failure", icon: Landmark, desc: "Neglect of civic infrastructure, offices or services", color: "border-red-700/20 hover:border-red-700 bg-red-950/25" },
+  { value: "Protest / Rally", label: "Protest / Rally", icon: Megaphone, desc: "Demonstrations, rallies, assemblies, or blockades", color: "border-pink-500/20 hover:border-pink-500 bg-pink-950/20" },
+  { value: "Local Drama", label: "Local Drama / Chaos", icon: MessageCircle, desc: "Gossip, public chaos, street fights, or neighbor drama", color: "border-teal-500/20 hover:border-teal-500 bg-teal-950/20" },
+  { value: "Argument / Dispute", label: "Argument / Dispute", icon: MessageSquare, desc: "Public disagreements, disputes, or screaming matches", color: "border-rose-500/20 hover:border-rose-500 bg-rose-950/20" },
+  { value: "Harassment", label: "Harassment", icon: ShieldAlert, desc: "Unsafe environment, catcalling, or intimidation", color: "border-red-600/20 hover:border-red-600 bg-red-950/20" },
+  { value: "Breaking News", label: "Breaking News", icon: Newspaper, desc: "Live incidents, unfolding updates, or emergency announcements", color: "border-cyan-500/20 hover:border-cyan-500 bg-cyan-950/20" },
+  { value: "Village Problem", label: "Village Problem", icon: Home, desc: "Rural or localized community issues", color: "border-green-500/20 hover:border-green-500 bg-green-950/20" },
+  { value: "Weather", label: "Weather Conditions", icon: Cloud, desc: "Heavy rain, storms, extreme heat, or dense fog", color: "border-sky-500/20 hover:border-sky-500 bg-sky-950/20" },
+  { value: "War / Conflict", label: "War / Conflict", icon: Flame, desc: "Active clashes, structural damage, or violent skirmishes", color: "border-gray-700/20 hover:border-gray-500 bg-gray-950/20" },
+  { value: "Other", label: "Other Issues", icon: HelpCircle, desc: "Any other hyperlocal issues or bulletins", color: "border-gray-500/20 hover:border-gray-500 bg-gray-950/20" }
 ];
 
 export default function ReportForm({
@@ -370,7 +399,7 @@ export default function ReportForm({
           theme === 'dark' ? 'bg-neutral-950 border-neutral-850' : 'bg-gray-50 border-gray-200'
         }`}>
           <div className="flex items-center gap-2">
-            <span className="text-sm">🔗</span>
+            <Link className="w-4 h-4 text-brand shrink-0" />
             <div>
               <p className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>Linked to Incident</p>
               <p className="text-[10px] text-gray-400 line-clamp-1">"{parentIssue.title}"</p>
@@ -467,7 +496,7 @@ export default function ReportForm({
               theme === 'dark' ? 'bg-neutral-950 border-neutral-900 text-gray-300' : 'bg-emerald-50/40 border-emerald-100 text-emerald-700 font-medium'
             }`}>
               <Loader2 className={`w-3.5 h-3.5 animate-spin ${theme === 'dark' ? 'text-gray-400' : 'text-emerald-500'}`} />
-              <span>👁️ Gemini Vision is inspecting uploaded evidence...</span>
+              <span>Gemini Vision is inspecting uploaded evidence...</span>
             </div>
           )}
 
@@ -475,11 +504,11 @@ export default function ReportForm({
             <div className={`mt-2.5 p-4 border rounded-lg space-y-2 ${
               theme === 'dark' ? 'bg-neutral-950 border-neutral-900' : 'bg-emerald-50/40 border-emerald-100 text-neutral-850'
             }`} id="gemini-vision-card">
-              <p className="text-[11px] font-sans leading-relaxed">
-                👁️ <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-emerald-800'}`}>AI sees:</span> {aiVisionResult.description}
+              <p className="text-[11px] font-sans leading-relaxed flex items-center gap-1.5">
+                <Eye className="w-4 h-4 text-emerald-500 shrink-0" /> <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-emerald-800'}`}>AI Analysis:</span> {aiVisionResult.description}
               </p>
               <div className="flex items-center gap-1.5 text-[9px] font-mono uppercase text-gray-500">
-                <span>✅ Auto-suggested category:</span>
+                <Check className="w-3.5 h-3.5 text-emerald-500" /> <span>Auto-suggested category:</span>
                 <span className={`px-2 py-0.5 rounded font-black ${
                   theme === 'dark' ? 'bg-[#39FF14] text-black' : 'bg-[#2ECC0F] text-white shadow-xs'
                 }`}>{aiVisionResult.suggestedCategory}</span>
@@ -497,28 +526,31 @@ export default function ReportForm({
           </label>
           
           <div className="flex gap-1.5 overflow-x-auto py-1.5 scrollbar-thin">
-            {CATEGORY_ITEMS.map((item) => (
-              <button
-                type="button"
-                key={item.value}
-                onClick={() => {
-                  setCategory(item.value);
-                }}
-                className={`px-3 py-1.5 rounded-full border text-xs font-semibold shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
-                  category === item.value
-                    ? theme === 'dark'
-                      ? "bg-[#39FF14] text-black border-[#39FF14] font-black shadow-md"
-                      : "bg-[#2ECC0F] text-white border-[#2ECC0F] font-black shadow-xs"
-                    : theme === 'dark'
-                      ? "bg-black text-gray-400 border-neutral-900 hover:border-neutral-750 hover:text-white"
-                      : "bg-white text-gray-600 border-gray-250 hover:border-gray-300 hover:text-neutral-950 shadow-xs"
-                }`}
-                id={`manual-cat-${item.value}`}
-              >
-                <span>{item.icon}</span>
-                <span>{item.label}</span>
-              </button>
-            ))}
+            {CATEGORY_ITEMS.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <button
+                  type="button"
+                  key={item.value}
+                  onClick={() => {
+                    setCategory(item.value);
+                  }}
+                  className={`px-3 py-1.5 rounded-full border text-xs font-semibold shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
+                    category === item.value
+                      ? theme === 'dark'
+                        ? "bg-[#39FF14] text-black border-[#39FF14] font-black shadow-md"
+                        : "bg-[#2ECC0F] text-white border-[#2ECC0F] font-black shadow-xs"
+                      : theme === 'dark'
+                        ? "bg-black text-gray-400 border-neutral-900 hover:border-neutral-750 hover:text-white"
+                        : "bg-white text-gray-600 border-gray-250 hover:border-gray-300 hover:text-neutral-950 shadow-xs"
+                  }`}
+                  id={`manual-cat-${item.value}`}
+                >
+                  <IconComponent className="w-3.5 h-3.5 shrink-0" />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -596,15 +628,15 @@ export default function ReportForm({
                     <p className={`text-xs font-black font-sans flex items-center gap-1.5 ${
                       theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600'
                     }`}>
-                      🤖 AI detected: {aiAnalysisResult.category}
+                      <Cpu className="w-3.5 h-3.5 shrink-0 text-emerald-500" /> AI detected: {aiAnalysisResult.category}
                     </p>
-                    <p className={`text-[11px] font-sans leading-relaxed ${theme === 'dark' ? 'text-gray-300' : 'text-neutral-800'}`}>
-                      📰 <span className={`font-semibold ${theme === 'dark' ? 'text-emerald-300' : 'text-emerald-700'}`}>Suggested headline:</span> "{aiAnalysisResult.title}"
+                    <p className={`text-[11px] font-sans leading-relaxed flex items-center gap-1.5 ${theme === 'dark' ? 'text-gray-300' : 'text-neutral-800'}`}>
+                      <Newspaper className="w-3.5 h-3.5 shrink-0 text-emerald-500" /> <span className={`font-semibold ${theme === 'dark' ? 'text-emerald-300' : 'text-emerald-700'}`}>Suggested headline:</span> "{aiAnalysisResult.title}"
                     </p>
-                    <p className={`text-[10px] font-mono uppercase tracking-wider font-bold ${
+                    <p className={`text-[10px] font-mono uppercase tracking-wider font-bold flex items-center gap-1.5 ${
                       theme === 'dark' ? 'text-emerald-500' : 'text-emerald-600'
                     }`}>
-                      ✅ Auto-selected category: {aiAnalysisResult.category}
+                      <Check className="w-3.5 h-3.5 shrink-0 text-emerald-500" /> Auto-selected category: {aiAnalysisResult.category}
                     </p>
                   </div>
                 </div>

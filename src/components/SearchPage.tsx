@@ -5,7 +5,34 @@
 
 import React, { useState, useMemo } from "react";
 import { Issue, Category, ReactionType } from "../types";
-import { Search, MapPin, Eye, Check, TrendingUp, Sparkles, ChevronRight, RefreshCw } from "lucide-react";
+import {
+  Search,
+  MapPin,
+  Eye,
+  Check,
+  TrendingUp,
+  Sparkles,
+  ChevronRight,
+  RefreshCw,
+  Building,
+  Construction,
+  Waves,
+  Zap,
+  Trash2,
+  Scale,
+  Landmark,
+  Megaphone,
+  MessageCircle,
+  MessageSquare,
+  ShieldAlert,
+  Newspaper,
+  Home,
+  Cloud,
+  Flame,
+  HelpCircle,
+  User,
+  AlertTriangle
+} from "lucide-react";
 import { motion } from "motion/react";
 
 interface SearchPageProps {
@@ -15,23 +42,23 @@ interface SearchPageProps {
   theme?: "light" | "dark";
 }
 
-const CATEGORY_MAP: Record<Category, { label: string; emoji: string; bg: string; text: string; border: string }> = {
-  "Civic Issue": { label: "Civic Issue", emoji: "🏢", bg: "bg-indigo-500/10", text: "text-indigo-400", border: "border-indigo-500/30" },
-  "Pothole": { label: "Pothole", emoji: "🕳️", bg: "bg-orange-500/10", text: "text-orange-400", border: "border-orange-500/30" },
-  "Flooding": { label: "Flooding", emoji: "🌊", bg: "bg-blue-500/10", text: "text-blue-400", border: "border-blue-500/30" },
-  "Power Cut": { label: "Power Cut", emoji: "🔌", bg: "bg-yellow-500/10", text: "text-yellow-400", border: "border-yellow-500/30" },
-  "Garbage": { label: "Garbage", emoji: "🗑️", bg: "bg-amber-700/10", text: "text-amber-500", border: "border-amber-700/30" },
-  "Corruption": { label: "Corruption", emoji: "💼", bg: "bg-red-500/10", text: "text-red-400", border: "border-red-500/30" },
-  "Government Failure": { label: "Govt Failure", emoji: "🏛️", bg: "bg-red-700/10", text: "text-red-500", border: "border-red-700/30" },
-  "Protest / Rally": { label: "Protest / Rally", emoji: "📣", bg: "bg-pink-500/10", text: "text-pink-400", border: "border-pink-500/30" },
-  "Local Drama": { label: "Local Drama", emoji: "🍵", bg: "bg-teal-500/10", text: "text-teal-400", border: "border-teal-500/30" },
-  "Argument / Dispute": { label: "Argument", emoji: "🗣️", bg: "bg-rose-500/10", text: "text-rose-400", border: "border-rose-500/30" },
-  "Harassment": { label: "Harassment", emoji: "⚠️", bg: "bg-red-600/10", text: "text-red-500", border: "border-red-600/30" },
-  "Breaking News": { label: "Breaking News", emoji: "📰", bg: "bg-cyan-500/10", text: "text-cyan-400", border: "border-cyan-500/30" },
-  "Village Problem": { label: "Village Prob", emoji: "🏡", bg: "bg-green-500/10", text: "text-green-400", border: "border-green-500/30" },
-  "Weather": { label: "Weather", emoji: "☁️", bg: "bg-sky-500/10", text: "text-sky-400", border: "border-sky-500/30" },
-  "War / Conflict": { label: "Conflict", emoji: "💥", bg: "bg-gray-800/20", text: "text-gray-400", border: "border-gray-700/30" },
-  "Other": { label: "Other", emoji: "❓", bg: "bg-gray-700/10", text: "text-gray-400", border: "border-gray-700/30" }
+const CATEGORY_MAP: Record<Category, { label: string; icon: React.ComponentType<any>; bg: string; text: string; border: string }> = {
+  "Civic Issue": { label: "Civic Issue", icon: Building, bg: "bg-indigo-500/10", text: "text-indigo-400", border: "border-indigo-500/30" },
+  "Pothole": { label: "Pothole", icon: Construction, bg: "bg-orange-500/10", text: "text-orange-400", border: "border-orange-500/30" },
+  "Flooding": { label: "Flooding", icon: Waves, bg: "bg-blue-500/10", text: "text-blue-400", border: "border-blue-500/30" },
+  "Power Cut": { label: "Power Cut", icon: Zap, bg: "bg-yellow-500/10", text: "text-yellow-400", border: "border-yellow-500/30" },
+  "Garbage": { label: "Garbage", icon: Trash2, bg: "bg-amber-700/10", text: "text-amber-500", border: "border-amber-700/30" },
+  "Corruption": { label: "Corruption", icon: Scale, bg: "bg-red-500/10", text: "text-red-400", border: "border-red-500/30" },
+  "Government Failure": { label: "Govt Failure", icon: Landmark, bg: "bg-red-700/10", text: "text-red-500", border: "border-red-700/30" },
+  "Protest / Rally": { label: "Protest / Rally", icon: Megaphone, bg: "bg-pink-500/10", text: "text-pink-400", border: "border-pink-500/30" },
+  "Local Drama": { label: "Local Drama", icon: MessageCircle, bg: "bg-teal-500/10", text: "text-teal-400", border: "border-teal-500/30" },
+  "Argument / Dispute": { label: "Argument", icon: MessageSquare, bg: "bg-rose-500/10", text: "text-rose-400", border: "border-rose-500/30" },
+  "Harassment": { label: "Harassment", icon: ShieldAlert, bg: "bg-red-600/10", text: "text-red-500", border: "border-red-600/30" },
+  "Breaking News": { label: "Breaking News", icon: Newspaper, bg: "bg-cyan-500/10", text: "text-cyan-400", border: "border-cyan-500/30" },
+  "Village Problem": { label: "Village Prob", icon: Home, bg: "bg-green-500/10", text: "text-green-400", border: "border-green-500/30" },
+  "Weather": { label: "Weather", icon: Cloud, bg: "bg-sky-500/10", text: "text-sky-400", border: "border-sky-500/30" },
+  "War / Conflict": { label: "Conflict", icon: Flame, bg: "bg-gray-800/20", text: "text-gray-400", border: "border-gray-700/30" },
+  "Other": { label: "Other", icon: HelpCircle, bg: "bg-gray-700/10", text: "text-gray-400", border: "border-gray-700/30" }
 };
 
 const CATEGORY_IMAGES: Record<Category | string, string> = {
@@ -202,7 +229,7 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
                     : `${style.bg} ${style.border} ${style.text} hover:opacity-80`
                 }`}
               >
-                <span>{style.emoji}</span>
+                {React.createElement(style.icon, { className: "w-3 h-3 shrink-0" })}
                 <span>{style.label}</span>
               </button>
             );
@@ -244,7 +271,8 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className={`inline-flex items-center gap-1 px-1.5 py-0.2 rounded-md text-[8px] font-bold uppercase ${catInfo.bg} ${catInfo.text} ${catInfo.border} border`}>
-                        {catInfo.emoji} {catInfo.label}
+                        {React.createElement(catInfo.icon, { className: "w-2.5 h-2.5 shrink-0" })}
+                        <span>{catInfo.label}</span>
                       </span>
                       <span className="text-[8px] text-gray-500 font-mono uppercase flex items-center gap-0.5">
                         <MapPin className="w-2 h-2 text-brand" />
@@ -262,9 +290,9 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
                       {issue.description}
                     </p>
                     <div className="flex items-center gap-2 text-[8px] font-mono text-gray-500 mt-1.5">
-                      <span>👤 {issue.isAnonymous ? "Anonymous" : issue.reporterName}</span>
+                      <span className="flex items-center gap-0.5"><User className="w-2.5 h-2.5 text-gray-400" /> {issue.isAnonymous ? "Anonymous" : issue.reporterName}</span>
                       <span>•</span>
-                      <span className="text-brand">🔥 {issue.reactions?.verified || 0} Vouches</span>
+                      <span className="text-brand flex items-center gap-0.5"><Check className="w-2.5 h-2.5 text-emerald-500" /> {issue.reactions?.verified || 0} Vouches</span>
                       {issue.seeThisTooCount ? (
                         <>
                           <span>•</span>
@@ -320,8 +348,9 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
                   />
                   {/* Glassmorphic/translucent overlay at the bottom always visible */}
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent p-2.5 flex flex-col justify-end transition-opacity duration-300">
-                    <span className="text-[8px] font-mono font-black text-brand uppercase tracking-wider mb-0.5 block truncate">
-                      {catInfo.emoji} {issue.category}
+                    <span className="text-[8px] font-mono font-black text-brand uppercase tracking-wider mb-0.5 flex items-center gap-1 truncate">
+                      {React.createElement(catInfo.icon, { className: "w-2.5 h-2.5 text-brand shrink-0" })}
+                      <span>{issue.category}</span>
                     </span>
                     <h4 className="text-[10px] font-black text-white leading-tight line-clamp-1">
                       {issue.title}
@@ -334,14 +363,15 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
                   {/* Instagram-style Hover Overlay (shows engagement: vouches, seeThisToo count) */}
                   <div className="absolute inset-0 bg-black/85 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-3 text-center">
                     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider mb-2 border ${catInfo.bg} ${catInfo.text} ${catInfo.border}`}>
-                      {catInfo.emoji} {catInfo.label}
+                      {React.createElement(catInfo.icon, { className: "w-2.5 h-2.5 shrink-0" })}
+                      <span>{catInfo.label}</span>
                     </span>
                     <p className="text-[11px] font-extrabold text-white line-clamp-2 leading-snug px-1 mb-3">
                       "{issue.title}"
                     </p>
                     <div className="flex items-center gap-3 text-xs">
                       <span className="text-brand font-black flex items-center gap-1 text-[11px]">
-                        🔥 {issue.reactions?.verified || 0} <span className="text-[9px] font-mono text-gray-400 font-normal">vouches</span>
+                        <Check className="w-3.5 h-3.5 text-brand shrink-0" /> {issue.reactions?.verified || 0}
                       </span>
                       {issue.seeThisTooCount ? (
                         <span className="text-pink-400 font-black flex items-center gap-1 text-[11px]">

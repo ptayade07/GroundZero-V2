@@ -5,30 +5,53 @@
 
 import React, { useState, useEffect } from "react";
 import { DashboardMetrics, Category } from "../types";
-import { ShieldCheck, HelpCircle, Activity, BarChart3, AlertCircle, Map, Search, Flame } from "lucide-react";
+import {
+  ShieldCheck,
+  HelpCircle,
+  Activity,
+  BarChart3,
+  AlertCircle,
+  Map,
+  Search,
+  Flame,
+  Building,
+  Construction,
+  Waves,
+  Zap,
+  Trash2,
+  Scale,
+  Landmark,
+  Megaphone,
+  MessageCircle,
+  MessageSquare,
+  ShieldAlert,
+  Newspaper,
+  Home,
+  Cloud
+} from "lucide-react";
 
 interface AnalyticsDashboardProps {
   metrics: DashboardMetrics | null;
   theme?: "light" | "dark";
 }
 
-const CATEGORY_ICONS: Record<Category, string> = {
-  "Civic Issue": "🏢",
-  "Pothole": "🕳️",
-  "Flooding": "🌊",
-  "Power Cut": "🔌",
-  "Garbage": "🗑️",
-  "Corruption": "💼",
-  "Government Failure": "🏛️",
-  "Protest / Rally": "📣",
-  "Local Drama": "🍵",
-  "Argument / Dispute": "🗣️",
-  "Harassment": "⚠️",
-  "Breaking News": "📰",
-  "Village Problem": "🏡",
-  "Weather": "☁️",
-  "War / Conflict": "💥",
-  "Other": "❓"
+const CATEGORY_ICONS: Record<Category, React.ComponentType<any>> = {
+  "Civic Issue": Building,
+  "Pothole": Construction,
+  "Flooding": Waves,
+  "Power Cut": Zap,
+  "Garbage": Trash2,
+  "Corruption": Scale,
+  "Government Failure": Landmark,
+  "Protest / Rally": Megaphone,
+  "Local Drama": MessageCircle,
+  "Argument / Dispute": MessageSquare,
+  "Harassment": ShieldAlert,
+  "Breaking News": Newspaper,
+  "Village Problem": Home,
+  "Weather": Cloud,
+  "War / Conflict": Flame,
+  "Other": HelpCircle
 };
 
 const CATEGORY_NAMES: Record<Category, string> = {
@@ -186,13 +209,13 @@ export default function AnalyticsDashboard({ metrics, theme = "dark" }: Analytic
             const pct = metrics.totalIssues > 0 ? (count / metrics.totalIssues) * 100 : 0;
             const barColor = CATEGORY_COLORS[cat];
             const name = CATEGORY_NAMES[cat];
-            const icon = CATEGORY_ICONS[cat];
+            const IconComponent = CATEGORY_ICONS[cat] || HelpCircle;
  
             return (
               <div key={cat} className="space-y-1">
                 <div className="flex items-center justify-between text-[10px]">
-                  <span className={`flex items-center gap-1 font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    <span className="text-xs">{icon}</span>
+                  <span className={`flex items-center gap-1.5 font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <IconComponent className="w-3.5 h-3.5" />
                     {name}
                   </span>
                   <span className={`font-mono font-bold ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{count} reports ({Math.round(pct)}%)</span>

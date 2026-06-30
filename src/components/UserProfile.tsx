@@ -13,9 +13,18 @@ import {
   Users,
   TrendingUp,
   Sparkles,
-  HelpCircle
+  HelpCircle,
+  Camera,
+  Upload,
+  MapPin,
+  Search,
+  Megaphone,
+  Zap,
+  Check,
+  Flag,
+  AlertTriangle
 } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 
 interface UserProfileProps {
   user: UserType;
@@ -35,6 +44,43 @@ export default function UserProfile({
   theme = "dark"
 }: UserProfileProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showAvatarPicker, setShowAvatarPicker] = useState(false);
+
+  const presets = ["AG", "CD", "SP", "RC", "OP", "FC", "OB", "VS", "SD", "TR"];
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64String = reader.result as string;
+        await updateProfilePicture(base64String);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const updateProfilePicture = async (newAvatar: string) => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+    try {
+      const res = await fetch(`/api/users/${user.id}/update`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ avatarUrl: newAvatar })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          onUpdateUser(data.user);
+        }
+      }
+    } catch (e) {
+      console.error("Failed to update profile picture:", e);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   // Find all issues submitted by this user
   const userIssues = issues.filter(
@@ -60,41 +106,44 @@ export default function UserProfile({
   const impactScore = user.trustScore * totalPosts;
 
   const getRank = (score: number) => {
-    if (score >= 90) return { title: "Civic Sentinel", icon: "👑", color: "text-brand bg-brand/5 border-brand/20", desc: "Elite guardian of civic transparency." };
-    if (score >= 75) return { title: "Ward Watcher", icon: "🛡️", color: "text-green-400 bg-green-950/40 border-green-500/30", desc: "Highly reliable community helper." };
-    if (score >= 55) return { title: "Active Reporter", icon: "⚡", color: "text-blue-400 bg-blue-950/40 border-blue-500/30", desc: "Standard reporter reporting local outages." };
-    return { title: "Civic Novice", icon: "🌱", color: "text-gray-400 bg-gray-900/40 border-gray-700/50", desc: "Newly initialized citizen on GroundZero." };
+    if (score >= 90) return { title: "Civic Sentinel", color: "text-brand bg-brand/5 border-brand/20", desc: "Elite guardian of civic transparency." };
+    if (score >= 75) return { title: "Ward Watcher", color: "text-green-400 bg-green-950/40 border-green-500/30", desc: "Highly reliable community helper." };
+    if (score >= 55) return { title: "Active Reporter", color: "text-blue-400 bg-blue-950/40 border-blue-500/30", desc: "Standard reporter reporting local outages." };
+    return { title: "Civic Novice", color: "text-gray-400 bg-gray-900/40 border-gray-700/50", desc: "Newly initialized citizen on GroundZero." };
   };
 
   const rank = getRank(user.trustScore);
+
+  const BADGE_ICONS: Record<string, React.ComponentType<any>> = {
+    first_report: MapPin,
+    truth_seeker: Search,
+    whistleblower: Megaphone,
+    ground_reporter: Zap,
+  };
 
   // Civic badges checklist
   const badges = [
     {
       id: "first_report",
       title: "First Report",
-      icon: "📍",
       description: "Filed your first report on the grid",
       earned: totalPosts >= 1
     },
     {
       id: "truth_seeker",
       title: "Truth Seeker",
-      icon: "🔍",
       description: "Had at least one report verified by community",
       earned: userIssues.some(i => i.status === "Verified" || i.status === "Resolved" || i.status === "Escalated")
     },
     {
       id: "whistleblower",
       title: "Whistleblower",
-      icon: "📣",
       description: "Reported Corruption or Govt Failure",
       earned: userIssues.some(i => ["Corruption", "Government Failure", "Harassment"].includes(i.category))
     },
     {
       id: "ground_reporter",
       title: "Ground Reporter",
-      icon: "⚡",
       description: "Filed 3 or more incident reports",
       earned: totalPosts >= 3
     }
@@ -144,13 +193,29 @@ export default function UserProfile({
       {/* Top Banner & Header info */}
       <div className={`flex items-start justify-between pb-6 border-b ${theme === "dark" ? "border-neutral-900" : "border-gray-200"}`} id="profile-top-header">
         <div className="flex items-center gap-4">
-          {/* Avatar with initials */}
-          <div className="relative">
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-lg font-black font-mono shrink-0 ${
+          {/* Avatar with initials or profile picture */}
+          <div className="relative group cursor-pointer" onClick={() => !user.isAnonymous && setShowAvatarPicker(!showAvatarPicker)}>
+            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-lg font-black font-mono shrink-0 overflow-hidden border ${
               theme === "dark" ? "bg-neutral-950 border border-neutral-900 text-white" : "bg-gray-100 border border-gray-200 text-neutral-900"
             }`}>
-              {user.isAnonymous ? "🔒" : getInitials(user.name)}
+              {user.isAnonymous ? (
+                <EyeOff className="w-6 h-6 text-gray-400" />
+              ) : user.avatarUrl ? (
+                user.avatarUrl.startsWith("data:") || user.avatarUrl.startsWith("http") ? (
+                  <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                ) : (
+                  <span className="text-2xl">{user.avatarUrl}</span>
+                )
+              ) : (
+                getInitials(user.name)
+              )}
             </div>
+            {/* Camera Overlay on Hover */}
+            {!user.isAnonymous && (
+              <div className="absolute inset-0 bg-black/60 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <Camera className="w-4 h-4 text-white" />
+              </div>
+            )}
             {/* Status indicator */}
             <span className={`absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center ${
               theme === "dark" ? "bg-[#39FF14] border-black" : "bg-[#2ECC0F] border-white"
@@ -187,6 +252,87 @@ export default function UserProfile({
           <span>Exit</span>
         </button>
       </div>
+
+      {/* Collapsible Avatar Picker */}
+      <AnimatePresence>
+        {showAvatarPicker && !user.isAnonymous && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className={`p-4 border rounded-xl space-y-3 overflow-hidden ${
+              theme === "dark" ? "bg-neutral-950 border-neutral-900" : "bg-gray-50 border-gray-200"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <h4 className={`text-[10px] font-black font-mono uppercase tracking-wider ${theme === "dark" ? "text-gray-400" : "text-gray-700"}`}>
+                Customize operative avatar
+              </h4>
+              <button 
+                onClick={() => setShowAvatarPicker(false)}
+                className="text-[10px] text-gray-500 hover:text-red-400 font-mono"
+              >
+                CLOSE
+              </button>
+            </div>
+
+            {/* Custom file upload button */}
+            <div className="flex items-center gap-3">
+              <label className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 border border-dashed rounded-lg text-xs font-mono uppercase cursor-pointer transition-all ${
+                theme === "dark"
+                  ? "border-neutral-800 hover:border-[#39FF14]/50 bg-black/40 text-gray-400 hover:text-white"
+                  : "border-gray-300 hover:border-[#2ECC0F]/50 bg-white text-gray-600 hover:text-black"
+              }`}>
+                <Upload className="w-3.5 h-3.5" />
+                <span>Upload Custom Photo</span>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleImageUpload} 
+                  className="hidden" 
+                />
+              </label>
+
+              {user.avatarUrl && (
+                <button
+                  onClick={() => updateProfilePicture("")}
+                  className={`px-3 py-2 border rounded-lg text-[9px] font-mono uppercase font-bold transition-all ${
+                    theme === "dark"
+                      ? "border-neutral-900 hover:border-red-500/30 text-gray-400 hover:text-red-400 bg-black/20"
+                      : "border-gray-200 hover:border-red-300 text-gray-600 hover:text-red-600 bg-white"
+                  }`}
+                >
+                  Reset
+                </button>
+              )}
+            </div>
+
+            {/* Presets Grid */}
+            <div className="space-y-1.5">
+              <p className="text-[8px] text-gray-500 font-mono uppercase">Quick presets:</p>
+              <div className="grid grid-cols-5 gap-2">
+                {presets.map((preset) => (
+                  <button
+                    key={preset}
+                    onClick={() => updateProfilePicture(preset)}
+                    className={`p-2 rounded-lg text-xl flex items-center justify-center transition-all border ${
+                      user.avatarUrl === preset
+                        ? theme === "dark"
+                          ? "bg-[#39FF14]/10 border-[#39FF14] scale-110"
+                          : "bg-[#2ECC0F]/10 border-[#2ECC0F] scale-110"
+                        : theme === "dark"
+                          ? "bg-black/40 border-neutral-900 hover:border-neutral-800"
+                          : "bg-white border-gray-200 hover:border-gray-300"
+                    }`}
+                  >
+                    {preset}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Prominent Anonymous Mode Toggle */}
       <div className={`p-4 border rounded-xl flex items-center justify-between ${
@@ -331,33 +477,34 @@ export default function UserProfile({
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-          {badges.map((badge) => (
-            <div
-              key={badge.id}
-              className={`p-2.5 border rounded-xl flex flex-col items-center text-center transition-all relative overflow-hidden ${
-                badge.earned
-                  ? (theme === "dark" ? "bg-neutral-950 border-neutral-850" : "bg-gray-50 border-gray-300 shadow-sm")
-                  : (theme === "dark" ? "bg-black border-neutral-900 opacity-30 select-none" : "bg-gray-100/50 border-gray-200 opacity-35 select-none")
-              }`}
-              title={badge.description}
-            >
-              {/* Badge Icon */}
-              <span className={`text-xl mb-1 ${badge.earned ? "scale-100" : "grayscale filter"}`}>
-                {badge.icon}
-              </span>
-              <p className={`text-[9px] font-black uppercase tracking-wider leading-tight ${badge.earned ? (theme === "dark" ? "text-white" : "text-neutral-900") : "text-gray-500"}`}>
-                {badge.title}
-              </p>
-              <p className="text-[7.5px] text-gray-500 font-mono leading-normal mt-0.5 line-clamp-2 uppercase">
-                {badge.description}
-              </p>
+          {badges.map((badge) => {
+            const BadgeIcon = BADGE_ICONS[badge.id] || HelpCircle;
+            return (
+              <div
+                key={badge.id}
+                className={`p-2.5 border rounded-xl flex flex-col items-center text-center transition-all relative overflow-hidden ${
+                  badge.earned
+                    ? (theme === "dark" ? "bg-neutral-950 border-neutral-850" : "bg-gray-50 border-gray-300 shadow-sm")
+                    : (theme === "dark" ? "bg-black border-neutral-900 opacity-30 select-none" : "bg-gray-100/50 border-gray-200 opacity-35 select-none")
+                }`}
+                title={badge.description}
+              >
+                {/* Badge Icon */}
+                <BadgeIcon className={`w-5 h-5 mb-1 ${badge.earned ? (theme === "dark" ? "text-[#39FF14]" : "text-[#2ECC0F]") : "text-gray-500"}`} />
+                <p className={`text-[9px] font-black uppercase tracking-wider leading-tight ${badge.earned ? (theme === "dark" ? "text-white" : "text-neutral-900") : "text-gray-500"}`}>
+                  {badge.title}
+                </p>
+                <p className="text-[7.5px] text-gray-500 font-mono leading-normal mt-0.5 line-clamp-2 uppercase">
+                  {badge.description}
+                </p>
 
-              {/* Verified badge status banner */}
-              {badge.earned && (
-                <span className={`absolute top-0 right-0 w-2.5 h-2.5 rounded-bl-sm ${theme === "dark" ? "bg-[#39FF14]" : "bg-[#2ECC0F]"}`} />
-              )}
-            </div>
-          ))}
+                {/* Verified badge status banner */}
+                {badge.earned && (
+                  <span className={`absolute top-0 right-0 w-2.5 h-2.5 rounded-bl-sm ${theme === "dark" ? "bg-[#39FF14]" : "bg-[#2ECC0F]"}`} />
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -370,9 +517,9 @@ export default function UserProfile({
           Trust Metric Operations
         </p>
         <ul className="list-disc pl-4 space-y-0.5 font-mono uppercase tracking-wide text-[8.5px]">
-          <li>Community logs <span className={theme === "dark" ? "text-[#39FF14]" : "text-[#2ECC0F]"}>(+5 TS)</span> for every "Verified ✅" reaction.</li>
-          <li>Submitting fake logs <span className="text-red-500">(-12 TS)</span> for "Cap 🧢" consensus.</li>
-          <li>Official Status updates <span className={theme === "dark" ? "text-[#39FF14]" : "text-[#2ECC0F]"}>(up to +25 TS)</span> when issue is Resolved!</li>
+          <li>Community logs <span className={theme === "dark" ? "text-[#39FF14]" : "text-[#2ECC0F]"}>[+5 TS]</span> for every "Verified" reaction.</li>
+          <li>Submitting fake logs <span className="text-red-500">[-12 TS]</span> for "Cap" consensus.</li>
+          <li>Official Status updates <span className={theme === "dark" ? "text-[#39FF14]" : "text-[#2ECC0F]"}>[up to +25 TS]</span> when issue is Resolved!</li>
         </ul>
       </div>
 
@@ -436,11 +583,11 @@ export default function UserProfile({
                   <h4 className={`text-xs font-bold tracking-tight truncate ${theme === "dark" ? "text-white" : "text-neutral-900"}`}>{issue.title}</h4>
                   <div className="flex items-center gap-2.5 text-[8.5px] text-gray-500 font-mono uppercase">
                     <span>{issue.area}</span>
-                    <div className="flex items-center gap-1.5">
-                      <span>✅ {issue.reactions.verified || 0}</span>
-                      <span>🧢 {issue.reactions.cap || 0}</span>
-                      <span>🔥 {issue.reactions.big_issue || 0}</span>
-                      <span>💀 {issue.reactions.bruh || 0}</span>
+                    <div className="flex items-center gap-2.5">
+                      <span className="flex items-center gap-0.5"><Check className="w-2.5 h-2.5 text-emerald-500" /> {issue.reactions.verified || 0}</span>
+                      <span className="flex items-center gap-0.5"><Flag className="w-2.5 h-2.5 text-red-500" /> {issue.reactions.cap || 0}</span>
+                      <span className="flex items-center gap-0.5"><Flame className="w-2.5 h-2.5 text-amber-500" /> {issue.reactions.big_issue || 0}</span>
+                      <span className="flex items-center gap-0.5"><AlertTriangle className="w-2.5 h-2.5 text-teal-400" /> {issue.reactions.bruh || 0}</span>
                     </div>
                   </div>
                 </div>

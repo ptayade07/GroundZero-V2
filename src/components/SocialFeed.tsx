@@ -5,7 +5,36 @@
 
 import React, { useState } from "react";
 import { Issue, Category, ReactionType } from "../types";
-import { Search, MapPin, Sparkles, Eye, ShieldCheck, HelpCircle, X, Sun, Moon } from "lucide-react";
+import {
+  Search,
+  MapPin,
+  Sparkles,
+  Eye,
+  ShieldCheck,
+  HelpCircle,
+  X,
+  Sun,
+  Moon,
+  Building,
+  Construction,
+  Waves,
+  Zap,
+  Trash2,
+  Scale,
+  Landmark,
+  Megaphone,
+  MessageCircle,
+  MessageSquare,
+  ShieldAlert,
+  Newspaper,
+  Home,
+  Cloud,
+  Flame,
+  User,
+  AlertTriangle,
+  Check,
+  Flag
+} from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface SocialFeedProps {
@@ -21,23 +50,23 @@ interface SocialFeedProps {
   onToggleTheme?: () => void;
 }
 
-const CATEGORY_MAP: Record<Category, { label: string; emoji: string; bg: string; text: string; gradient: string }> = {
-  "Civic Issue": { label: "Civic Issue", emoji: "🏢", bg: "bg-indigo-500/20 border-indigo-500/30", text: "text-indigo-400", gradient: "from-[#1e1b4b] via-[#0f0a21] to-[#030008]" },
-  "Pothole": { label: "Pothole", emoji: "🕳️", bg: "bg-orange-500/20 border-orange-500/30", text: "text-orange-400", gradient: "from-[#431407] via-[#1c0802] to-[#050000]" },
-  "Flooding": { label: "Flooding", emoji: "🌊", bg: "bg-blue-500/20 border-blue-500/30", text: "text-blue-400", gradient: "from-[#172554] via-[#0c1435] to-[#01020d]" },
-  "Power Cut": { label: "Power Cut", emoji: "🔌", bg: "bg-yellow-500/20 border-yellow-500/30", text: "text-yellow-400", gradient: "from-[#422006] via-[#1c0d02] to-[#040100]" },
-  "Garbage": { label: "Garbage", emoji: "🗑️", bg: "bg-amber-700/20 border-amber-700/30", text: "text-amber-500", gradient: "from-[#3b2207] via-[#1a0e03] to-[#030100]" },
-  "Corruption": { label: "Corruption", emoji: "💼", bg: "bg-red-500/20 border-red-500/30", text: "text-red-400", gradient: "from-[#450a0a] via-[#1f0303] to-[#050000]" },
-  "Government Failure": { label: "Govt Failure", emoji: "🏛️", bg: "bg-red-700/20 border-red-700/30", text: "text-red-500", gradient: "from-[#5c0a0a] via-[#240404] to-[#050000]" },
-  "Protest / Rally": { label: "Protest / Rally", emoji: "📣", bg: "bg-pink-500/20 border-pink-500/30", text: "text-pink-400", gradient: "from-[#4c0519] via-[#20020a] to-[#050001]" },
-  "Local Drama": { label: "Local Drama", emoji: "🍵", bg: "bg-teal-500/20 border-teal-500/30", text: "text-teal-400", gradient: "from-[#042f2e] via-[#021414] to-[#000303]" },
-  "Argument / Dispute": { label: "Argument", emoji: "🗣️", bg: "bg-rose-500/20 border-rose-500/30", text: "text-rose-400", gradient: "from-[#4c0519] via-[#1a050d] to-[#050001]" },
-  "Harassment": { label: "Harassment", emoji: "⚠️", bg: "bg-red-600/20 border-red-600/30", text: "text-red-500", gradient: "from-[#580505] via-[#1c0202] to-[#050000]" },
-  "Breaking News": { label: "Breaking News", emoji: "📰", bg: "bg-cyan-500/20 border-cyan-500/30", text: "text-cyan-400", gradient: "from-[#083344] via-[#03151c] to-[#000405]" },
-  "Village Problem": { label: "Village Prob", emoji: "🏡", bg: "bg-green-500/20 border-green-500/30", text: "text-green-400", gradient: "from-[#064e3b] via-[#022119] to-[#000403]" },
-  "Weather": { label: "Weather", emoji: "☁️", bg: "bg-sky-500/20 border-sky-500/30", text: "text-sky-400", gradient: "from-[#0c4a6e] via-[#042238] to-[#00060d]" },
-  "War / Conflict": { label: "Conflict", emoji: "💥", bg: "bg-gray-800/40 border-gray-700/30", text: "text-gray-400", gradient: "from-[#1c1917] via-[#0c0a09] to-black" },
-  "Other": { label: "Other", emoji: "❓", bg: "bg-gray-700/20 border-gray-700/30", text: "text-gray-400", gradient: "from-[#18181b] via-[#09090b] to-black" }
+const CATEGORY_MAP: Record<Category, { label: string; icon: React.ComponentType<any>; bg: string; text: string; gradient: string }> = {
+  "Civic Issue": { label: "Civic Issue", icon: Building, bg: "bg-indigo-500/20 border-indigo-500/30", text: "text-indigo-400", gradient: "from-[#1e1b4b] via-[#0f0a21] to-[#030008]" },
+  "Pothole": { label: "Pothole", icon: Construction, bg: "bg-orange-500/20 border-orange-500/30", text: "text-orange-400", gradient: "from-[#431407] via-[#1c0802] to-[#050000]" },
+  "Flooding": { label: "Flooding", icon: Waves, bg: "bg-blue-500/20 border-blue-500/30", text: "text-blue-400", gradient: "from-[#172554] via-[#0c1435] to-[#01020d]" },
+  "Power Cut": { label: "Power Cut", icon: Zap, bg: "bg-yellow-500/20 border-yellow-500/30", text: "text-yellow-400", gradient: "from-[#422006] via-[#1c0d02] to-[#040100]" },
+  "Garbage": { label: "Garbage", icon: Trash2, bg: "bg-amber-700/20 border-amber-700/30", text: "text-amber-500", gradient: "from-[#3b2207] via-[#1a0e03] to-[#030100]" },
+  "Corruption": { label: "Corruption", icon: Scale, bg: "bg-red-500/20 border-red-500/30", text: "text-red-400", gradient: "from-[#450a0a] via-[#1f0303] to-[#050000]" },
+  "Government Failure": { label: "Govt Failure", icon: Landmark, bg: "bg-red-700/20 border-red-700/30", text: "text-red-500", gradient: "from-[#5c0a0a] via-[#240404] to-[#050000]" },
+  "Protest / Rally": { label: "Protest / Rally", icon: Megaphone, bg: "bg-pink-500/20 border-pink-500/30", text: "text-pink-400", gradient: "from-[#4c0519] via-[#20020a] to-[#050001]" },
+  "Local Drama": { label: "Local Drama", icon: MessageCircle, bg: "bg-teal-500/20 border-teal-500/30", text: "text-teal-400", gradient: "from-[#042f2e] via-[#021414] to-[#000303]" },
+  "Argument / Dispute": { label: "Argument", icon: MessageSquare, bg: "bg-rose-500/20 border-rose-500/30", text: "text-rose-400", gradient: "from-[#4c0519] via-[#1a050d] to-[#050001]" },
+  "Harassment": { label: "Harassment", icon: ShieldAlert, bg: "bg-red-600/20 border-red-600/30", text: "text-red-500", gradient: "from-[#580505] via-[#1c0202] to-[#050000]" },
+  "Breaking News": { label: "Breaking News", icon: Newspaper, bg: "bg-cyan-500/20 border-cyan-500/30", text: "text-cyan-400", gradient: "from-[#083344] via-[#03151c] to-[#000405]" },
+  "Village Problem": { label: "Village Prob", icon: Home, bg: "bg-green-500/20 border-green-500/30", text: "text-green-400", gradient: "from-[#064e3b] via-[#022119] to-[#000403]" },
+  "Weather": { label: "Weather", icon: Cloud, bg: "bg-sky-500/20 border-sky-500/30", text: "text-sky-400", gradient: "from-[#0c4a6e] via-[#042238] to-[#00060d]" },
+  "War / Conflict": { label: "Conflict", icon: Flame, bg: "bg-gray-800/40 border-gray-700/30", text: "text-gray-400", gradient: "from-[#1c1917] via-[#0c0a09] to-black" },
+  "Other": { label: "Other", icon: HelpCircle, bg: "bg-gray-700/20 border-gray-700/30", text: "text-gray-400", gradient: "from-[#18181b] via-[#09090b] to-black" }
 };
 
 const CATEGORY_SOLID_BG: Record<Category, string> = {
@@ -224,11 +253,11 @@ export default function SocialFeed({
                       ? (CATEGORY_LIGHT_SOLID_BG[issue.category] || "bg-gray-50") 
                       : (CATEGORY_SOLID_BG[issue.category] || "bg-neutral-900")
                   }`}>
-                    {/* Centered category emoji as clean background accent with high-end scale effect */}
-                    <div className={`text-[120px] font-black transform group-hover:scale-110 transition-transform duration-1000 ease-out ${
-                      isCardLight ? 'opacity-20' : 'opacity-10'
+                    {/* Centered category icon as clean background accent with high-end scale effect */}
+                    <div className={`transform group-hover:scale-110 transition-transform duration-1000 ease-out ${
+                      isCardLight ? 'text-neutral-900 opacity-15' : 'text-white opacity-10'
                     }`}>
-                      {catConfig.emoji}
+                      {React.createElement(catConfig.icon, { className: "w-24 h-24" })}
                     </div>
                   </div>
                 )}
@@ -237,19 +266,21 @@ export default function SocialFeed({
                 <div className="absolute bottom-6 left-4 right-20 z-10 flex flex-col gap-1.5 pointer-events-auto text-left max-h-[25%] justify-end">
                   {/* Category and Location Badges */}
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase border ${
+                    <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase border flex items-center gap-1 ${
                       isCardLight 
                         ? 'bg-neutral-100 border-neutral-200 text-neutral-800 shadow-xs' 
                         : `bg-black/60 ${catConfig.bg} ${catConfig.text} backdrop-blur-sm`
                     }`}>
-                      <span>{catConfig.emoji}</span> {catConfig.label}
+                      {React.createElement(catConfig.icon, { className: "w-2.5 h-2.5 shrink-0" })}
+                      <span>{catConfig.label}</span>
                     </span>
                     <span className={`text-[8px] font-mono uppercase tracking-wider flex items-center gap-1 px-2 py-0.5 rounded-full border ${
                       isCardLight 
                         ? 'bg-white/90 border-gray-200/80 text-gray-700 shadow-xs' 
                         : 'bg-black/60 border-gray-800/40 text-gray-300 backdrop-blur-sm'
                     }`}>
-                      📍 {issue.area}
+                      <MapPin className="w-2.5 h-2.5 shrink-0 text-red-500" />
+                      <span>{issue.area}</span>
                     </span>
                     <span className={`text-[8px] font-mono px-1.5 py-0.5 rounded ${
                       isCardLight 
@@ -273,26 +304,28 @@ export default function SocialFeed({
                   <div className={`flex items-center gap-1.5 flex-wrap ${
                     isCardLight ? 'text-gray-700' : 'text-gray-300'
                   }`}>
-                    <span className="text-[10px]">👤</span>
+                    <User className="w-3 h-3 text-gray-400" />
                     <span className={`text-[10px] font-bold tracking-tight ${
                       isCardLight ? 'text-neutral-900' : 'text-white drop-shadow-sm'
                     }`}>
                       {issue.isAnonymous ? "Anonymous Citizen" : issue.reporterName}
                     </span>
-                    <span className={`px-1 py-0.2 font-mono rounded text-[8px] font-black tracking-tight uppercase border ${
+                    <span className={`px-1 py-0.2 font-mono rounded text-[8px] font-black tracking-tight uppercase border flex items-center gap-0.5 ${
                       isCardLight 
                         ? 'bg-[#2ECC0F]/10 border-[#2ECC0F]/20 text-[#2ECC0F]' 
                         : 'bg-brand/15 border border-brand/35 text-brand'
                     }`}>
-                      🛡️ {issue.reporterTrustScore} TS
+                      <ShieldCheck className="w-2.5 h-2.5 text-emerald-400" />
+                      <span>{issue.reporterTrustScore} TS</span>
                     </span>
                     {issue.isSpam && (
-                      <span className={`flex items-center gap-1 px-1.5 py-0.2 rounded text-[8px] font-mono uppercase font-black border ${
+                      <span className={`flex items-center gap-1 px-1.5 py-0.2 rounded text-[8px] font-mono uppercase font-black border flex items-center gap-0.5 ${
                         isCardLight 
                           ? 'bg-red-50 border-red-200 text-red-600' 
                           : 'bg-red-950/80 border border-red-500/40 text-red-400'
                       }`}>
-                        ⚠️ SPAM
+                        <AlertTriangle className="w-2.5 h-2.5 text-red-400" />
+                        <span>SPAM</span>
                       </span>
                     )}
                   </div>
@@ -301,7 +334,7 @@ export default function SocialFeed({
                   <div className={`text-[8px] font-mono uppercase tracking-widest flex items-center gap-1 animate-pulse ${
                     isCardLight ? 'text-neutral-500' : 'text-brand/80 drop-shadow-sm'
                   }`}>
-                    <span>⚡ TAP FOR DETAILED BREAKDOWN</span>
+                    <span>TAP FOR DETAILED BREAKDOWN</span>
                   </div>
                 </div>
 
@@ -327,7 +360,7 @@ export default function SocialFeed({
                           ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
                           : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
-                      <span className="text-base">👁️</span>
+                      <Eye className="w-5 h-5" />
                     </div>
                     <span className={`text-[9px] font-mono font-black ${
                       isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
@@ -341,7 +374,7 @@ export default function SocialFeed({
                     </span>
                   </button>
 
-                  {/* Verified ✅ */}
+                  {/* Verified */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -359,7 +392,7 @@ export default function SocialFeed({
                           ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
                           : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
-                      <span className="text-base">✅</span>
+                      <Check className="w-5 h-5" />
                     </div>
                     <span className={`text-[9px] font-mono font-black ${
                       isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
@@ -373,7 +406,7 @@ export default function SocialFeed({
                     </span>
                   </button>
 
-                  {/* Cap 🧢 */}
+                  {/* Cap */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -391,7 +424,7 @@ export default function SocialFeed({
                           ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
                           : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
-                      <span className="text-base">🧢</span>
+                      <Flag className="w-5 h-5" />
                     </div>
                     <span className={`text-[9px] font-mono font-black ${
                       isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
@@ -405,7 +438,7 @@ export default function SocialFeed({
                     </span>
                   </button>
 
-                  {/* Big Issue 🔥 */}
+                  {/* Big Issue */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -423,7 +456,7 @@ export default function SocialFeed({
                           ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
                           : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
-                      <span className="text-base">🔥</span>
+                      <Flame className="w-5 h-5" />
                     </div>
                     <span className={`text-[9px] font-mono font-black ${
                       isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
@@ -437,7 +470,7 @@ export default function SocialFeed({
                     </span>
                   </button>
 
-                  {/* Bruh 💀 */}
+                  {/* Bruh */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -455,7 +488,7 @@ export default function SocialFeed({
                           ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
                           : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
-                      <span className="text-base">💀</span>
+                      <AlertTriangle className="w-5 h-5" />
                     </div>
                     <span className={`text-[9px] font-mono font-black ${
                       isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'

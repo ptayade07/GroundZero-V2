@@ -93,7 +93,7 @@ export default function LandingPage({
             <p className={`text-xs font-bold font-mono tracking-wider uppercase ${
               theme === 'dark' ? 'text-gray-300' : 'text-neutral-800'
             }`}>
-              📍 Post what you see
+              Post what you see
             </p>
           </div>
 
@@ -109,7 +109,7 @@ export default function LandingPage({
             <p className={`text-xs font-bold font-mono tracking-wider uppercase ${
               theme === 'dark' ? 'text-gray-300' : 'text-neutral-800'
             }`}>
-              ✅ Verify what's real
+              Verify what's real
             </p>
           </div>
 
@@ -125,7 +125,7 @@ export default function LandingPage({
             <p className={`text-xs font-bold font-mono tracking-wider uppercase ${
               theme === 'dark' ? 'text-gray-300' : 'text-neutral-800'
             }`}>
-              ⚡ Hold power accountable
+              Hold power accountable
             </p>
           </div>
         </motion.div>
