@@ -15,7 +15,7 @@ import UserProfile from "./components/UserProfile";
 import SocialFeed from "./components/SocialFeed";
 import Onboarding from "./components/Onboarding";
 import SearchPage from "./components/SearchPage";
-import { Map, Plus, BarChart3, User as UserIcon, ShieldAlert, Navigation, Layers, AlertCircle, Sparkles, Check, ChevronDown, ListFilter, SlidersHorizontal, MessageSquare, Search, X } from "lucide-react";
+import { Map, Plus, BarChart3, User as UserIcon, ShieldAlert, Navigation, Layers, AlertCircle, Sparkles, Check, ChevronDown, ListFilter, SlidersHorizontal, MessageSquare, Search, X, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
@@ -40,6 +40,30 @@ export default function App() {
   
   // Profile sub-tab selector: "profile" (My Registry) vs "dashboard" (City Outrage)
   const [profileSubTab, setProfileSubTab] = useState<"registry" | "dashboard">("registry");
+
+  // Theme state: dark by default, stored in localStorage
+  const [theme, setTheme] = useState<"light" | "dark">(
+    () => {
+      if (typeof window !== "undefined") {
+        try {
+          return (localStorage.getItem("theme") as "light" | "dark") || "dark";
+        } catch (e) {
+          return "dark";
+        }
+      }
+      return "dark";
+    }
+  );
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("theme", theme);
+      } catch (e) {
+        // Ignore
+      }
+    }
+  }, [theme]);
 
   // Filter and Search for Map/Feed list
   const [categoryFilter, setCategoryFilter] = useState<Category | "all">("all");
@@ -398,6 +422,7 @@ export default function App() {
   if (showOnboarding) {
     return (
       <Onboarding
+        theme={theme}
         onComplete={() => {
           localStorage.setItem("gz_onboarding_completed", "true");
           setShowOnboarding(false);
@@ -410,6 +435,7 @@ export default function App() {
     if (showLanding) {
       return (
         <LandingPage
+          theme={theme}
           onLoginClick={() => setShowLanding(false)}
           onSignUpClick={() => setShowLanding(false)}
           onContinueAnonymously={() => handleLogin("", "", true)}
@@ -417,42 +443,60 @@ export default function App() {
       );
     } else {
       return (
-        <div className="w-full h-screen flex flex-col bg-[#0A0A0A] text-white relative overflow-y-auto" id="login-container-wrapper">
+        <div className={`w-full h-screen flex flex-col relative overflow-y-auto transition-all duration-300 ${
+          theme === 'dark' ? 'bg-[#0A0A0A] text-white' : 'bg-[#FAFAFA] text-neutral-900'
+        }`} id="login-container-wrapper">
           {/* Top Back navigation */}
           <div className="absolute top-6 left-6 z-50">
             <button
               onClick={() => setShowLanding(true)}
-              className="px-3 py-1.5 bg-[#141414] hover:bg-[#1f1f1f] text-gray-400 hover:text-white rounded-lg text-xs font-bold uppercase transition-all cursor-pointer flex items-center gap-1.5 border border-gray-900 shadow-xl"
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all cursor-pointer flex items-center gap-1.5 border shadow-xl ${
+                theme === 'dark' 
+                  ? 'bg-[#141414] hover:bg-[#1f1f1f] text-gray-400 hover:text-white border-gray-900' 
+                  : 'bg-white hover:bg-gray-50 text-gray-650 hover:text-black border-gray-200'
+              }`}
               id="back-to-landing-btn"
             >
               ← Back
             </button>
           </div>
           <div className="w-full min-h-screen flex items-center justify-center py-16">
-            <LoginPage onLogin={handleLogin} />
+            <LoginPage onLogin={handleLogin} theme={theme} />
           </div>
         </div>
       );
     }
-  }
-
-  return (
-    <div className="w-full h-screen flex flex-col bg-[#0A0A0A] select-none text-white relative font-sans overflow-hidden" id="groundzero-root">
+  }  return (
+    <div className={`w-full h-screen flex flex-col select-none relative font-sans overflow-hidden transition-all duration-300 ${
+      theme === "dark" ? "bg-[#0A0A0A] text-white" : "bg-[#FAFAFA] text-neutral-900"
+    }`} id="groundzero-root">
       
       {/* Top operational banner header */}
       {view !== "feed" && (
-        <header className="px-4 py-3 bg-[#0A0A0A]/95 border-b border-gray-900 flex items-center justify-between backdrop-blur shrink-0 z-50 shadow-md">
+        <header className={`px-4 py-3 border-b flex items-center justify-between backdrop-blur shrink-0 z-50 shadow-md ${
+          theme === 'dark' ? 'bg-[#0A0A0A]/95 border-neutral-900 text-white' : 'bg-white/95 border-gray-200 text-neutral-900'
+        }`}>
           <div className="flex items-center gap-2">
-            <div className="px-2 py-1 bg-gradient-to-tr from-[#124d04] to-brand rounded text-xs font-black font-mono shadow-md shadow-brand/20 text-[#0A0A0A]">
+            <div className={`px-2 py-1 rounded text-xs font-black font-mono shadow-md text-[#0A0A0A] ${
+              theme === 'dark' ? 'bg-gradient-to-tr from-[#124d04] to-brand shadow-brand/20' : 'bg-gradient-to-tr from-[#2ECC0F] to-[#2ECC0F]/80 shadow-[#2ECC0F]/20 text-white'
+            }`}>
               GZ
             </div>
             <div className="flex flex-col justify-center">
               <div className="flex items-center gap-1.5">
-                <h1 className="text-sm font-black tracking-tight uppercase leading-none text-white">
-                  GROUND<span className="text-brand">ZERO</span>
+                <h1 className={`text-sm font-black tracking-tight uppercase leading-none ${
+                  theme === 'dark' ? 'text-white' : 'text-neutral-900'
+                }`}>
+                  GROUND<span className={theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}>ZERO</span>
                 </h1>
-                <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-950/80 border border-[#39FF14]/30 text-[#39FF14] text-[8px] font-black tracking-wider uppercase">
-                  <span className="w-1 h-1 rounded-full bg-[#39FF14] animate-ping" />
+                <span className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-black tracking-wider uppercase border ${
+                  theme === 'dark' 
+                    ? 'bg-emerald-950/80 border-[#39FF14]/30 text-[#39FF14]' 
+                    : 'bg-emerald-50 border-[#2ECC0F]/30 text-[#2ECC0F]'
+                }`}>
+                  <span className={`w-1 h-1 rounded-full animate-ping ${
+                    theme === 'dark' ? 'bg-[#39FF14]' : 'bg-[#2ECC0F]'
+                  }`} />
                   <span className="animate-pulse">LIVE</span>
                 </span>
               </div>
@@ -461,20 +505,42 @@ export default function App() {
               </p>
             </div>
           </div>
-
+ 
           {/* Live radar indicators and trust score */}
           <div className="flex items-center gap-2">
+            {/* Theme Toggle Button */}
+            <button
+              onClick={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
+              className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+                theme === 'dark' 
+                  ? 'bg-[#0a0a0a] border-neutral-800 text-gray-400 hover:text-white hover:border-neutral-700' 
+                  : 'bg-white border-gray-200 text-gray-500 hover:text-black hover:border-gray-300 shadow-xs'
+              }`}
+              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+              id="top-theme-toggle"
+            >
+              {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+            </button>
+
             {user ? (
               <div
                 onClick={() => setView("profile")}
-                className="flex items-center gap-1.5 px-2.5 py-1 bg-[#0A0A0A] border border-gray-800 rounded-lg text-xs cursor-pointer hover:border-brand/40 transition-all font-mono"
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs cursor-pointer transition-all font-mono border ${
+                  theme === 'dark' 
+                    ? 'bg-[#0A0A0A] border-gray-800 text-white hover:border-brand/40' 
+                    : 'bg-white border-gray-250 text-neutral-850 hover:border-[#2ECC0F]/40 shadow-xs'
+                }`}
                 id="top-profile-badge"
               >
-                <span className="text-brand text-[10px] animate-pulse">●</span>
-                <span className="text-gray-400 font-sans font-medium line-clamp-1 max-w-[80px] text-[10px]">
+                <span className={`text-[10px] animate-pulse ${theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}`}>●</span>
+                <span className={`font-sans font-medium line-clamp-1 max-w-[80px] text-[10px] ${
+                  theme === 'dark' ? 'text-gray-400' : 'text-neutral-700'
+                }`}>
                   {user.isAnonymous ? "Anonymous" : user.name.split(" ")[0]}
                 </span>
-                <span className="px-1 py-0.2 bg-brand/10 text-brand rounded text-[8px] font-bold">
+                <span className={`px-1 py-0.2 rounded text-[8px] font-bold ${
+                  theme === 'dark' ? 'bg-brand/10 text-brand' : 'bg-[#2ECC0F]/10 text-[#2ECC0F]'
+                }`}>
                   {user.trustScore} TS
                 </span>
               </div>
@@ -661,6 +727,7 @@ export default function App() {
               onSelectLocationForNewIssue={handleSelectLocationForNewIssue}
               isSelectingLocationMode={isSelectingLocationMode}
               selectedLocation={selectedLocation}
+              theme={theme}
             />
 
              {/* Clicked Map Pin Info Overlay Popup */}
@@ -703,6 +770,7 @@ export default function App() {
             <SearchPage
               issues={issues}
               currentUserId={user.id}
+              theme={theme}
               onSelectIssue={(issue) => {
                 setSelectedIssue(issue);
                 setView("map"); // Swaps to map to focus and show info popup
@@ -730,18 +798,25 @@ export default function App() {
               }}
               onEnterLocationSelectionMode={handleEnterLocationSelectionMode}
               onSelectLocation={handleSelectLocationForNewIssue}
+              theme={theme}
             />
           </div>
 
           {/* View 4: Profile & Dashboard combined */}
           <div className={`w-full h-full absolute inset-0 overflow-y-auto px-4 py-6 ${view === "profile" ? "block" : "hidden"}`}>
-            <div className="max-w-lg mx-auto mb-4 bg-black border border-neutral-900 rounded-xl p-1 flex">
+            <div className={`max-w-lg mx-auto mb-4 border rounded-xl p-1 flex transition-all ${
+              theme === "dark" ? "bg-black border-neutral-900" : "bg-gray-150 border-gray-200 shadow-xs"
+            }`}>
               <button
                 onClick={() => setProfileSubTab("registry")}
-                className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
+                className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer ${
                   profileSubTab === "registry"
-                    ? "bg-[#39FF14] text-black font-black"
-                    : "text-gray-400 hover:text-white"
+                    ? theme === "dark"
+                      ? "bg-[#39FF14] text-black font-black"
+                      : "bg-[#2ECC0F] text-white font-black shadow-xs"
+                    : theme === "dark"
+                      ? "text-gray-400 hover:text-white"
+                      : "text-gray-500 hover:text-neutral-900"
                 }`}
                 id="profile-subtab-registry"
               >
@@ -749,10 +824,14 @@ export default function App() {
               </button>
               <button
                 onClick={() => setProfileSubTab("dashboard")}
-                className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
+                className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer ${
                   profileSubTab === "dashboard"
-                    ? "bg-[#39FF14] text-black font-black"
-                    : "text-gray-400 hover:text-white"
+                    ? theme === "dark"
+                      ? "bg-[#39FF14] text-black font-black"
+                      : "bg-[#2ECC0F] text-white font-black shadow-xs"
+                    : theme === "dark"
+                      ? "text-gray-400 hover:text-white"
+                      : "text-gray-500 hover:text-neutral-900"
                 }`}
                 id="profile-subtab-dashboard"
               >
@@ -770,9 +849,10 @@ export default function App() {
                   setSelectedIssue(issue);
                   setView("map"); // Swaps to map to highlight selected history complaint
                 }}
+                theme={theme}
               />
             ) : (
-              <AnalyticsDashboard metrics={dashboardMetrics} />
+              <AnalyticsDashboard metrics={dashboardMetrics} theme={theme} />
             )}
           </div>
 
@@ -781,75 +861,109 @@ export default function App() {
 
       {/* Global Bottom Navigation bar */}
       {user && (
-        <nav className="px-4 py-2 bg-black border-t border-neutral-900 flex items-center justify-around shrink-0 z-50 backdrop-blur">
+        <nav className={`px-4 py-2 border-t flex items-center justify-around shrink-0 z-50 backdrop-blur transition-all duration-300 ${
+          theme === "dark" 
+            ? "bg-black border-neutral-900" 
+            : "bg-white border-gray-200 shadow-md text-neutral-800"
+        }`}>
           {/* Map Feed tab */}
           <button
             onClick={() => {
               setView("map");
               setIsSelectingLocationMode(false);
             }}
-            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all ${
-              view === "map" ? "text-[#39FF14] font-extrabold" : "text-gray-400 hover:text-white"
+            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all cursor-pointer ${
+              view === "map" 
+                ? theme === "dark" 
+                  ? "text-[#39FF14] font-extrabold" 
+                  : "text-[#2ECC0F] font-extrabold"
+                : theme === "dark" 
+                  ? "text-gray-400 hover:text-white" 
+                  : "text-gray-500 hover:text-neutral-900"
             }`}
             id="nav-map-btn"
           >
             <Map className="w-5 h-5" />
             <span className="text-[8px] font-mono uppercase tracking-wide">Map</span>
           </button>
-
+ 
           {/* Social Feed Tab */}
           <button
             onClick={() => {
               setView("feed");
               setIsSelectingLocationMode(false);
             }}
-            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all ${
-              view === "feed" ? "text-[#39FF14] font-extrabold" : "text-gray-400 hover:text-white"
+            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all cursor-pointer ${
+              view === "feed" 
+                ? theme === "dark" 
+                  ? "text-[#39FF14] font-extrabold" 
+                  : "text-[#2ECC0F] font-extrabold"
+                : theme === "dark" 
+                  ? "text-gray-400 hover:text-white" 
+                  : "text-gray-500 hover:text-neutral-900"
             }`}
             id="nav-feed-btn"
           >
             <MessageSquare className="w-5 h-5" />
             <span className="text-[8px] font-mono uppercase tracking-wide">Civic Tea</span>
           </button>
-
+ 
           {/* Search Tab */}
           <button
             onClick={() => {
               setView("search");
               setIsSelectingLocationMode(false);
             }}
-            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all ${
-              view === "search" ? "text-[#39FF14] font-extrabold" : "text-gray-400 hover:text-white"
+            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all cursor-pointer ${
+              view === "search" 
+                ? theme === "dark" 
+                  ? "text-[#39FF14] font-extrabold" 
+                  : "text-[#2ECC0F] font-extrabold"
+                : theme === "dark" 
+                  ? "text-gray-400 hover:text-white" 
+                  : "text-gray-500 hover:text-neutral-900"
             }`}
             id="nav-search-btn"
           >
             <Search className="w-5 h-5" />
             <span className="text-[8px] font-mono uppercase tracking-wide">Search</span>
           </button>
-
+ 
           {/* Report Tab */}
           <button
             onClick={() => {
               setView("report");
               setIsSelectingLocationMode(false);
             }}
-            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all ${
-              view === "report" ? "text-[#39FF14] font-extrabold" : "text-gray-400 hover:text-white"
+            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all cursor-pointer ${
+              view === "report" 
+                ? theme === "dark" 
+                  ? "text-[#39FF14] font-extrabold" 
+                  : "text-[#2ECC0F] font-extrabold"
+                : theme === "dark" 
+                  ? "text-gray-400 hover:text-white" 
+                  : "text-gray-500 hover:text-neutral-900"
             }`}
             id="nav-report-btn"
           >
             <Plus className="w-5 h-5" />
             <span className="text-[8px] font-mono uppercase tracking-wide">Post</span>
           </button>
-
+ 
           {/* Profile tab */}
           <button
             onClick={() => {
               setView("profile");
               setIsSelectingLocationMode(false);
             }}
-            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all ${
-              view === "profile" ? "text-[#39FF14] font-extrabold" : "text-gray-400 hover:text-white"
+            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all cursor-pointer ${
+              view === "profile" 
+                ? theme === "dark" 
+                  ? "text-[#39FF14] font-extrabold" 
+                  : "text-[#2ECC0F] font-extrabold"
+                : theme === "dark" 
+                  ? "text-gray-400 hover:text-white" 
+                  : "text-gray-500 hover:text-neutral-900"
             }`}
             id="nav-profile-btn"
           >
@@ -858,7 +972,7 @@ export default function App() {
           </button>
         </nav>
       )}
-
+ 
       {/* Global Interactive Float Notifications (Toast) */}
       <AnimatePresence>
         {toastMessage && (
@@ -868,8 +982,12 @@ export default function App() {
             exit={{ opacity: 0, y: 50 }}
             className="absolute bottom-20 left-4 right-4 z-50 max-w-sm mx-auto pointer-events-none"
           >
-            <div className="px-3 py-2.5 bg-[#39FF14] border border-[#39FF14] text-black text-xs font-black rounded-xl flex items-center gap-2 backdrop-blur">
-              <Sparkles className="w-4 h-4 text-black animate-pulse" />
+            <div className={`px-3 py-2.5 border text-xs font-black rounded-xl flex items-center gap-2 backdrop-blur transition-all ${
+              theme === "dark"
+                ? "bg-[#39FF14] border-[#39FF14] text-black"
+                : "bg-[#2ECC0F] border-[#2ECC0F] text-white"
+            }`}>
+              <Sparkles className={`w-4 h-4 animate-pulse ${theme === "dark" ? "text-black" : "text-white"}`} />
               <span>{toastMessage}</span>
             </div>
           </motion.div>

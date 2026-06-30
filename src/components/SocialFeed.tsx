@@ -5,7 +5,7 @@
 
 import React, { useState } from "react";
 import { Issue, Category, ReactionType } from "../types";
-import { Search, MapPin, Sparkles, Eye, ShieldCheck, HelpCircle, X } from "lucide-react";
+import { Search, MapPin, Sparkles, Eye, ShieldCheck, HelpCircle, X, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface SocialFeedProps {
@@ -17,6 +17,8 @@ interface SocialFeedProps {
   setTimeFilter: (filter: "2hrs" | "today" | "week" | "all") => void;
   onSeeThisToo: (issueId: string) => void;
   onNavigateToSearch?: () => void;
+  theme?: "light" | "dark";
+  onToggleTheme?: () => void;
 }
 
 const CATEGORY_MAP: Record<Category, { label: string; emoji: string; bg: string; text: string; gradient: string }> = {
@@ -65,7 +67,9 @@ export default function SocialFeed({
   timeFilter,
   setTimeFilter,
   onSeeThisToo,
-  onNavigateToSearch
+  onNavigateToSearch,
+  theme = "dark",
+  onToggleTheme
 }: SocialFeedProps) {
   const [selectedDetailPost, setSelectedDetailPost] = useState<Issue | null>(null);
 
@@ -92,21 +96,25 @@ export default function SocialFeed({
   );
 
   return (
-    <div className="w-full h-full relative bg-black flex flex-col" id="social-feed-tiktok-view">
+    <div className={`w-full h-full relative flex flex-col ${theme === 'dark' ? 'bg-black text-white' : 'bg-[#FAFAFA] text-neutral-900'}`} id="social-feed-tiktok-view">
       
       {/* Top Bar Overlay */}
       <div className="absolute top-0 inset-x-0 z-20 px-4 py-3.5 flex items-center justify-between bg-gradient-to-b from-black/90 via-black/40 to-transparent pointer-events-none">
         <div className="flex items-center gap-2 pointer-events-auto">
-          <div className="px-2 py-0.5 bg-brand text-[#0A0A0A] rounded text-[10px] font-black font-mono shadow-[0_0_8px_rgba(57,255,20,0.3)]">
+          <div className={`px-2 py-0.5 rounded text-[10px] font-black font-mono text-[#0A0A0A] ${
+            theme === 'dark' ? 'bg-brand shadow-[0_0_8px_rgba(57,255,20,0.3)]' : 'bg-[#2ECC0F] shadow-[0_0_8px_rgba(46,204,15,0.3)]'
+          }`}>
             GZ
           </div>
           <div className="flex flex-col justify-center">
             <div className="flex items-center gap-1.5">
               <h1 className="text-xs font-black tracking-tight uppercase text-white leading-none">
-                GROUND<span className="text-brand">ZERO</span>
+                GROUND<span className={theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}>ZERO</span>
               </h1>
-              <span className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-emerald-950/80 border border-[#39FF14]/30 text-[#39FF14] text-[7px] font-black tracking-wider uppercase">
-                <span className="w-1 h-1 rounded-full bg-[#39FF14] animate-ping" />
+              <span className={`flex items-center gap-0.5 px-1 py-0.2 rounded border text-[7px] font-black tracking-wider uppercase ${
+                theme === 'dark' ? 'bg-emerald-950/80 border-[#39FF14]/30 text-[#39FF14]' : 'bg-emerald-50/80 border-[#2ECC0F]/30 text-[#2ECC0F]'
+              }`}>
+                <span className={`w-1 h-1 rounded-full animate-ping ${theme === 'dark' ? 'bg-[#39FF14]' : 'bg-[#2ECC0F]'}`} />
                 <span className="animate-pulse">LIVE</span>
               </span>
             </div>
@@ -116,15 +124,35 @@ export default function SocialFeed({
           </div>
         </div>
 
-        {/* Action Button Link to Search Tab */}
-        <button
-          onClick={onNavigateToSearch}
-          className="p-1.5 bg-black/40 hover:bg-black/60 border border-gray-800/40 hover:border-brand/40 text-gray-300 hover:text-brand rounded-lg transition-all pointer-events-auto flex items-center gap-1 font-mono text-[9px] uppercase font-bold"
-          id="social-feed-top-search-btn"
-        >
-          <Search className="w-3 h-3" />
-          <span>Search</span>
-        </button>
+        <div className="flex items-center gap-1.5 pointer-events-auto">
+          {/* Theme Toggle Button */}
+          <button
+            onClick={onToggleTheme}
+            className={`p-1.5 rounded-lg border transition-all flex items-center justify-center cursor-pointer ${
+              theme === 'dark'
+                ? 'bg-black/40 hover:bg-black/60 border-gray-800/40 text-gray-400 hover:text-white'
+                : 'bg-white/60 hover:bg-white/80 border-gray-300/40 text-gray-650 hover:text-black'
+            }`}
+            title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+            id="social-feed-theme-toggle"
+          >
+            {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+          </button>
+
+          {/* Action Button Link to Search Tab */}
+          <button
+            onClick={onNavigateToSearch}
+            className={`p-1.5 border rounded-lg transition-all flex items-center gap-1 font-mono text-[9px] uppercase font-bold cursor-pointer ${
+              theme === 'dark'
+                ? 'bg-black/40 hover:bg-black/60 border-gray-800/40 text-gray-300 hover:text-brand'
+                : 'bg-white/60 hover:bg-white/80 border-gray-300/40 text-gray-700 hover:text-[#2ECC0F]'
+            }`}
+            id="social-feed-top-search-btn"
+          >
+            <Search className="w-3 h-3" />
+            <span>Search</span>
+          </button>
+        </div>
       </div>
 
       {/* Swipe Snapping vertical container */}
@@ -365,11 +393,13 @@ export default function SocialFeed({
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 220 }}
-              className="absolute inset-x-0 bottom-0 max-h-[80%] bg-black border-t border-neutral-900 rounded-t-2xl z-40 px-6 py-8 flex flex-col gap-6 overflow-y-auto pointer-events-auto shadow-2xl text-left"
+              className={`absolute inset-x-0 bottom-0 max-h-[80%] border-t rounded-t-2xl z-40 px-6 py-8 flex flex-col gap-6 overflow-y-auto pointer-events-auto shadow-2xl text-left ${
+                theme === 'dark' ? 'bg-black border-neutral-900 text-white' : 'bg-white border-gray-200 text-neutral-900'
+              }`}
               id="details-bottom-sheet"
             >
               {/* Top drag handle indicator */}
-              <div className="w-12 h-1 bg-gray-800 rounded-full mx-auto mb-1 shrink-0" />
+              <div className={`w-12 h-1 rounded-full mx-auto mb-1 shrink-0 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-300'}`} />
 
               {/* Header inside Bottom Sheet */}
               <div className="flex items-start justify-between gap-4">
@@ -377,13 +407,15 @@ export default function SocialFeed({
                   <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase border bg-black/40 ${CATEGORY_MAP[selectedDetailPost.category]?.bg || ""} ${CATEGORY_MAP[selectedDetailPost.category]?.text || ""}`}>
                     {CATEGORY_MAP[selectedDetailPost.category]?.emoji} {selectedDetailPost.category}
                   </span>
-                  <h2 className="text-base font-black text-white uppercase mt-2 tracking-tight">
+                  <h2 className={`text-base font-black uppercase mt-2 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>
                     {selectedDetailPost.title}
                   </h2>
                 </div>
                 <button
                   onClick={() => setSelectedDetailPost(null)}
-                  className="p-1.5 rounded-lg bg-neutral-900 text-gray-400 hover:text-white transition-all shrink-0 cursor-pointer"
+                  className={`p-1.5 rounded-lg transition-all shrink-0 cursor-pointer ${
+                    theme === 'dark' ? 'bg-neutral-900 text-gray-400 hover:text-white' : 'bg-gray-100 text-gray-500 hover:text-black'
+                  }`}
                   id="close-bottom-sheet-btn"
                   title="Close Detail Panel"
                 >
@@ -392,29 +424,31 @@ export default function SocialFeed({
               </div>
 
               {/* Local Info panel */}
-              <div className="p-4 bg-black border-b border-neutral-900 space-y-3.5 text-xs">
+              <div className={`p-4 border-b space-y-3.5 text-xs ${theme === 'dark' ? 'bg-black border-neutral-900' : 'bg-gray-50 border-gray-200'}`}>
                 <div className="flex justify-between items-center text-[11px]">
                   <span className="text-gray-500 font-mono uppercase">📍 Area Sector:</span>
-                  <span className="text-brand font-bold uppercase font-mono">{selectedDetailPost.area}</span>
+                  <span className={`font-bold uppercase font-mono ${theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}`}>{selectedDetailPost.area}</span>
                 </div>
                 <div className="flex justify-between items-center text-[11px]">
                   <span className="text-gray-500 font-mono uppercase">⏰ Reported Time:</span>
-                  <span className="text-gray-300 font-mono">{new Date(selectedDetailPost.createdAt).toLocaleString()}</span>
+                  <span className={`font-mono ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{new Date(selectedDetailPost.createdAt).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center text-[11px]">
                   <span className="text-gray-500 font-mono uppercase">👤 Reporter Name:</span>
-                  <span className="text-white font-bold">
+                  <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>
                     {selectedDetailPost.isAnonymous ? "Anonymous Citizen" : selectedDetailPost.reporterName}
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-[11px]">
                   <span className="text-gray-500 font-mono uppercase">🛡️ Trust Score:</span>
-                  <span className="text-brand font-black">{selectedDetailPost.reporterTrustScore} / 100</span>
+                  <span className={`font-black ${theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}`}>{selectedDetailPost.reporterTrustScore} / 100</span>
                 </div>
                 {selectedDetailPost.status && (
                   <div className="flex justify-between items-center text-[11px]">
                     <span className="text-gray-500 font-mono uppercase">🚀 Verification State:</span>
-                    <span className="px-2 py-0.5 rounded bg-brand/10 border border-brand/20 text-brand text-[9px] font-black uppercase tracking-wider">
+                    <span className={`px-2 py-0.5 rounded border text-[9px] font-black uppercase tracking-wider ${
+                      theme === 'dark' ? 'bg-[#39FF14]/10 border-[#39FF14]/20 text-brand' : 'bg-[#2ECC0F]/10 border-[#2ECC0F]/20 text-[#2ECC0F]'
+                    }`}>
                       {selectedDetailPost.status}
                     </span>
                   </div>
@@ -426,7 +460,9 @@ export default function SocialFeed({
                 <span className="text-[10px] font-mono font-bold text-gray-500 uppercase tracking-widest block">
                   Detailed Complaint Description
                 </span>
-                <p className="text-xs text-gray-300 leading-relaxed font-sans bg-black p-4 whitespace-pre-wrap">
+                <p className={`text-xs leading-relaxed font-sans p-4 whitespace-pre-wrap ${
+                  theme === 'dark' ? 'text-gray-300 bg-black' : 'text-gray-700 bg-gray-55'
+                }`}>
                   {selectedDetailPost.description}
                 </p>
               </div>
@@ -434,10 +470,12 @@ export default function SocialFeed({
               {/* AI Insight Description (if any) */}
               {selectedDetailPost.aiDescription && (
                 <div className="space-y-1.5">
-                  <span className="text-[10px] font-mono font-black text-brand uppercase tracking-widest flex items-center gap-1">
-                    <Sparkles className="w-3.5 h-3.5 text-brand" /> AI Analysis Insight
+                  <span className={`text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-1 ${theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}`}>
+                    <Sparkles className="w-3.5 h-3.5" /> AI Analysis Insight
                   </span>
-                  <p className="text-xs text-gray-400 bg-neutral-950 p-4 border border-neutral-900 italic leading-relaxed">
+                  <p className={`text-xs p-4 border italic leading-relaxed ${
+                    theme === 'dark' ? 'text-gray-400 bg-neutral-950 border-neutral-900' : 'text-gray-650 bg-gray-50 border-gray-200'
+                  }`}>
                     "{selectedDetailPost.aiDescription}"
                   </p>
                 </div>
@@ -450,7 +488,9 @@ export default function SocialFeed({
                     setSelectedDetailPost(null);
                     onSelectIssue(selectedDetailPost); // Center map and show popup
                   }}
-                  className="flex-1 py-3 bg-brand text-black rounded-xl text-xs font-black uppercase tracking-wider shadow-md hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5"
+                  className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-md hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                    theme === 'dark' ? 'bg-brand text-black' : 'bg-[#2ECC0F] text-white'
+                  }`}
                 >
                   <MapPin className="w-4 h-4" /> View on Local Radar Map
                 </button>

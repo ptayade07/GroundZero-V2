@@ -15,6 +15,7 @@ interface MapComponentProps {
   onSelectLocationForNewIssue?: (lat: number, lng: number, area: string) => void;
   isSelectingLocationMode: boolean;
   selectedLocation: { lat: number; lng: number } | null;
+  theme?: "light" | "dark";
 }
 
 const CATEGORY_COLORS: Record<Category, { hex: string; bg: string; text: string; pin: string }> = {
@@ -61,7 +62,8 @@ export default function MapComponent({
   onSelectIssue,
   onSelectLocationForNewIssue,
   isSelectingLocationMode,
-  selectedLocation
+  selectedLocation,
+  theme = "dark"
 }: MapComponentProps) {
   const [viewMode, setViewMode] = useState<"street" | "satellite">("street");
   const [leafletLoaded, setLeafletLoaded] = useState(false);
@@ -196,7 +198,7 @@ export default function MapComponent({
     };
   }, []);
 
-  // Update Base Tile Layer when viewMode changes
+  // Update Base Tile Layer when viewMode or theme changes
   useEffect(() => {
     const L = (window as any).L;
     if (!leafletLoaded || !L || !mapInstance.current) return;
@@ -213,8 +215,13 @@ export default function MapComponent({
       tileUrl = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
       attribution = "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community";
     } else {
-      // CartoDB Dark Matter Tile Layer (Modern dark theme street map)
-      tileUrl = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+      if (theme === "light") {
+        // CartoDB Voyager Tile Layer (Modern light theme street map)
+        tileUrl = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
+      } else {
+        // CartoDB Dark Matter Tile Layer (Modern dark theme street map)
+        tileUrl = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+      }
       attribution = "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>";
     }
 
@@ -223,7 +230,7 @@ export default function MapComponent({
       maxZoom: 20
     }).addTo(mapInstance.current);
 
-  }, [leafletLoaded, viewMode]);
+  }, [leafletLoaded, viewMode, theme]);
 
   // Pan / Zoom map when center reference target shifts
   useEffect(() => {
@@ -321,6 +328,10 @@ export default function MapComponent({
       }
     });
 
+    const activeBg = theme === "dark" ? "#0A0A0A" : "#FFFFFF";
+    const activeBorderColor = theme === "dark" ? "#0A0A0A" : "#FFFFFF";
+    const greenColor = theme === "dark" ? "#39FF14" : "#2ECC0F";
+
     // Now plot items: either cluster bubble (>= 3) or individual pins (< 3)
     tempClusters.forEach(c => {
       if (c.issues.length >= 3) {
@@ -328,7 +339,7 @@ export default function MapComponent({
         const clusterHtml = `
           <div class="relative flex items-center justify-center">
             <span class="animate-ping absolute inline-flex h-10 w-10 rounded-full bg-emerald-500 opacity-30"></span>
-            <div class="relative flex items-center justify-center w-9 h-9 rounded-full bg-[#0A0A0A] border-2 border-[#39FF14] text-[#39FF14] font-black text-xs shadow-[0_0_15px_rgba(57,255,20,0.5)] transition-all transform hover:scale-110">
+            <div class="relative flex items-center justify-center w-9 h-9 rounded-full bg-${theme === 'dark' ? '[#0A0A0A]' : 'white'} border-2 border-${greenColor} text-${greenColor} font-black text-xs shadow-[0_0_15px_rgba(57,255,20,0.5)] transition-all transform hover:scale-110" style="color: ${greenColor}; border-color: ${greenColor};">
               ${c.issues.length}
             </div>
           </div>
@@ -362,7 +373,7 @@ export default function MapComponent({
       } else {
         // Render each issue inside as a normal individual pin
         c.issues.forEach(issue => {
-          const color = CATEGORY_COLORS[issue.category]?.hex || "#39FF14";
+          const color = CATEGORY_COLORS[issue.category]?.hex || greenColor;
           const isSelected = selectedIssue?.id === issue.id;
           const emoji = CATEGORY_EMOJIS[issue.category] || "📍";
 
@@ -386,7 +397,7 @@ export default function MapComponent({
           const pinHtml = `
             <div class="relative flex items-center justify-center">
               <span class="animate-ping absolute inline-flex ${pingSize} rounded-full" style="background-color: ${color}; transform: scale(${glowMultiplier}); opacity: ${pingOpacity};"></span>
-              <div class="relative flex items-center justify-center ${size} rounded-full bg-[#0A0A0A] border-2 transition-all duration-300" style="border-color: ${color}; ${shadowStyle}">
+              <div class="relative flex items-center justify-center ${size} rounded-full bg-${theme === 'dark' ? '[#0A0A0A]' : 'white'} border-2 transition-all duration-300" style="border-color: ${color}; ${shadowStyle}; background-color: ${activeBg};">
                 <span class="select-none leading-none">${emoji}</span>
               </div>
             </div>
@@ -424,10 +435,10 @@ export default function MapComponent({
     if (isSelectingLocationMode && selectedLocation) {
       const selectedLocationIconHtml = `
         <div class="relative flex items-center justify-center animate-bounce">
-          <div class="w-8 h-8 rounded-full bg-[#39FF14] border-2 border-[#0A0A0A] shadow-xl flex items-center justify-center">
+          <div class="w-8 h-8 rounded-full bg-${greenColor} border-2 border-${activeBorderColor} shadow-xl flex items-center justify-center" style="background-color: ${greenColor}; border-color: ${activeBorderColor};">
             <span class="text-sm">➕</span>
           </div>
-          <div class="w-3 h-3 bg-[#39FF14] rounded-full blur-[1px] absolute -bottom-1"></div>
+          <div class="w-3 h-3 bg-${greenColor} rounded-full blur-[1px] absolute -bottom-1" style="background-color: ${greenColor};"></div>
         </div>
       `;
 
@@ -478,16 +489,27 @@ export default function MapComponent({
     return closest;
   };
 
+  const isDark = theme === "dark";
+  const activeGreen = isDark ? "#39FF14" : "#2ECC0F";
+
   return (
-    <div className="relative w-full h-full bg-black overflow-hidden select-none" id="map-container-wrapper">
+    <div className={`relative w-full h-full overflow-hidden select-none transition-colors duration-300 ${
+      isDark ? 'bg-black text-white' : 'bg-gray-50 text-neutral-900'
+    }`} id="map-container-wrapper">
       {/* Map view controls in top right */}
-      <div className="absolute top-4 right-4 z-[1000] flex items-center gap-1 bg-neutral-950 p-1.5 rounded-lg border border-neutral-900 shadow-none backdrop-blur" id="map-view-controls">
+      <div className={`absolute top-4 right-4 z-[1000] flex items-center gap-1 p-1.5 rounded-lg border shadow-xs backdrop-blur ${
+        isDark ? 'bg-neutral-950 border-neutral-900' : 'bg-white/95 border-gray-200'
+      }`} id="map-view-controls">
         <button
           onClick={() => setViewMode("street")}
           className={`px-2.5 py-1 text-[9px] font-mono tracking-wider transition-all cursor-pointer rounded-md uppercase font-black border ${
             viewMode === "street"
-              ? "bg-[#39FF14] text-black border-[#39FF14]"
-              : "bg-black text-gray-500 border-transparent hover:text-white"
+              ? isDark 
+                ? "bg-[#39FF14] text-black border-[#39FF14]"
+                : "bg-[#2ECC0F] text-white border-[#2ECC0F] shadow-xs"
+              : isDark
+                ? "bg-black text-gray-500 border-transparent hover:text-white"
+                : "bg-white text-gray-400 border-transparent hover:text-neutral-900"
           }`}
           id="btn-street-mode"
         >
@@ -497,8 +519,12 @@ export default function MapComponent({
           onClick={() => setViewMode("satellite")}
           className={`px-2.5 py-1 text-[9px] font-mono tracking-wider transition-all cursor-pointer rounded-md uppercase font-black border ${
             viewMode === "satellite"
-              ? "bg-[#39FF14] text-black border-[#39FF14]"
-              : "bg-black text-gray-500 border-transparent hover:text-white"
+              ? isDark 
+                ? "bg-[#39FF14] text-black border-[#39FF14]"
+                : "bg-[#2ECC0F] text-white border-[#2ECC0F] shadow-xs"
+              : isDark
+                ? "bg-black text-gray-500 border-transparent hover:text-white"
+                : "bg-white text-gray-400 border-transparent hover:text-neutral-900"
           }`}
           id="btn-satellite-mode"
         >
@@ -515,7 +541,11 @@ export default function MapComponent({
             exit={{ opacity: 0, y: -20 }}
             className="absolute top-4 left-4 z-[1000] right-16 pr-12 md:pr-0 md:max-w-xs pointer-events-none"
           >
-            <div className="px-3 py-2 bg-[#39FF14] text-[#0A0A0A] text-xs font-black rounded-lg shadow-lg border border-[#39FF14] flex items-center gap-2 backdrop-blur animate-pulse">
+            <div className={`px-3 py-2 text-xs font-black rounded-lg shadow-lg border flex items-center gap-2 backdrop-blur animate-pulse ${
+              isDark 
+                ? 'bg-[#39FF14] text-[#0A0A0A] border-[#39FF14]' 
+                : 'bg-[#2ECC0F] text-white border-[#2ECC0F]'
+            }`}>
               <MapPin className="w-4 h-4 animate-bounce" />
               <span>TAP ON MAP TO SELECT LOCATION</span>
             </div>
@@ -526,8 +556,10 @@ export default function MapComponent({
       {/* Leaflet Core Map Component */}
       <div className="w-full h-full relative" id="leaflet-map-view">
         {!leafletLoaded && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black text-gray-400">
-            <Loader2 className="w-8 h-8 animate-spin text-[#39FF14]" />
+          <div className={`absolute inset-0 flex flex-col items-center justify-center gap-2 transition-colors duration-300 ${
+            isDark ? 'bg-black text-gray-400' : 'bg-gray-100 text-gray-650'
+          }`}>
+            <Loader2 className={`w-8 h-8 animate-spin ${isDark ? 'text-[#39FF14]' : 'text-[#2ECC0F]'}`} />
             <p className="text-xs font-mono">Launching OpenStreetMap Engine...</p>
           </div>
         )}
@@ -537,12 +569,16 @@ export default function MapComponent({
       {/* Elegant Compass / Legend Footer (Floating and Collapsible) */}
       <div className="absolute bottom-4 left-4 z-[1000] flex flex-col items-start gap-1.5" id="map-legend-container">
         {isLegendOpen ? (
-          <div className="flex flex-col gap-1.5 p-3 bg-neutral-950 border border-neutral-900 rounded-lg text-[9px] text-gray-400 backdrop-blur min-w-[145px] shadow-none">
-            <div className="flex items-center justify-between w-full pb-1 border-b border-neutral-900 gap-4">
-              <p className="font-bold text-gray-300 font-sans tracking-wide">RADAR LEGEND</p>
+          <div className={`flex flex-col gap-1.5 p-3 border rounded-lg text-[9px] backdrop-blur min-w-[145px] shadow-xs ${
+            isDark ? 'bg-neutral-950 border-neutral-900 text-gray-400' : 'bg-white/95 border-gray-200 text-gray-600'
+          }`}>
+            <div className={`flex items-center justify-between w-full pb-1 border-b gap-4 ${
+              isDark ? 'border-neutral-900' : 'border-gray-100'
+            }`}>
+              <p className={`font-bold font-sans tracking-wide ${isDark ? 'text-gray-300' : 'text-neutral-800'}`}>RADAR LEGEND</p>
               <button 
                 onClick={() => setIsLegendOpen(false)}
-                className="text-gray-500 hover:text-white text-[9px] cursor-pointer"
+                className={`text-[9px] cursor-pointer ${isDark ? 'text-gray-500 hover:text-white' : 'text-gray-400 hover:text-black'}`}
               >
                 ✕
               </button>
@@ -559,7 +595,11 @@ export default function MapComponent({
         ) : (
           <button
             onClick={() => setIsLegendOpen(true)}
-            className="w-8 h-8 rounded-lg bg-neutral-950 border border-neutral-900 flex items-center justify-center text-gray-400 hover:text-[#39FF14] hover:border-neutral-700 shadow-none backdrop-blur cursor-pointer transition-all"
+            className={`w-8 h-8 rounded-lg border flex items-center justify-center shadow-xs backdrop-blur cursor-pointer transition-all ${
+              isDark 
+                ? 'bg-neutral-950 border-neutral-900 text-gray-400 hover:text-[#39FF14] hover:border-neutral-700' 
+                : 'bg-white/95 border-gray-200 text-gray-500 hover:text-[#2ECC0F] hover:border-gray-400'
+            }`}
             title="Show Radar Legend"
             id="toggle-legend-btn"
           >

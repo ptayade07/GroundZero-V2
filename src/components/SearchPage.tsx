@@ -12,6 +12,7 @@ interface SearchPageProps {
   issues: Issue[];
   currentUserId: string;
   onSelectIssue: (issue: Issue) => void;
+  theme?: "light" | "dark";
 }
 
 const CATEGORY_MAP: Record<Category, { label: string; emoji: string; bg: string; text: string; border: string }> = {
@@ -63,7 +64,7 @@ const TRENDING_CATEGORIES: Category[] = [
   "Flooding"
 ];
 
-export default function SearchPage({ issues, currentUserId, onSelectIssue }: SearchPageProps) {
+export default function SearchPage({ issues, currentUserId, onSelectIssue, theme = "dark" }: SearchPageProps) {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<Category | null>(null);
 
@@ -117,16 +118,24 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
     }
   };
 
+  const activeGreen = theme === "dark" ? "#39FF14" : "#2ECC0F";
+
   return (
     <div className="max-w-lg mx-auto flex flex-col gap-5 pb-16" id="search-page-container">
       {/* Title Header */}
       <div className="flex items-center gap-2 mt-2">
-        <div className="p-2 bg-neutral-950 border border-neutral-900 rounded-xl">
+        <div className={`p-2 border rounded-xl ${
+          theme === 'dark' ? 'bg-neutral-950 border-neutral-900' : 'bg-white border-gray-200 shadow-xs'
+        }`}>
           <Search className="w-5 h-5 text-brand" />
         </div>
         <div>
-          <h1 className="text-lg font-black text-white uppercase tracking-tight">Explore Grid</h1>
-          <p className="text-[10px] text-gray-500 font-mono uppercase">DISCOVER TRENDING CIVIC ACTIONS & REPORTINGS</p>
+          <h1 className={`text-lg font-black uppercase tracking-tight ${
+            theme === 'dark' ? 'text-white' : 'text-neutral-900'
+          }`}>Explore Grid</h1>
+          <p className={`text-[10px] font-mono uppercase ${
+            theme === 'dark' ? 'text-gray-500' : 'text-gray-600'
+          }`}>DISCOVER TRENDING CIVIC ACTIONS & REPORTINGS</p>
         </div>
       </div>
 
@@ -138,13 +147,19 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search reports, locations, reporters..."
-          className="w-full pl-10 pr-4 py-2.5 bg-black border border-neutral-900 rounded-xl text-xs text-white placeholder-gray-500 font-mono tracking-tight outline-none shadow-inner focus:border-neutral-700 transition-all"
+          className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-xs font-mono tracking-tight outline-none transition-all ${
+            theme === 'dark'
+              ? 'bg-black border border-neutral-900 text-white placeholder-gray-500 focus:border-neutral-700 shadow-inner'
+              : 'bg-white border border-gray-200 text-neutral-900 placeholder-gray-400 focus:border-gray-400 shadow-xs'
+          }`}
           id="search-input-field"
         />
         {query && (
           <button
             onClick={() => setQuery("")}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-gray-500 hover:text-white font-bold"
+            className={`absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold ${
+              theme === 'dark' ? 'text-gray-500 hover:text-white' : 'text-gray-400 hover:text-black'
+            }`}
           >
             CLEAR
           </button>
@@ -162,8 +177,12 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
             onClick={() => setActiveCategory(null)}
             className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 border transition-all ${
               !activeCategory
-                ? "bg-[#39FF14] border-[#39FF14] text-black animate-pulse"
-                : "bg-black border-neutral-900 text-gray-400 hover:text-white hover:border-neutral-700"
+                ? theme === 'dark'
+                  ? 'bg-[#39FF14] border-[#39FF14] text-black animate-pulse'
+                  : 'bg-[#2ECC0F] border-[#2ECC0F] text-white shadow-xs'
+                : theme === 'dark'
+                  ? 'bg-black border-neutral-900 text-gray-400 hover:text-white hover:border-neutral-700'
+                  : 'bg-white border-gray-200 text-gray-500 hover:text-neutral-900 hover:border-gray-400'
             }`}
           >
             All Sectors
@@ -177,7 +196,9 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
                 onClick={() => handleCategoryPillClick(cat)}
                 className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 border transition-all flex items-center gap-1 ${
                   isActive
-                    ? "bg-[#39FF14] border-[#39FF14] text-black"
+                    ? theme === 'dark'
+                      ? 'bg-[#39FF14] border-[#39FF14] text-black'
+                      : 'bg-[#2ECC0F] border-[#2ECC0F] text-white shadow-xs'
                     : `${style.bg} ${style.border} ${style.text} hover:opacity-80`
                 }`}
               >
@@ -206,7 +227,11 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
                 <div
                   key={issue.id}
                   onClick={() => onSelectIssue(issue)}
-                  className="py-4 px-1 bg-black border-b border-neutral-900 hover:bg-neutral-950/40 cursor-pointer transition-all flex items-start gap-4 group"
+                  className={`py-4 px-1 border-b cursor-pointer transition-all flex items-start gap-4 group ${
+                    theme === 'dark' 
+                      ? 'bg-black border-neutral-900 hover:bg-neutral-950/40' 
+                      : 'bg-transparent border-gray-200 hover:bg-gray-100/30'
+                  }`}
                 >
                   <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 border border-gray-800/50">
                     <img
@@ -226,10 +251,14 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
                         {issue.area}
                       </span>
                     </div>
-                    <h3 className="text-xs font-bold text-white mt-1 line-clamp-1 group-hover:text-brand transition-colors">
+                    <h3 className={`text-xs font-bold mt-1 line-clamp-1 group-hover:text-brand transition-colors ${
+                      theme === 'dark' ? 'text-white' : 'text-neutral-900'
+                    }`}>
                       {issue.title}
                     </h3>
-                    <p className="text-[10px] text-gray-400 line-clamp-1 mt-0.5 leading-snug">
+                    <p className={`text-[10px] line-clamp-1 mt-0.5 leading-snug ${
+                      theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                    }`}>
                       {issue.description}
                     </p>
                     <div className="flex items-center gap-2 text-[8px] font-mono text-gray-500 mt-1.5">
@@ -261,7 +290,9 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
         </span>
 
         {filteredIssues.length === 0 ? (
-          <div className="text-center py-12 bg-black border border-neutral-900 rounded-2xl flex flex-col items-center gap-2">
+          <div className={`text-center py-12 border rounded-2xl flex flex-col items-center gap-2 ${
+            theme === 'dark' ? 'bg-black border-neutral-900' : 'bg-white border-gray-200 shadow-xs'
+          }`}>
             <Search className="w-6 h-6 text-gray-700 animate-pulse" />
             <p className="text-xs text-gray-500 font-mono italic">No matches found. Try widening your criteria.</p>
           </div>
@@ -274,7 +305,9 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue }: Sea
                 <motion.div
                   key={issue.id}
                   onClick={() => onSelectIssue(issue)}
-                  className="aspect-square relative rounded-xl overflow-hidden border border-neutral-900 bg-black group cursor-pointer"
+                  className={`aspect-square relative rounded-xl overflow-hidden border group cursor-pointer ${
+                    theme === 'dark' ? 'border-neutral-900 bg-black' : 'border-gray-200 bg-white shadow-xs'
+                  }`}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2, delay: Math.min(idx * 0.03, 0.3) }}

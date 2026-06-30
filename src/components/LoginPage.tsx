@@ -9,9 +9,10 @@ import { motion } from "motion/react";
 
 interface LoginPageProps {
   onLogin: (email: string, name: string, isAnonymous: boolean) => Promise<void>;
+  theme?: "light" | "dark";
 }
 
-export default function LoginPage({ onLogin }: LoginPageProps) {
+export default function LoginPage({ onLogin, theme = "dark" }: LoginPageProps) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -59,22 +60,30 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto flex flex-col justify-center min-h-[85vh] px-4 text-white" id="login-splash-screen">
+    <div className={`w-full max-w-sm mx-auto flex flex-col justify-center min-h-[85vh] px-4 ${
+      theme === 'dark' ? 'text-white' : 'text-neutral-900'
+    }`} id="login-splash-screen">
       {/* App branding */}
       <div className="text-center mb-8">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#39FF14] mb-3 border border-neutral-900"
+          className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl border ${
+            theme === 'dark' ? 'bg-[#39FF14] border-neutral-900' : 'bg-[#2ECC0F] border-gray-200 text-white'
+          }`}
         >
-          <span className="text-2xl font-black text-black font-mono">GZ</span>
+          <span className={`text-2xl font-black font-mono ${theme === 'dark' ? 'text-black' : 'text-white'}`}>GZ</span>
         </motion.div>
         
-        <h1 className="text-2xl font-black tracking-tight text-white font-sans uppercase">
-          GROUND<span className="text-[#39FF14]">ZERO</span>
+        <h1 className={`text-2xl font-black tracking-tight font-sans uppercase ${
+          theme === 'dark' ? 'text-white' : 'text-neutral-900'
+        }`}>
+          GROUND<span className={theme === 'dark' ? 'text-[#39FF14]' : 'text-[#2ECC0F]'}>ZERO</span>
         </h1>
-        <p className="text-[10px] text-gray-400 font-mono tracking-widest uppercase mt-1">
+        <p className={`text-[10px] font-mono tracking-widest uppercase mt-1 ${
+          theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+        }`}>
           LIVE NEWS BY THE PEOPLE, FOR THE PEOPLE
         </p>
       </div>
@@ -84,9 +93,11 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1 }}
-        className="bg-black border border-neutral-900 rounded-xl p-6 backdrop-blur"
+        className={`border rounded-xl p-6 backdrop-blur transition-all duration-300 ${
+          theme === 'dark' ? 'bg-black border-neutral-900' : 'bg-white border-gray-200 shadow-md'
+        }`}
       >
-        <h2 className="text-sm font-bold font-mono text-gray-400 mb-4 uppercase tracking-wider text-center">
+        <h2 className="text-sm font-bold font-mono text-gray-500 mb-4 uppercase tracking-wider text-center">
           Access GroundZero Grid
         </h2>
 
@@ -103,7 +114,11 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
               placeholder="citizen@groundzero.news"
               required
               disabled={isPending}
-              className="w-full px-3 py-2 text-xs bg-black border border-neutral-900 rounded-lg text-white placeholder-gray-700 focus:outline-none focus:border-[#39FF14]/50"
+              className={`w-full px-3 py-2 text-xs border rounded-lg focus:outline-none transition-all ${
+                theme === 'dark' 
+                  ? 'bg-black border-neutral-900 text-white placeholder-gray-700 focus:border-[#39FF14]/50' 
+                  : 'bg-gray-50 border-gray-250 text-neutral-900 placeholder-gray-400 focus:border-[#2ECC0F]/50'
+              }`}
               id="login-email-input"
             />
           </div>
@@ -119,7 +134,11 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
               onChange={(e) => setName(e.target.value)}
               placeholder="Rahul Sharma"
               disabled={isPending}
-              className="w-full px-3 py-2 text-xs bg-black border border-neutral-900 rounded-lg text-white placeholder-gray-700 focus:outline-none focus:border-[#39FF14]/50"
+              className={`w-full px-3 py-2 text-xs border rounded-lg focus:outline-none transition-all ${
+                theme === 'dark' 
+                  ? 'bg-black border-neutral-900 text-white placeholder-gray-700 focus:border-[#39FF14]/50' 
+                  : 'bg-gray-50 border-gray-250 text-neutral-900 placeholder-gray-400 focus:border-[#2ECC0F]/50'
+              }`}
               id="login-name-input"
             />
           </div>
@@ -137,13 +156,19 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                 placeholder="••••••••••••"
                 required
                 disabled={isPending}
-                className="w-full pl-3 pr-10 py-2 text-xs bg-black border border-neutral-900 rounded-lg text-white placeholder-gray-700 focus:outline-none focus:border-[#39FF14]/50"
+                className={`w-full pl-3 pr-10 py-2 text-xs border rounded-lg focus:outline-none transition-all ${
+                  theme === 'dark' 
+                    ? 'bg-black border-neutral-900 text-white placeholder-gray-700 focus:border-[#39FF14]/50' 
+                    : 'bg-gray-50 border-gray-250 text-neutral-900 placeholder-gray-400 focus:border-[#2ECC0F]/50'
+                }`}
                 id="login-password-input"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-2.5 top-2 p-0.5 text-gray-500 hover:text-gray-300 transition-colors"
+                className={`absolute right-2.5 top-2 p-0.5 transition-colors ${
+                  theme === 'dark' ? 'text-gray-500 hover:text-gray-300' : 'text-gray-400 hover:text-gray-600'
+                }`}
                 id="login-toggle-pass-btn"
               >
                 {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
@@ -162,7 +187,9 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full py-2.5 bg-[#39FF14] text-black font-black rounded-lg text-xs tracking-wider transition-all flex items-center justify-center gap-1.5 uppercase cursor-pointer"
+            className={`w-full py-2.5 font-black rounded-lg text-xs tracking-wider transition-all flex items-center justify-center gap-1.5 uppercase cursor-pointer ${
+              theme === 'dark' ? 'bg-[#39FF14] text-black hover:opacity-90' : 'bg-[#2ECC0F] text-white hover:opacity-95 shadow-sm'
+            }`}
             id="login-submit-btn"
           >
             {isPending ? (
@@ -176,25 +203,33 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
         {/* Divider */}
         <div className="relative my-5 flex items-center justify-center">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-neutral-900"></div>
+            <div className={`w-full border-t ${theme === 'dark' ? 'border-neutral-900' : 'border-gray-200'}`}></div>
           </div>
-          <span className="relative px-3 bg-black text-[9px] text-gray-500 font-mono uppercase">OR</span>
+          <span className={`relative px-3 text-[9px] font-mono uppercase ${
+            theme === 'dark' ? 'bg-black text-gray-500' : 'bg-white text-gray-400'
+          }`}>OR</span>
         </div>
 
         {/* Anonymous login option */}
         <button
           onClick={handleAnonymousLogin}
           disabled={isPending}
-          className="w-full py-2.5 bg-black border border-neutral-900 hover:border-neutral-800 text-gray-300 hover:text-white font-bold rounded-lg text-xs transition-all flex items-center justify-center gap-2 uppercase tracking-wide cursor-pointer"
+          className={`w-full py-2.5 border font-bold rounded-lg text-xs transition-all flex items-center justify-center gap-2 uppercase tracking-wide cursor-pointer ${
+            theme === 'dark' 
+              ? 'bg-black border-neutral-900 hover:border-neutral-800 text-gray-300 hover:text-white' 
+              : 'bg-white border-gray-200 hover:border-gray-300 text-neutral-800 hover:bg-gray-50 shadow-xs'
+          }`}
           id="login-anonymous-btn"
         >
-          <span className="text-[#39FF14]">🛡️</span>
+          <span className={theme === 'dark' ? 'text-[#39FF14]' : 'text-[#2ECC0F]'}>🛡️</span>
           <span>ENTER ANONYMOUSLY</span>
         </button>
       </motion.div>
 
       {/* Footer statistics decoration */}
-      <div className="text-center mt-6 text-[9px] text-gray-600 font-mono tracking-wide flex flex-col gap-1">
+      <div className={`text-center mt-6 text-[9px] font-mono tracking-wide flex flex-col gap-1 ${
+        theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
+      }`}>
         <p>● SECURE SHIELD ACTIVE (AES-256)</p>
         <p>GROUNDZERO © 2026 RADAR OPERATIONS</p>
       </div>
