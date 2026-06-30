@@ -571,13 +571,19 @@ export default function App() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search radar reports..."
-                  className="w-full pl-3 pr-8 py-2 text-xs bg-black border border-neutral-900 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-[#39FF14]/50 backdrop-blur"
+                  className={`w-full pl-3 pr-8 py-2 text-xs border rounded-lg outline-none focus:outline-none backdrop-blur transition-all ${
+                    theme === 'dark' 
+                      ? 'bg-black border-neutral-900 text-white placeholder-gray-600 focus:border-[#39FF14]/50' 
+                      : 'bg-white/90 border-gray-200 text-neutral-900 placeholder-gray-400 focus:border-[#2ECC0F]/50 shadow-xs'
+                  }`}
                   id="radar-search-input"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-2 top-2 text-gray-500 hover:text-white text-xs font-bold"
+                    className={`absolute right-2 top-2 text-xs font-bold transition-all ${
+                      theme === 'dark' ? 'text-gray-500 hover:text-white' : 'text-gray-400 hover:text-black'
+                    }`}
                   >
                     ×
                   </button>
@@ -599,8 +605,12 @@ export default function App() {
                       onClick={() => setTimeFilter(opt)}
                       className={`px-2.5 py-1 rounded-full text-[9px] font-mono tracking-wider font-bold shrink-0 transition-all cursor-pointer border ${
                         timeFilter === opt
-                          ? "bg-[#39FF14] text-black border-[#39FF14]"
-                          : "bg-black text-gray-500 border-neutral-900 hover:text-white"
+                          ? theme === 'dark'
+                            ? "bg-[#39FF14] text-black border-[#39FF14]"
+                            : "bg-[#2ECC0F] text-white border-[#2ECC0F] shadow-xs"
+                          : theme === 'dark'
+                            ? "bg-black text-gray-500 border-neutral-900 hover:text-white"
+                            : "bg-white text-gray-500 border-gray-200 hover:text-black shadow-xs"
                       }`}
                     >
                       {label}
@@ -615,24 +625,40 @@ export default function App() {
                 <select
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value as any)}
-                  className="px-2 py-1 bg-black border border-neutral-900 rounded-md text-[10px] text-gray-300 font-mono outline-none focus:border-[#39FF14]/50"
+                  className={`px-2 py-1 border rounded-md text-[10px] font-mono outline-none transition-all ${
+                    theme === 'dark' 
+                      ? 'bg-black border-neutral-900 text-gray-300 focus:border-[#39FF14]/50' 
+                      : 'bg-white border-gray-200 text-gray-700 focus:border-[#2ECC0F]/50 shadow-xs'
+                  }`}
                 >
                   <option value="all">ALL SECTORS</option>
-                  <option value="flood">🌊 FLOODS</option>
-                  <option value="pothole">🕳️ POTHOLES</option>
-                  <option value="crime">🚨 SECURITY</option>
-                  <option value="power cut">🔌 POWER CUTS</option>
-                  <option value="garbage">🗑️ GARBAGE</option>
-                  <option value="protest">📣 PROTESTS</option>
-                  <option value="event">🕺 EVENTS</option>
-                  <option value="drama">🍵 LOCAL DRAMA</option>
+                  <option value="Civic Issue">🏢 CIVIC ISSUES</option>
+                  <option value="Pothole">🕳️ POTHOLES</option>
+                  <option value="Flooding">🌊 FLOODS</option>
+                  <option value="Power Cut">🔌 POWER CUTS</option>
+                  <option value="Garbage">🗑️ GARBAGE</option>
+                  <option value="Corruption">💼 CORRUPTION</option>
+                  <option value="Government Failure">🏛️ GOVT FAILURE</option>
+                  <option value="Protest / Rally">📣 PROTESTS</option>
+                  <option value="Local Drama">🍵 LOCAL DRAMA</option>
+                  <option value="Argument / Dispute">🗣️ DISPUTES</option>
+                  <option value="Harassment">⚠️ HARASSMENT</option>
+                  <option value="Breaking News">📰 BREAKING NEWS</option>
+                  <option value="Village Problem">🏡 VILLAGE PROBS</option>
+                  <option value="Weather">☁️ WEATHER</option>
+                  <option value="War / Conflict">💥 CONFLICTS</option>
+                  <option value="Other">❓ OTHER</option>
                 </select>
 
                 {/* Status Filter selector */}
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value as any)}
-                  className="px-2 py-1 bg-black border border-neutral-900 rounded-md text-[10px] text-gray-300 font-mono outline-none focus:border-[#39FF14]/50"
+                  className={`px-2 py-1 border rounded-md text-[10px] font-mono outline-none transition-all ${
+                    theme === 'dark' 
+                      ? 'bg-black border-neutral-900 text-gray-300 focus:border-[#39FF14]/50' 
+                      : 'bg-white border-gray-200 text-gray-700 focus:border-[#2ECC0F]/50 shadow-xs'
+                  }`}
                 >
                   <option value="all">ALL STATUS</option>
                   <option value="Reported">REPORTED</option>
@@ -644,8 +670,14 @@ export default function App() {
                 {/* Toggle Drawer button */}
                 <button
                   onClick={() => setShowFeedDrawer(!showFeedDrawer)}
-                  className={`px-2 py-1 bg-black border rounded-md text-[10px] font-mono flex items-center gap-1 shrink-0 ${
-                    showFeedDrawer ? "border-[#39FF14] text-[#39FF14]" : "border-neutral-900 text-gray-400 hover:text-white"
+                  className={`px-2 py-1 border rounded-md text-[10px] font-mono flex items-center gap-1 shrink-0 transition-all cursor-pointer ${
+                    showFeedDrawer 
+                      ? theme === 'dark' 
+                        ? "bg-black border-[#39FF14] text-[#39FF14]" 
+                        : "bg-[#2ECC0F]/15 border-[#2ECC0F]/30 text-[#2ECC0F] font-bold"
+                      : theme === 'dark' 
+                        ? "bg-black border-neutral-900 text-gray-400 hover:text-white" 
+                        : "bg-white border-gray-200 text-gray-600 hover:text-black shadow-xs"
                   }`}
                 >
                   <span>FEED LIST ({filteredIssues.length})</span>
@@ -660,14 +692,22 @@ export default function App() {
                   initial={{ opacity: 0, x: -300 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -300 }}
-                  className="absolute top-18 bottom-4 left-4 z-30 w-72 bg-black border border-neutral-900 rounded-xl p-3 flex flex-col backdrop-blur max-h-[72vh] md:max-h-[80vh]"
+                  className={`absolute top-18 bottom-4 left-4 z-30 w-72 border rounded-xl p-3 flex flex-col backdrop-blur max-h-[72vh] md:max-h-[80vh] shadow-2xl ${
+                    theme === 'dark' ? 'bg-black border-neutral-900 text-white' : 'bg-white/95 border-gray-200 text-neutral-900'
+                  }`}
                   id="feed-list-drawer"
                 >
-                  <div className="flex items-center justify-between border-b border-neutral-900 pb-2 mb-2">
-                    <span className="text-[10px] font-mono font-bold text-gray-400 uppercase">CIVIC COMPLAINT FEED</span>
+                  <div className={`flex items-center justify-between border-b pb-2 mb-2 ${
+                    theme === 'dark' ? 'border-neutral-900' : 'border-gray-150'
+                  }`}>
+                    <span className={`text-[10px] font-mono font-bold uppercase ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                      CIVIC COMPLAINT FEED
+                    </span>
                     <button
                       onClick={() => setShowFeedDrawer(false)}
-                      className="p-1.5 rounded-lg text-gray-400 hover:text-white transition-all shrink-0 cursor-pointer"
+                      className={`p-1.5 rounded-lg transition-all shrink-0 cursor-pointer ${
+                        theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-black'
+                      }`}
                       id="close-feed-drawer-btn"
                       title="Close Feed"
                     >
@@ -686,30 +726,29 @@ export default function App() {
                             setSelectedIssue(issue);
                             setShowFeedDrawer(false); // Close feed to show map pin zoom
                           }}
-                          className={`p-2 bg-black hover:bg-neutral-950 border rounded-lg cursor-pointer transition-all flex flex-col gap-1 ${
-                            selectedIssue?.id === issue.id ? "border-[#39FF14] bg-neutral-950" : "border-neutral-900"
+                          className={`p-2 border rounded-lg cursor-pointer transition-all flex flex-col gap-1 ${
+                            selectedIssue?.id === issue.id 
+                              ? theme === 'dark' 
+                                ? "border-[#39FF14] bg-neutral-950" 
+                                : "border-[#2ECC0F] bg-emerald-50/50 shadow-xs" 
+                              : theme === 'dark' 
+                                ? "bg-black hover:bg-neutral-950 border-neutral-900" 
+                                : "bg-gray-50 hover:bg-gray-100/50 border-gray-150 shadow-xs"
                           }`}
                         >
                           <div className="flex items-center justify-between">
                             <span className={`text-[8px] px-1 py-0.2 rounded font-bold uppercase ${
-                              issue.category === "flood" ? "bg-blue-950/40 text-blue-400" :
-                              issue.category === "pothole" ? "bg-brand/15 text-brand" :
-                              issue.category === "crime" ? "bg-red-950/40 text-red-400" :
-                              issue.category === "power cut" ? "bg-yellow-950/40 text-yellow-400" :
-                              issue.category === "protest" ? "bg-purple-950/40 text-purple-400" :
-                              issue.category === "event" ? "bg-pink-950/40 text-pink-400" :
-                              issue.category === "drama" ? "bg-teal-950/40 text-teal-400" :
-                              "bg-amber-950/40 text-amber-500"
+                              theme === 'dark' ? 'bg-white/10 text-gray-300' : 'bg-gray-200/60 text-gray-700'
                             }`}>
                               {issue.category}
                             </span>
                             <span className="text-[8px] font-mono text-gray-500">{issue.area}</span>
                           </div>
-                          <h4 className="text-xs font-bold text-white leading-tight line-clamp-1">{issue.title}</h4>
-                          <p className="text-[10px] text-gray-400 line-clamp-1 leading-snug">{issue.description}</p>
+                          <h4 className={`text-xs font-bold leading-tight line-clamp-1 ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>{issue.title}</h4>
+                          <p className={`text-[10px] line-clamp-1 leading-snug ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{issue.description}</p>
                           <div className="flex items-center justify-between text-[8px] text-gray-500 font-mono mt-0.5">
                             <span>✅ {issue.reactions.verified} vouches</span>
-                            <span className="uppercase font-bold text-brand">{issue.status}</span>
+                            <span className={`uppercase font-bold ${theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}`}>{issue.status}</span>
                           </div>
                         </div>
                       ))

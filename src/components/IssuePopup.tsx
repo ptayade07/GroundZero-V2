@@ -191,7 +191,7 @@ export default function IssuePopup({
                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide border ${
               theme === "dark" 
                 ? `${catStyle.bg} ${catStyle.text} ${catStyle.border}` 
-                : "bg-gray-150 border-gray-300 text-neutral-800"
+                : "bg-gray-100 border-gray-300 text-neutral-800"
             }`}>
               <span>{catStyle.emoji}</span>
               <span>{catStyle.label}</span>
@@ -224,7 +224,9 @@ export default function IssuePopup({
       <div className="grid grid-cols-1 gap-2 mb-3">
         {activeMediaUrl && (
           <div 
-            className="w-full h-48 rounded-xl overflow-hidden border border-gray-900 bg-black/40 relative group/carousel select-none"
+            className={`w-full h-48 rounded-xl overflow-hidden border relative group/carousel select-none ${
+              theme === 'dark' ? 'border-gray-900 bg-black/40' : 'border-gray-200 bg-gray-100'
+            }`}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
@@ -543,7 +545,9 @@ export default function IssuePopup({
             title="Real Report"
           >
             <span>✅ Verified</span>
-            <span className="font-mono text-[9px] bg-black/30 px-1 rounded">{issue.reactions.verified || 0}</span>
+            <span className={`font-mono text-[9px] px-1 rounded ${
+              theme === 'dark' ? 'bg-black/30 text-white' : 'bg-neutral-100 text-neutral-700'
+            }`}>{issue.reactions.verified || 0}</span>
           </button>
 
           {/* Reaction 2: Cap (🧢) */}
@@ -558,7 +562,9 @@ export default function IssuePopup({
             title="Fake / Cap Report"
           >
             <span>🧢 Cap</span>
-            <span className="font-mono text-[9px] bg-black/30 px-1 rounded">{issue.reactions.cap || 0}</span>
+            <span className={`font-mono text-[9px] px-1 rounded ${
+              theme === 'dark' ? 'bg-black/30 text-white' : 'bg-neutral-100 text-neutral-700'
+            }`}>{issue.reactions.cap || 0}</span>
           </button>
 
           {/* Reaction 3: Big Issue (🔥) */}
@@ -573,7 +579,9 @@ export default function IssuePopup({
             title="Needs Attention ASAP"
           >
             <span>🔥 Big Issue</span>
-            <span className="font-mono text-[9px] bg-black/30 px-1 rounded">{issue.reactions.big_issue || 0}</span>
+            <span className={`font-mono text-[9px] px-1 rounded ${
+              theme === 'dark' ? 'bg-black/30 text-white' : 'bg-neutral-100 text-neutral-700'
+            }`}>{issue.reactions.big_issue || 0}</span>
           </button>
 
           {/* Reaction 4: Bruh (💀) */}
@@ -588,7 +596,9 @@ export default function IssuePopup({
             title="Wow / Bruh moment"
           >
             <span>💀 Bruh</span>
-            <span className="font-mono text-[9px] bg-black/30 px-1 rounded">{issue.reactions.bruh || 0}</span>
+            <span className={`font-mono text-[9px] px-1 rounded ${
+              theme === 'dark' ? 'bg-black/30 text-white' : 'bg-neutral-100 text-neutral-700'
+            }`}>{issue.reactions.bruh || 0}</span>
           </button>
         </div>
       </div>

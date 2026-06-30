@@ -59,6 +59,25 @@ const CATEGORY_SOLID_BG: Record<Category, string> = {
   "Other": "bg-neutral-900"
 };
 
+const CATEGORY_LIGHT_SOLID_BG: Record<Category, string> = {
+  "Civic Issue": "bg-indigo-50/60",
+  "Pothole": "bg-amber-50/60",
+  "Flooding": "bg-blue-50/60",
+  "Power Cut": "bg-yellow-50/60",
+  "Garbage": "bg-neutral-100/60",
+  "Corruption": "bg-red-50/60",
+  "Government Failure": "bg-rose-50/60",
+  "Protest / Rally": "bg-pink-50/60",
+  "Local Drama": "bg-teal-50/60",
+  "Argument / Dispute": "bg-orange-50/60",
+  "Harassment": "bg-red-50/60",
+  "Breaking News": "bg-cyan-50/60",
+  "Village Problem": "bg-green-50/60",
+  "Weather": "bg-sky-50/60",
+  "War / Conflict": "bg-neutral-100/60",
+  "Other": "bg-neutral-100/60"
+};
+
 export default function SocialFeed({
   issues,
   currentUserId,
@@ -158,13 +177,17 @@ export default function SocialFeed({
       {/* Swipe Snapping vertical container */}
       <div className="flex-1 w-full h-full overflow-y-scroll snap-y snap-mandatory scrollbar-none" id="swipe-snap-feed-container">
         {sortedIssues.length === 0 ? (
-          <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center bg-[#0A0A0A] gap-3">
-            <div className="p-4 bg-brand/10 rounded-full border border-brand/20">
-              <Sparkles className="w-8 h-8 text-brand animate-pulse" />
+          <div className={`w-full h-full flex flex-col items-center justify-center p-8 text-center gap-3 ${
+            theme === 'dark' ? 'bg-[#0A0A0A] text-white' : 'bg-white text-neutral-900'
+          }`}>
+            <div className={`p-4 rounded-full border ${
+              theme === 'dark' ? 'bg-brand/10 border-brand/20 text-brand' : 'bg-[#2ECC0F]/10 border-[#2ECC0F]/20 text-[#2ECC0F]'
+            }`}>
+              <Sparkles className="w-8 h-8 animate-pulse" />
             </div>
             <div>
-              <p className="text-xs text-gray-400 font-mono">No bulletins or neighborhood drama spilled yet.</p>
-              <p className="text-[9px] text-gray-600 font-mono mt-1 uppercase">TAP THE '+' TAB AT THE BOTTOM TO POST ONE!</p>
+              <p className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>No bulletins or neighborhood drama spilled yet.</p>
+              <p className={`text-[9px] font-mono mt-1 uppercase font-bold ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`}>TAP THE '+' TAB AT THE BOTTOM TO POST ONE!</p>
             </div>
           </div>
         ) : (
@@ -172,12 +195,15 @@ export default function SocialFeed({
             const catConfig = CATEGORY_MAP[issue.category] || CATEGORY_MAP["Other"];
             const userReaction = issue.userReactions?.[currentUserId];
             const hasPhoto = !!issue.photoUrl;
+            const isCardLight = theme === "light" && !hasPhoto;
 
             return (
               <div
                 key={issue.id}
                 onClick={() => setSelectedDetailPost(issue)}
-                className="w-full h-full snap-start snap-always relative overflow-hidden flex flex-col justify-end bg-black cursor-pointer group"
+                className={`w-full h-full snap-start snap-always relative overflow-hidden flex flex-col justify-end cursor-pointer group transition-colors duration-350 ${
+                  isCardLight ? 'bg-white' : 'bg-black'
+                }`}
                 id={`feed-card-tiktok-${issue.id}`}
               >
                 {/* 1. Backdrop Photo or Solid Category Gradient */}
@@ -193,9 +219,15 @@ export default function SocialFeed({
                     <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black via-black/85 to-transparent pointer-events-none" />
                   </>
                 ) : (
-                  <div className={`absolute inset-0 ${CATEGORY_SOLID_BG[issue.category] || "bg-neutral-900"} flex flex-col items-center justify-center p-12 select-none`}>
+                  <div className={`absolute inset-0 flex flex-col items-center justify-center p-12 select-none ${
+                    isCardLight 
+                      ? (CATEGORY_LIGHT_SOLID_BG[issue.category] || "bg-gray-50") 
+                      : (CATEGORY_SOLID_BG[issue.category] || "bg-neutral-900")
+                  }`}>
                     {/* Centered category emoji as clean background accent with high-end scale effect */}
-                    <div className="text-[120px] font-black opacity-10 transform group-hover:scale-110 transition-transform duration-1000 ease-out">
+                    <div className={`text-[120px] font-black transform group-hover:scale-110 transition-transform duration-1000 ease-out ${
+                      isCardLight ? 'opacity-20' : 'opacity-10'
+                    }`}>
                       {catConfig.emoji}
                     </div>
                   </div>
@@ -205,40 +237,70 @@ export default function SocialFeed({
                 <div className="absolute bottom-6 left-4 right-20 z-10 flex flex-col gap-1.5 pointer-events-auto text-left max-h-[25%] justify-end">
                   {/* Category and Location Badges */}
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase border bg-black/60 ${catConfig.bg} ${catConfig.text} backdrop-blur-sm`}>
+                    <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase border ${
+                      isCardLight 
+                        ? 'bg-neutral-100 border-neutral-200 text-neutral-800 shadow-xs' 
+                        : `bg-black/60 ${catConfig.bg} ${catConfig.text} backdrop-blur-sm`
+                    }`}>
                       <span>{catConfig.emoji}</span> {catConfig.label}
                     </span>
-                    <span className="text-[8px] font-mono text-gray-300 uppercase tracking-wider flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded-full border border-gray-800/40 backdrop-blur-sm">
+                    <span className={`text-[8px] font-mono uppercase tracking-wider flex items-center gap-1 px-2 py-0.5 rounded-full border ${
+                      isCardLight 
+                        ? 'bg-white/90 border-gray-200/80 text-gray-700 shadow-xs' 
+                        : 'bg-black/60 border-gray-800/40 text-gray-300 backdrop-blur-sm'
+                    }`}>
                       📍 {issue.area}
                     </span>
-                    <span className="text-[8px] text-gray-400 font-mono bg-black/40 px-1.5 py-0.5 rounded backdrop-blur-sm">
+                    <span className={`text-[8px] font-mono px-1.5 py-0.5 rounded ${
+                      isCardLight 
+                        ? 'bg-gray-100/80 text-gray-600 border border-gray-200/50' 
+                        : 'bg-black/40 text-gray-400 backdrop-blur-sm'
+                    }`}>
                       {timeAgo(issue.createdAt)}
                     </span>
                   </div>
 
                   {/* Main Headline (compact, maximum 2 lines) */}
-                  <h2 className="text-sm md:text-base font-black text-white leading-tight uppercase tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] line-clamp-2">
+                  <h2 className={`text-sm md:text-base font-black leading-tight uppercase tracking-tight line-clamp-2 ${
+                    isCardLight 
+                      ? 'text-neutral-900' 
+                      : 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]'
+                  }`}>
                     {issue.title}
                   </h2>
 
                   {/* Reporter & Verification info */}
-                  <div className="flex items-center gap-1.5 flex-wrap text-gray-300">
+                  <div className={`flex items-center gap-1.5 flex-wrap ${
+                    isCardLight ? 'text-gray-700' : 'text-gray-300'
+                  }`}>
                     <span className="text-[10px]">👤</span>
-                    <span className="text-[10px] font-bold text-white tracking-tight drop-shadow-sm">
+                    <span className={`text-[10px] font-bold tracking-tight ${
+                      isCardLight ? 'text-neutral-900' : 'text-white drop-shadow-sm'
+                    }`}>
                       {issue.isAnonymous ? "Anonymous Citizen" : issue.reporterName}
                     </span>
-                    <span className="px-1 py-0.2 bg-brand/15 border border-brand/35 text-brand font-mono rounded text-[8px] font-black tracking-tight uppercase">
+                    <span className={`px-1 py-0.2 font-mono rounded text-[8px] font-black tracking-tight uppercase border ${
+                      isCardLight 
+                        ? 'bg-[#2ECC0F]/10 border-[#2ECC0F]/20 text-[#2ECC0F]' 
+                        : 'bg-brand/15 border border-brand/35 text-brand'
+                    }`}>
                       🛡️ {issue.reporterTrustScore} TS
                     </span>
                     {issue.isSpam && (
-                      <span className="flex items-center gap-1 px-1.5 py-0.2 bg-red-950/80 border border-red-500/40 rounded text-red-400 text-[8px] font-mono uppercase font-black">
+                      <span className={`flex items-center gap-1 px-1.5 py-0.2 rounded text-[8px] font-mono uppercase font-black border ${
+                        isCardLight 
+                          ? 'bg-red-50 border-red-200 text-red-600' 
+                          : 'bg-red-950/80 border border-red-500/40 text-red-400'
+                      }`}>
                         ⚠️ SPAM
                       </span>
                     )}
                   </div>
 
                   {/* Gentle interaction instruction */}
-                  <div className="text-[8px] font-mono text-brand/80 uppercase tracking-widest flex items-center gap-1 animate-pulse drop-shadow-sm">
+                  <div className={`text-[8px] font-mono uppercase tracking-widest flex items-center gap-1 animate-pulse ${
+                    isCardLight ? 'text-neutral-500' : 'text-brand/80 drop-shadow-sm'
+                  }`}>
                     <span>⚡ TAP FOR DETAILED BREAKDOWN</span>
                   </div>
                 </div>
@@ -258,15 +320,23 @@ export default function SocialFeed({
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
                       issue.seeThisTooUsers?.includes(currentUserId)
-                        ? "bg-[#39FF14] border-[#39FF14] text-black shadow-[0_0_12px_rgba(57,255,20,0.55)]"
-                        : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
+                        ? isCardLight
+                          ? "bg-[#2ECC0F] border-[#2ECC0F] text-white shadow-md"
+                          : "bg-[#39FF14] border-[#39FF14] text-black shadow-[0_0_12px_rgba(57,255,20,0.55)]"
+                        : isCardLight
+                          ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
+                          : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
                       <span className="text-base">👁️</span>
                     </div>
-                    <span className="text-[9px] font-mono font-black text-white drop-shadow">
+                    <span className={`text-[9px] font-mono font-black ${
+                      isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
+                    }`}>
                       {issue.seeThisTooCount || 0}
                     </span>
-                    <span className="text-[7px] font-mono font-extrabold text-gray-400 uppercase tracking-tighter leading-none text-center">
+                    <span className={`text-[7px] font-mono font-extrabold uppercase tracking-tighter leading-none text-center ${
+                      isCardLight ? 'text-gray-500' : 'text-gray-400'
+                    }`}>
                       SEE TOO
                     </span>
                   </button>
@@ -282,15 +352,23 @@ export default function SocialFeed({
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
                       userReaction === "verified"
-                        ? "bg-[#39FF14] border-[#39FF14] text-black shadow-[0_0_10px_rgba(57,255,20,0.5)]"
-                        : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
+                        ? isCardLight
+                          ? "bg-[#2ECC0F] border-[#2ECC0F] text-white shadow-md"
+                          : "bg-[#39FF14] border-[#39FF14] text-black shadow-[0_0_10px_rgba(57,255,20,0.5)]"
+                        : isCardLight
+                          ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
+                          : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
                       <span className="text-base">✅</span>
                     </div>
-                    <span className="text-[9px] font-mono font-black text-white drop-shadow">
+                    <span className={`text-[9px] font-mono font-black ${
+                      isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
+                    }`}>
                       {issue.reactions.verified || 0}
                     </span>
-                    <span className="text-[7px] font-mono font-extrabold text-gray-400 uppercase tracking-tighter leading-none text-center">
+                    <span className={`text-[7px] font-mono font-extrabold uppercase tracking-tighter leading-none text-center ${
+                      isCardLight ? 'text-gray-500' : 'text-gray-400'
+                    }`}>
                       VOUCH
                     </span>
                   </button>
@@ -306,15 +384,23 @@ export default function SocialFeed({
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
                       userReaction === "cap"
-                        ? "bg-red-600 border-red-500 text-white shadow-[0_0_10px_rgba(239,68,68,0.5)]"
-                        : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
+                        ? isCardLight
+                          ? "bg-red-500 border-red-500 text-white shadow-md"
+                          : "bg-red-600 border-red-500 text-white shadow-[0_0_10px_rgba(239,68,68,0.5)]"
+                        : isCardLight
+                          ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
+                          : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
                       <span className="text-base">🧢</span>
                     </div>
-                    <span className="text-[9px] font-mono font-black text-white drop-shadow">
+                    <span className={`text-[9px] font-mono font-black ${
+                      isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
+                    }`}>
                       {issue.reactions.cap || 0}
                     </span>
-                    <span className="text-[7px] font-mono font-extrabold text-gray-400 uppercase tracking-tighter leading-none text-center">
+                    <span className={`text-[7px] font-mono font-extrabold uppercase tracking-tighter leading-none text-center ${
+                      isCardLight ? 'text-gray-500' : 'text-gray-400'
+                    }`}>
                       CAP
                     </span>
                   </button>
@@ -330,15 +416,23 @@ export default function SocialFeed({
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
                       userReaction === "big_issue"
-                        ? "bg-brand border-brand text-black shadow-[0_0_10px_rgba(57,255,20,0.5)]"
-                        : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
+                        ? isCardLight
+                          ? "bg-[#2ECC0F] border-[#2ECC0F] text-white shadow-md"
+                          : "bg-brand border-brand text-black shadow-[0_0_10px_rgba(57,255,20,0.5)]"
+                        : isCardLight
+                          ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
+                          : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
                       <span className="text-base">🔥</span>
                     </div>
-                    <span className="text-[9px] font-mono font-black text-white drop-shadow">
+                    <span className={`text-[9px] font-mono font-black ${
+                      isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
+                    }`}>
                       {issue.reactions.big_issue || 0}
                     </span>
-                    <span className="text-[7px] font-mono font-extrabold text-gray-400 uppercase tracking-tighter leading-none text-center">
+                    <span className={`text-[7px] font-mono font-extrabold uppercase tracking-tighter leading-none text-center ${
+                      isCardLight ? 'text-gray-500' : 'text-gray-400'
+                    }`}>
                       HOT
                     </span>
                   </button>
@@ -354,15 +448,23 @@ export default function SocialFeed({
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
                       userReaction === "bruh"
-                        ? "bg-teal-600 border-teal-500 text-white shadow-[0_0_10px_rgba(13,148,136,0.5)]"
-                        : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
+                        ? isCardLight
+                          ? "bg-teal-600 border-teal-500 text-white shadow-md"
+                          : "bg-teal-600 border-teal-500 text-white shadow-[0_0_10px_rgba(13,148,136,0.5)]"
+                        : isCardLight
+                          ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
+                          : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
                     }`}>
                       <span className="text-base">💀</span>
                     </div>
-                    <span className="text-[9px] font-mono font-black text-white drop-shadow">
+                    <span className={`text-[9px] font-mono font-black ${
+                      isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
+                    }`}>
                       {issue.reactions.bruh || 0}
                     </span>
-                    <span className="text-[7px] font-mono font-extrabold text-gray-400 uppercase tracking-tighter leading-none text-center">
+                    <span className={`text-[7px] font-mono font-extrabold uppercase tracking-tighter leading-none text-center ${
+                      isCardLight ? 'text-gray-500' : 'text-gray-400'
+                    }`}>
                       BRUH
                     </span>
                   </button>
@@ -461,7 +563,7 @@ export default function SocialFeed({
                   Detailed Complaint Description
                 </span>
                 <p className={`text-xs leading-relaxed font-sans p-4 whitespace-pre-wrap ${
-                  theme === 'dark' ? 'text-gray-300 bg-black' : 'text-gray-700 bg-gray-55'
+                  theme === 'dark' ? 'text-gray-300 bg-black' : 'text-gray-700 bg-gray-50'
                 }`}>
                   {selectedDetailPost.description}
                 </p>

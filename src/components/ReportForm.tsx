@@ -391,7 +391,9 @@ export default function ReportForm({
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Step 1: Upload Photo / Video (up to 5 photos or 1 video) */}
         <div>
-          <label className="block text-[10px] font-mono uppercase tracking-wider text-gray-400 mb-1.5">
+          <label className={`block text-[10px] font-mono uppercase tracking-wider mb-1.5 ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+          }`}>
             STEP 1: ADD PHOTO OR VIDEO (OPTIONAL)
           </label>
           
@@ -407,12 +409,16 @@ export default function ReportForm({
 
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="w-full h-24 border border-dashed border-neutral-800 rounded-lg flex flex-col items-center justify-center bg-black hover:border-neutral-700 cursor-pointer transition-all gap-1 text-gray-400"
+            className={`w-full h-24 border border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all gap-1 ${
+              theme === 'dark' 
+                ? 'bg-black border-neutral-800 text-gray-400 hover:border-neutral-750' 
+                : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100/50 hover:border-gray-300 shadow-xs'
+            }`}
             id="upload-placeholder-box"
           >
-            <Camera className="w-6 h-6 text-gray-500 hover:text-white transition-all" />
+            <Camera className={`w-6 h-6 transition-all ${theme === 'dark' ? 'text-gray-500 hover:text-white' : 'text-gray-400 hover:text-neutral-950'}`} />
             <span className="text-xs font-semibold">Upload Photos or Video / Capture</span>
-            <span className="text-[9px] text-gray-600 font-mono">Max 5 Photos or 1 Video clip (Max 25MB video, 8MB photo)</span>
+            <span className={`text-[9px] font-mono ${theme === 'dark' ? 'text-gray-600' : 'text-gray-500'}`}>Max 5 Photos or 1 Video clip (Max 25MB video, 8MB photo)</span>
           </div>
 
           {/* Horizontal scrollable thumbnail row */}
@@ -421,7 +427,9 @@ export default function ReportForm({
               {mediaUrls.map((url, idx) => {
                 const isUrlVideo = mediaType === "video" || url.startsWith("data:video/");
                 return (
-                  <div key={idx} className="relative w-16 h-16 rounded-lg overflow-hidden border border-gray-800 shrink-0 bg-black/40 group">
+                  <div key={idx} className={`relative w-16 h-16 rounded-lg overflow-hidden border shrink-0 group ${
+                    theme === 'dark' ? 'border-neutral-850 bg-black/40' : 'border-gray-250 bg-gray-50 shadow-xs'
+                  }`}>
                     {isUrlVideo ? (
                       <video src={url} className="w-full h-full object-cover" />
                     ) : (
@@ -455,20 +463,26 @@ export default function ReportForm({
           )}
 
           {isAiVisionLoading && (
-            <div className="flex items-center gap-1.5 mt-2.5 p-3.5 bg-neutral-950 border border-neutral-900 rounded-lg text-gray-300 text-[10px] font-mono uppercase tracking-wide animate-pulse">
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-gray-400" />
+            <div className={`flex items-center gap-1.5 mt-2.5 p-3.5 border rounded-lg text-[10px] font-mono uppercase tracking-wide animate-pulse ${
+              theme === 'dark' ? 'bg-neutral-950 border-neutral-900 text-gray-300' : 'bg-emerald-50/40 border-emerald-100 text-emerald-700 font-medium'
+            }`}>
+              <Loader2 className={`w-3.5 h-3.5 animate-spin ${theme === 'dark' ? 'text-gray-400' : 'text-emerald-500'}`} />
               <span>👁️ Gemini Vision is inspecting uploaded evidence...</span>
             </div>
           )}
 
           {aiVisionResult && (
-            <div className="mt-2.5 p-4 bg-neutral-950 border border-neutral-900 rounded-lg space-y-2" id="gemini-vision-card">
-              <p className="text-[11px] text-gray-300 font-sans leading-relaxed">
-                👁️ <span className="font-semibold text-white">AI sees:</span> {aiVisionResult.description}
+            <div className={`mt-2.5 p-4 border rounded-lg space-y-2 ${
+              theme === 'dark' ? 'bg-neutral-950 border-neutral-900' : 'bg-emerald-50/40 border-emerald-100 text-neutral-850'
+            }`} id="gemini-vision-card">
+              <p className="text-[11px] font-sans leading-relaxed">
+                👁️ <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-emerald-800'}`}>AI sees:</span> {aiVisionResult.description}
               </p>
               <div className="flex items-center gap-1.5 text-[9px] font-mono uppercase text-gray-500">
                 <span>✅ Auto-suggested category:</span>
-                <span className="px-2 py-0.5 bg-[#39FF14] text-black rounded font-black">{aiVisionResult.suggestedCategory}</span>
+                <span className={`px-2 py-0.5 rounded font-black ${
+                  theme === 'dark' ? 'bg-[#39FF14] text-black' : 'bg-[#2ECC0F] text-white shadow-xs'
+                }`}>{aiVisionResult.suggestedCategory}</span>
               </div>
             </div>
           )}
@@ -476,7 +490,9 @@ export default function ReportForm({
 
         {/* Step 2: SELECT CATEGORY */}
         <div className="space-y-1.5" id="manual-category-section">
-          <label className="block text-[10px] font-mono uppercase tracking-wider text-gray-400 mb-1">
+          <label className={`block text-[10px] font-mono uppercase tracking-wider mb-1 ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+          }`}>
             STEP 2: SELECT CATEGORY
           </label>
           
@@ -490,8 +506,12 @@ export default function ReportForm({
                 }}
                 className={`px-3 py-1.5 rounded-full border text-xs font-semibold shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
                   category === item.value
-                    ? "bg-[#39FF14] text-black border-[#39FF14] font-black"
-                    : "bg-black text-gray-400 border-neutral-900 hover:border-neutral-750 hover:text-white"
+                    ? theme === 'dark'
+                      ? "bg-[#39FF14] text-black border-[#39FF14] font-black shadow-md"
+                      : "bg-[#2ECC0F] text-white border-[#2ECC0F] font-black shadow-xs"
+                    : theme === 'dark'
+                      ? "bg-black text-gray-400 border-neutral-900 hover:border-neutral-750 hover:text-white"
+                      : "bg-white text-gray-600 border-gray-250 hover:border-gray-300 hover:text-neutral-950 shadow-xs"
                 }`}
                 id={`manual-cat-${item.value}`}
               >
@@ -503,11 +523,13 @@ export default function ReportForm({
         </div>
 
         {/* AI Auto-categorize switch */}
-        <div className="flex items-center justify-between p-4 bg-neutral-950 border border-neutral-900 rounded-lg">
+        <div className={`flex items-center justify-between p-4 border rounded-lg transition-all duration-300 ${
+          theme === 'dark' ? 'bg-neutral-950 border-neutral-900' : 'bg-gray-50 border-gray-150'
+        }`}>
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-gray-400" />
+            <Sparkles className={`w-4 h-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
             <div>
-              <p className="text-xs font-bold text-white">Gemini AI Auto-Categorizer</p>
+              <p className={`text-xs font-bold ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>Gemini AI Auto-Categorizer</p>
               <p className="text-[9px] text-gray-500">Classifies categories & crafts specific titles instantly</p>
             </div>
           </div>
@@ -516,10 +538,14 @@ export default function ReportForm({
             onClick={() => {
               setUseAI(!useAI);
             }}
-            className={`w-10 h-6 rounded-full p-0.5 transition-colors cursor-pointer ${useAI ? "bg-[#39FF14]" : "bg-gray-800"}`}
+            className={`w-10 h-6 rounded-full p-0.5 transition-colors cursor-pointer ${
+              useAI 
+                ? theme === 'dark' ? "bg-[#39FF14]" : "bg-[#2ECC0F]" 
+                : theme === 'dark' ? "bg-neutral-800" : "bg-gray-300"
+            }`}
             id="ai-categorize-toggle"
           >
-            <div className={`w-5 h-5 rounded-full bg-black transition-transform ${useAI ? "translate-x-4" : "translate-x-0"}`} />
+            <div className="w-5 h-5 rounded-full bg-white transition-transform duration-200" style={{ transform: useAI ? "translateX(16px)" : "translateX(0px)" }} />
           </button>
         </div>
 
@@ -716,7 +742,7 @@ export default function ReportForm({
           theme === 'dark' ? 'bg-neutral-950 border-neutral-900' : 'bg-gray-50 border-gray-150'
         }`}>
           <div className="flex items-center gap-2">
-            <EyeOff className="w-4 h-4 text-gray-400" />
+            <EyeOff className={`w-4 h-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
             <div>
               <p className={`font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-neutral-800'}`}>Submit Anonymously</p>
               <p className="text-[9px] text-gray-500">Your real name won't be visible to others</p>
@@ -728,24 +754,32 @@ export default function ReportForm({
             className={`w-10 h-6 rounded-full p-0.5 transition-colors cursor-pointer ${
               isAnonymous 
                 ? theme === 'dark' ? 'bg-[#39FF14]' : 'bg-[#2ECC0F]' 
-                : theme === 'dark' ? 'bg-neutral-850' : 'bg-gray-300'
+                : theme === 'dark' ? 'bg-neutral-800' : 'bg-gray-300'
             }`}
             id="anonymous-report-toggle"
           >
-            <div className={`w-5 h-5 rounded-full bg-white transition-transform ${isAnonymous ? "translate-x-4" : "translate-x-0"}`} />
+            <div className="w-5 h-5 rounded-full bg-white transition-transform duration-200" style={{ transform: isAnonymous ? "translateX(16px)" : "translateX(0px)" }} />
           </button>
         </div>
 
         {/* Errors & Success Feedback */}
         {errorMessage && (
-          <div className="p-2.5 bg-red-600/10 border border-red-500/30 rounded-lg text-xs text-red-400 flex items-center gap-2">
+          <div className={`p-2.5 border rounded-lg text-xs flex items-center gap-2 ${
+            theme === 'dark' 
+              ? 'bg-red-600/10 border-red-500/30 text-red-400' 
+              : 'bg-red-50 border-red-200 text-red-600 font-medium'
+          }`}>
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{errorMessage}</span>
           </div>
         )}
 
         {successMsg && (
-          <div className="p-2.5 bg-green-600/10 border border-green-500/30 rounded-lg text-xs text-green-400 flex items-center gap-2">
+          <div className={`p-2.5 border rounded-lg text-xs flex items-center gap-2 ${
+            theme === 'dark' 
+              ? 'bg-green-600/10 border-green-500/30 text-green-400' 
+              : 'bg-green-50 border-green-200 text-green-600 font-medium'
+          }`}>
             <Check className="w-4 h-4 shrink-0" />
             <span>{successMsg}</span>
           </div>
