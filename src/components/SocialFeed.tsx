@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import Logo from "./Logo";
 import { Issue, Category, ReactionType } from "../types";
 import {
   Search,
@@ -159,11 +160,7 @@ export default function SocialFeed({
       {/* Top Bar Overlay */}
       <div className="absolute top-0 inset-x-0 z-20 px-4 py-3.5 flex items-center justify-between bg-gradient-to-b from-black/90 via-black/40 to-transparent pointer-events-none">
         <div className="flex items-center gap-2 pointer-events-auto">
-          <div className={`px-2 py-0.5 rounded text-[10px] font-black font-mono text-[#0A0A0A] ${
-            theme === 'dark' ? 'bg-brand shadow-[0_0_8px_rgba(57,255,20,0.3)]' : 'bg-[#2ECC0F] shadow-[0_0_8px_rgba(46,204,15,0.3)]'
-          }`}>
-            GZ
-          </div>
+          <Logo theme="dark" className="w-7 h-7 rounded-lg" />
           <div className="flex flex-col justify-center">
             <div className="flex items-center gap-1.5">
               <h1 className="text-xs font-black tracking-tight uppercase text-white leading-none">

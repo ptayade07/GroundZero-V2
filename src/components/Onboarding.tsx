@@ -92,7 +92,11 @@ export default function Onboarding({ onComplete, theme = "dark" }: OnboardingPro
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -50, scale: 0.95 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
-            className="flex flex-col items-center text-center space-y-6 px-4"
+            className={`w-full max-w-[360px] border rounded-[24px] p-8 backdrop-blur-[20px] flex flex-col items-center text-center space-y-6 shadow-2xl transition-all duration-500 ${
+              theme === 'dark'
+                ? "bg-white/[0.05] border-white/10 text-white"
+                : "bg-white/60 border-neutral-200/50 text-neutral-800"
+            }`}
             id={`onboarding-slide-${currentSlide}`}
           >
             {/* Big Icon Container with Pulse Glow */}
@@ -100,8 +104,8 @@ export default function Onboarding({ onComplete, theme = "dark" }: OnboardingPro
               <div className={`absolute inset-0 rounded-full blur-2xl pointer-events-none ${
                 theme === 'dark' ? 'bg-[#39FF14]/5' : 'bg-[#2ECC0F]/5'
               }`} />
-              <div className={`w-24 h-24 rounded-3xl flex items-center justify-center text-5xl relative z-10 select-none border ${
-                theme === 'dark' ? 'bg-[#111111] border-neutral-900' : 'bg-white border-gray-200 shadow-md'
+              <div className={`w-24 h-24 rounded-[20px] flex items-center justify-center text-5xl relative z-10 select-none border backdrop-blur-md ${
+                theme === 'dark' ? 'bg-white/[0.04] border-white/10' : 'bg-white/80 border-neutral-200/40 shadow-sm'
               }`}>
                 {slides[currentSlide].icon}
               </div>

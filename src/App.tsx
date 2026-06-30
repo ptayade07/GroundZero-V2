@@ -15,6 +15,7 @@ import UserProfile from "./components/UserProfile";
 import SocialFeed from "./components/SocialFeed";
 import Onboarding from "./components/Onboarding";
 import SearchPage from "./components/SearchPage";
+import Logo from "./components/Logo";
 import { Map, Plus, BarChart3, User as UserIcon, ShieldAlert, Navigation, Layers, AlertCircle, Sparkles, Check, ChevronDown, ListFilter, SlidersHorizontal, MessageSquare, Search, X, Sun, Moon, Eye, EyeOff } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -501,11 +502,7 @@ export default function App() {
           theme === 'dark' ? 'bg-[#0A0A0A]/95 border-neutral-900 text-white' : 'bg-white/95 border-gray-200 text-neutral-900'
         }`}>
           <div className="flex items-center gap-2">
-            <div className={`px-2 py-1 rounded text-xs font-black font-mono shadow-md text-[#0A0A0A] ${
-              theme === 'dark' ? 'bg-gradient-to-tr from-[#124d04] to-brand shadow-brand/20' : 'bg-gradient-to-tr from-[#2ECC0F] to-[#2ECC0F]/80 shadow-[#2ECC0F]/20 text-white'
-            }`}>
-              GZ
-            </div>
+            <Logo theme={theme} className="w-7 h-7 rounded-lg" />
             <div className="flex flex-col justify-center">
               <div className="flex items-center gap-1.5">
                 <h1 className={`text-sm font-black tracking-tight uppercase leading-none ${
@@ -594,7 +591,7 @@ export default function App() {
           {/* View 1: Feed & Map (Google Maps Engine) */}
           <div className={`w-full h-full absolute inset-0 ${view === "map" ? "block" : "hidden"}`}>
             {/* Filter Floating controls on Map */}
-            <div className="absolute top-4 left-4 z-30 flex flex-col gap-2 w-auto max-w-[calc(100%-120px)] md:max-w-xs">
+            <div className="absolute top-4 left-4 z-30 flex flex-col gap-2 w-auto max-w-[calc(100%-165px)] sm:max-w-xs">
               
               {/* Search Bar */}
               <div className="relative flex items-center">
@@ -606,10 +603,10 @@ export default function App() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search..."
-                  className={`w-full pl-8 pr-8 py-2 text-xs border rounded-lg outline-none focus:outline-none backdrop-blur transition-all ${
+                  className={`w-full pl-8 pr-8 py-2.5 text-xs border rounded-xl outline-none focus:outline-none backdrop-blur-[20px] transition-all duration-305 ${
                     theme === 'dark' 
-                      ? 'bg-black border-neutral-900 text-white placeholder-gray-600 focus:border-[#39FF14]/50' 
-                      : 'bg-white/90 border-gray-200 text-neutral-900 placeholder-gray-400 focus:border-[#2ECC0F]/50 shadow-xs'
+                      ? 'bg-[#121212]/75 border-white/10 text-white placeholder-gray-550 focus:border-[#39FF14]/50' 
+                      : 'bg-white/80 border-neutral-200/50 text-neutral-900 placeholder-gray-400 focus:border-[#2ECC0F]/50 shadow-xs'
                   }`}
                   id="radar-search-input"
                 />
@@ -631,10 +628,10 @@ export default function App() {
                 <select
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value as any)}
-                  className={`px-2 py-1 border rounded-md text-[10px] font-mono outline-none transition-all ${
+                  className={`px-3 py-1.5 border rounded-xl text-[10px] font-mono outline-none transition-all backdrop-blur-md cursor-pointer ${
                     theme === 'dark' 
-                      ? 'bg-black border-neutral-900 text-gray-300 focus:border-[#39FF14]/50' 
-                      : 'bg-white border-gray-200 text-gray-700 focus:border-[#2ECC0F]/50 shadow-xs'
+                      ? 'bg-[#121212]/75 border-white/10 text-gray-300 focus:border-[#39FF14]/50' 
+                      : 'bg-white/80 border-neutral-200/50 text-gray-700 focus:border-[#2ECC0F]/50 shadow-xs'
                   }`}
                 >
                   <option value="all">ALL SECTORS</option>
@@ -660,10 +657,10 @@ export default function App() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value as any)}
-                  className={`px-2 py-1 border rounded-md text-[10px] font-mono outline-none transition-all ${
+                  className={`px-3 py-1.5 border rounded-xl text-[10px] font-mono outline-none transition-all backdrop-blur-md cursor-pointer ${
                     theme === 'dark' 
-                      ? 'bg-black border-neutral-900 text-gray-300 focus:border-[#39FF14]/50' 
-                      : 'bg-white border-gray-200 text-gray-700 focus:border-[#2ECC0F]/50 shadow-xs'
+                      ? 'bg-[#121212]/75 border-white/10 text-gray-300 focus:border-[#39FF14]/50' 
+                      : 'bg-white/80 border-neutral-200/50 text-gray-700 focus:border-[#2ECC0F]/50 shadow-xs'
                   }`}
                 >
                   <option value="all">ALL STATUS</option>
@@ -676,17 +673,17 @@ export default function App() {
                 {/* Toggle Drawer button */}
                 <button
                   onClick={() => setShowFeedDrawer(!showFeedDrawer)}
-                  className={`px-2 py-1 border rounded-md text-[10px] font-mono flex items-center gap-1 shrink-0 transition-all cursor-pointer ${
+                  className={`px-3 py-1.5 border rounded-xl text-[10px] font-mono flex items-center gap-1 shrink-0 transition-all cursor-pointer backdrop-blur-md ${
                     showFeedDrawer 
                       ? theme === 'dark' 
-                        ? "bg-black border-[#39FF14] text-[#39FF14]" 
-                        : "bg-[#2ECC0F]/15 border-[#2ECC0F]/30 text-[#2ECC0F] font-bold"
+                        ? "bg-[#39FF14] border-[#39FF14] text-black font-black" 
+                        : "bg-[#2ECC0F] border-[#2ECC0F] text-white font-black shadow-xs"
                       : theme === 'dark' 
-                        ? "bg-black border-neutral-900 text-gray-400 hover:text-white" 
-                        : "bg-white border-gray-200 text-gray-600 hover:text-black shadow-xs"
+                        ? "bg-white/[0.03] border-white/5 text-gray-400 hover:text-white hover:border-white/20" 
+                        : "bg-white/50 border-neutral-200/50 text-gray-600 hover:text-black shadow-xs"
                   }`}
                 >
-                  <span>FEED LIST ({filteredIssues.length})</span>
+                  <span>FEED ({filteredIssues.length})</span>
                 </button>
               </div>
             </div>

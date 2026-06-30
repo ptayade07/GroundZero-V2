@@ -202,8 +202,8 @@ export default function IssuePopup({
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 100 }}
-      className={`absolute bottom-20 left-4 right-4 z-40 border rounded-2xl p-4 backdrop-blur-md max-w-md mx-auto max-h-[60vh] overflow-y-auto ${
-        theme === 'dark' ? 'bg-neutral-950 border-neutral-900 text-white' : 'bg-white border-gray-200 shadow-xl text-neutral-900'
+      className={`absolute bottom-22 left-4 right-4 z-40 border rounded-[24px] p-6 backdrop-blur-[20px] max-w-md mx-auto max-h-[60vh] flex flex-col shadow-2xl transition-all duration-500 ${
+        theme === 'dark' ? 'bg-white/[0.05] border-white/10 text-white' : 'bg-white/60 border-neutral-200/50 shadow-xl text-neutral-900'
       }`}
       id={`issue-popup-${issue.id}`}
     >
@@ -250,6 +250,8 @@ export default function IssuePopup({
           <X className="w-4 h-4" />
         </button>
       </div>
+
+      <div className="overflow-y-auto pr-1 flex-1 space-y-4 scrollbar-thin">
 
       {/* Photo / Video Swipeable Carousel and Description */}
       <div className="grid grid-cols-1 gap-2 mb-3">
@@ -655,7 +657,7 @@ export default function IssuePopup({
         </button>
       )}
 
-
+      </div>
     </motion.div>
   );
 }

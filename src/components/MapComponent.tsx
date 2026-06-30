@@ -497,19 +497,19 @@ export default function MapComponent({
       isDark ? 'bg-black text-white' : 'bg-gray-50 text-neutral-900'
     }`} id="map-container-wrapper">
       {/* Map view controls in top right */}
-      <div className={`absolute top-4 right-4 z-[1000] flex items-center gap-1 p-1.5 rounded-lg border shadow-xs backdrop-blur ${
-        isDark ? 'bg-neutral-950 border-neutral-900' : 'bg-white/95 border-gray-200'
+      <div className={`absolute top-4 right-4 z-[1000] flex items-center gap-1.5 p-1.5 rounded-2xl border shadow-xl backdrop-blur-[20px] transition-all duration-500 ${
+        isDark ? 'bg-white/[0.05] border-white/10' : 'bg-white/60 border-neutral-200/50'
       }`} id="map-view-controls">
         <button
           onClick={() => setViewMode("street")}
-          className={`px-2.5 py-1 text-[9px] font-mono tracking-wider transition-all cursor-pointer rounded-md uppercase font-black border ${
+          className={`px-3 py-1 text-[9px] font-mono tracking-wider transition-all cursor-pointer rounded-xl uppercase font-black border ${
             viewMode === "street"
               ? isDark 
                 ? "bg-[#39FF14] text-black border-[#39FF14]"
                 : "bg-[#2ECC0F] text-white border-[#2ECC0F] shadow-xs"
               : isDark
-                ? "bg-black text-gray-500 border-transparent hover:text-white"
-                : "bg-white text-gray-400 border-transparent hover:text-neutral-900"
+                ? "bg-transparent border-transparent text-gray-400 hover:text-white"
+                : "bg-transparent border-transparent text-gray-550 hover:text-neutral-900"
           }`}
           id="btn-street-mode"
         >
@@ -517,14 +517,14 @@ export default function MapComponent({
         </button>
         <button
           onClick={() => setViewMode("satellite")}
-          className={`px-2.5 py-1 text-[9px] font-mono tracking-wider transition-all cursor-pointer rounded-md uppercase font-black border ${
+          className={`px-3 py-1 text-[9px] font-mono tracking-wider transition-all cursor-pointer rounded-xl uppercase font-black border ${
             viewMode === "satellite"
               ? isDark 
                 ? "bg-[#39FF14] text-black border-[#39FF14]"
                 : "bg-[#2ECC0F] text-white border-[#2ECC0F] shadow-xs"
               : isDark
-                ? "bg-black text-gray-500 border-transparent hover:text-white"
-                : "bg-white text-gray-400 border-transparent hover:text-neutral-900"
+                ? "bg-transparent border-transparent text-gray-400 hover:text-white"
+                : "bg-transparent border-transparent text-gray-550 hover:text-neutral-900"
           }`}
           id="btn-satellite-mode"
         >
@@ -567,10 +567,10 @@ export default function MapComponent({
       </div>
 
       {/* Elegant Compass / Legend Footer (Floating and Collapsible) */}
-      <div className="absolute bottom-4 left-4 z-[1000] flex flex-col items-start gap-1.5" id="map-legend-container">
+      <div className="absolute bottom-4 left-4 z-[1000] flex flex-col items-start gap-2" id="map-legend-container">
         {isLegendOpen ? (
-          <div className={`flex flex-col gap-1.5 p-3 border rounded-lg text-[9px] backdrop-blur min-w-[145px] shadow-xs ${
-            isDark ? 'bg-neutral-950 border-neutral-900 text-gray-400' : 'bg-white/95 border-gray-200 text-gray-600'
+          <div className={`flex flex-col gap-2 p-4 border rounded-2xl text-[9px] backdrop-blur-[20px] min-w-[155px] shadow-2xl transition-all duration-500 ${
+            isDark ? 'bg-white/[0.05] border-white/10 text-gray-400' : 'bg-white/60 border-neutral-200/50 text-gray-600'
           }`}>
             <div className={`flex items-center justify-between w-full pb-1 border-b gap-4 ${
               isDark ? 'border-neutral-900' : 'border-gray-100'
@@ -595,10 +595,10 @@ export default function MapComponent({
         ) : (
           <button
             onClick={() => setIsLegendOpen(true)}
-            className={`w-8 h-8 rounded-lg border flex items-center justify-center shadow-xs backdrop-blur cursor-pointer transition-all ${
+            className={`w-10 h-10 rounded-2xl border flex items-center justify-center shadow-xl backdrop-blur-[20px] cursor-pointer transition-all duration-500 ${
               isDark 
-                ? 'bg-neutral-950 border-neutral-900 text-gray-400 hover:text-[#39FF14] hover:border-neutral-700' 
-                : 'bg-white/95 border-gray-200 text-gray-500 hover:text-[#2ECC0F] hover:border-gray-400'
+                ? 'bg-white/[0.05] border-white/10 text-gray-400 hover:text-[#39FF14] hover:border-white/20' 
+                : 'bg-white/60 border-neutral-200/50 text-gray-500 hover:text-[#2ECC0F] hover:border-neutral-400'
             }`}
             title="Show Radar Legend"
             id="toggle-legend-btn"

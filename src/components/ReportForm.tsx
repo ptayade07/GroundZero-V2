@@ -373,8 +373,8 @@ export default function ReportForm({
   };
 
   return (
-    <div className={`w-full max-w-lg mx-auto border rounded-xl shadow-xl overflow-hidden p-6 md:p-8 transition-all duration-300 ${
-      theme === 'dark' ? 'bg-black border-neutral-900 text-white' : 'bg-white border-gray-200 text-neutral-900 shadow-md'
+    <div className={`w-full max-w-lg mx-auto border rounded-[24px] shadow-2xl backdrop-blur-[20px] p-8 md:p-10 transition-all duration-500 ${
+      theme === 'dark' ? 'bg-white/[0.05] border-white/10 text-white' : 'bg-white/60 border-neutral-200/50 text-neutral-900'
     }`} id="report-creation-view">
       <div className="flex items-center gap-2 mb-6">
         <button
@@ -438,10 +438,10 @@ export default function ReportForm({
 
           <div
             onClick={() => fileInputRef.current?.click()}
-            className={`w-full h-24 border border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all gap-1 ${
+            className={`w-full h-28 border border-dashed rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-all gap-1.5 backdrop-blur-md ${
               theme === 'dark' 
-                ? 'bg-black border-neutral-800 text-gray-400 hover:border-neutral-750' 
-                : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100/50 hover:border-gray-300 shadow-xs'
+                ? 'bg-white/[0.02] border-white/10 text-gray-350 hover:bg-white/[0.05] hover:border-white/20' 
+                : 'bg-white/40 border-neutral-200/50 text-gray-700 hover:bg-white/60 hover:border-neutral-400 shadow-xs'
             }`}
             id="upload-placeholder-box"
           >
@@ -541,8 +541,8 @@ export default function ReportForm({
                         ? "bg-[#39FF14] text-black border-[#39FF14] font-black shadow-md"
                         : "bg-[#2ECC0F] text-white border-[#2ECC0F] font-black shadow-xs"
                       : theme === 'dark'
-                        ? "bg-black text-gray-400 border-neutral-900 hover:border-neutral-750 hover:text-white"
-                        : "bg-white text-gray-600 border-gray-250 hover:border-gray-300 hover:text-neutral-950 shadow-xs"
+                        ? "bg-white/[0.03] text-gray-400 border-white/5 hover:border-white/20 hover:text-white"
+                        : "bg-white/40 text-gray-650 border-neutral-200/40 hover:border-neutral-400 shadow-xs"
                   }`}
                   id={`manual-cat-${item.value}`}
                 >
@@ -555,8 +555,8 @@ export default function ReportForm({
         </div>
 
         {/* AI Auto-categorize switch */}
-        <div className={`flex items-center justify-between p-4 border rounded-lg transition-all duration-300 ${
-          theme === 'dark' ? 'bg-neutral-950 border-neutral-900' : 'bg-gray-50 border-gray-150'
+        <div className={`flex items-center justify-between p-5 border rounded-2xl backdrop-blur-md transition-all duration-500 ${
+          theme === 'dark' ? 'bg-white/[0.03] border-white/5' : 'bg-white/40 border-neutral-200/40 shadow-xs'
         }`}>
           <div className="flex items-center gap-2">
             <Sparkles className={`w-4 h-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
@@ -593,10 +593,10 @@ export default function ReportForm({
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
             placeholder="Tell your story. What did you see, hear, or experience? Be the reporter."
-            className={`w-full px-3 py-2 text-xs border rounded-lg font-sans resize-none focus:outline-none transition-all ${
+            className={`w-full p-4 text-xs border rounded-2xl font-sans resize-none focus:outline-none transition-all backdrop-blur-md ${
               theme === 'dark' 
-                ? 'bg-black border-neutral-900 text-white placeholder-gray-600 focus:border-neutral-700' 
-                : 'bg-white border-gray-200 text-neutral-900 placeholder-gray-400 focus:border-gray-400 shadow-xs'
+                ? 'bg-white/[0.03] border-white/10 text-white placeholder-gray-500 focus:border-white/20 focus:bg-white/[0.05]' 
+                : 'bg-white/40 border-neutral-200/50 text-neutral-900 placeholder-gray-400 focus:border-neutral-400 shadow-xs'
             }`}
             id="report-desc-textarea"
           />
@@ -754,8 +754,8 @@ export default function ReportForm({
                 <select
                   value={manualArea}
                   onChange={handleManualAreaSelect}
-                  className={`w-full px-2.5 py-1.5 text-xs border rounded focus:outline-none ${
-                    theme === 'dark' ? 'bg-neutral-950 border-neutral-900 text-gray-300' : 'bg-white border-gray-200 text-neutral-800'
+                  className={`w-full px-3 py-2 text-xs border rounded-xl focus:outline-none backdrop-blur-md ${
+                    theme === 'dark' ? 'bg-white/[0.03] border-white/10 text-gray-300' : 'bg-white/50 border-neutral-200/50 text-neutral-800'
                   }`}
                   id="neighborhood-manual-select"
                 >
@@ -770,8 +770,8 @@ export default function ReportForm({
         </div>
 
         {/* Step 5: Anonymous Toggle */}
-        <div className={`flex items-center justify-between p-4 border rounded-lg text-xs ${
-          theme === 'dark' ? 'bg-neutral-950 border-neutral-900' : 'bg-gray-50 border-gray-150'
+        <div className={`flex items-center justify-between p-5 border rounded-2xl text-xs backdrop-blur-md transition-all duration-500 ${
+          theme === 'dark' ? 'bg-white/[0.03] border-white/5' : 'bg-white/40 border-neutral-200/40 shadow-xs'
         }`}>
           <div className="flex items-center gap-2">
             <EyeOff className={`w-4 h-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />

@@ -43,22 +43,22 @@ interface SearchPageProps {
 }
 
 const CATEGORY_MAP: Record<Category, { label: string; icon: React.ComponentType<any>; bg: string; text: string; border: string }> = {
-  "Civic Issue": { label: "Civic Issue", icon: Building, bg: "bg-indigo-500/10", text: "text-indigo-400", border: "border-indigo-500/30" },
-  "Pothole": { label: "Pothole", icon: Construction, bg: "bg-orange-500/10", text: "text-orange-400", border: "border-orange-500/30" },
-  "Flooding": { label: "Flooding", icon: Waves, bg: "bg-blue-500/10", text: "text-blue-400", border: "border-blue-500/30" },
-  "Power Cut": { label: "Power Cut", icon: Zap, bg: "bg-yellow-500/10", text: "text-yellow-400", border: "border-yellow-500/30" },
-  "Garbage": { label: "Garbage", icon: Trash2, bg: "bg-amber-700/10", text: "text-amber-500", border: "border-amber-700/30" },
-  "Corruption": { label: "Corruption", icon: Scale, bg: "bg-red-500/10", text: "text-red-400", border: "border-red-500/30" },
-  "Government Failure": { label: "Govt Failure", icon: Landmark, bg: "bg-red-700/10", text: "text-red-500", border: "border-red-700/30" },
-  "Protest / Rally": { label: "Protest / Rally", icon: Megaphone, bg: "bg-pink-500/10", text: "text-pink-400", border: "border-pink-500/30" },
-  "Local Drama": { label: "Local Drama", icon: MessageCircle, bg: "bg-teal-500/10", text: "text-teal-400", border: "border-teal-500/30" },
-  "Argument / Dispute": { label: "Argument", icon: MessageSquare, bg: "bg-rose-500/10", text: "text-rose-400", border: "border-rose-500/30" },
-  "Harassment": { label: "Harassment", icon: ShieldAlert, bg: "bg-red-600/10", text: "text-red-500", border: "border-red-600/30" },
-  "Breaking News": { label: "Breaking News", icon: Newspaper, bg: "bg-cyan-500/10", text: "text-cyan-400", border: "border-cyan-500/30" },
-  "Village Problem": { label: "Village Prob", icon: Home, bg: "bg-green-500/10", text: "text-green-400", border: "border-green-500/30" },
-  "Weather": { label: "Weather", icon: Cloud, bg: "bg-sky-500/10", text: "text-sky-400", border: "border-sky-500/30" },
-  "War / Conflict": { label: "Conflict", icon: Flame, bg: "bg-gray-800/20", text: "text-gray-400", border: "border-gray-700/30" },
-  "Other": { label: "Other", icon: HelpCircle, bg: "bg-gray-700/10", text: "text-gray-400", border: "border-gray-700/30" }
+  "Civic Issue": { label: "Civic Issue", icon: Building, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "Pothole": { label: "Pothole", icon: Construction, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "Flooding": { label: "Flooding", icon: Waves, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "Power Cut": { label: "Power Cut", icon: Zap, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "Garbage": { label: "Garbage", icon: Trash2, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "Corruption": { label: "Corruption", icon: Scale, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "Government Failure": { label: "Govt Failure", icon: Landmark, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "Protest / Rally": { label: "Protest / Rally", icon: Megaphone, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "Local Drama": { label: "Local Drama", icon: MessageCircle, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "Argument / Dispute": { label: "Argument", icon: MessageSquare, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "Harassment": { label: "Harassment", icon: ShieldAlert, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "Breaking News": { label: "Breaking News", icon: Newspaper, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "Village Problem": { label: "Village Prob", icon: Home, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "Weather": { label: "Weather", icon: Cloud, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "War / Conflict": { label: "Conflict", icon: Flame, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" },
+  "Other": { label: "Other", icon: HelpCircle, bg: "bg-neutral-500/10", text: "text-neutral-500 dark:text-neutral-400", border: "border-neutral-500/20" }
 };
 
 const CATEGORY_IMAGES: Record<Category | string, string> = {
@@ -151,13 +151,11 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
     <div className="max-w-lg mx-auto flex flex-col gap-5 pb-16" id="search-page-container">
       {/* Title Header */}
       <div className="flex items-center gap-2 mt-2">
-        <div className={`p-2 border rounded-xl ${
-          theme === 'dark' ? 'bg-neutral-950 border-neutral-900' : 'bg-white border-gray-200 shadow-xs'
-        }`}>
-          <Search className="w-5 h-5 text-brand" />
+        <div className="p-2 border border-transparent bg-transparent shadow-none">
+          <Search className="w-6 h-6 text-brand" />
         </div>
         <div>
-          <h1 className={`text-lg font-black uppercase tracking-tight ${
+          <h1 className={`text-2xl font-black uppercase tracking-tight leading-none ${
             theme === 'dark' ? 'text-white' : 'text-neutral-900'
           }`}>Explore Grid</h1>
           <p className={`text-[10px] font-mono uppercase ${
@@ -174,10 +172,10 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search reports, locations, reporters..."
-          className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-xs font-mono tracking-tight outline-none transition-all ${
+          className={`w-full pl-10 pr-4 py-3 rounded-2xl text-xs font-mono tracking-tight outline-none transition-all border backdrop-blur-[20px] ${
             theme === 'dark'
-              ? 'bg-black border border-neutral-900 text-white placeholder-gray-500 focus:border-neutral-700 shadow-inner'
-              : 'bg-white border border-gray-200 text-neutral-900 placeholder-gray-400 focus:border-gray-400 shadow-xs'
+              ? 'bg-white/[0.05] border-white/10 text-white placeholder-gray-500 focus:border-white/20 focus:bg-white/[0.08]'
+              : 'bg-white/60 border-neutral-200/50 text-neutral-900 placeholder-gray-400 focus:border-neutral-400'
           }`}
           id="search-input-field"
         />
@@ -254,13 +252,13 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
                 <div
                   key={issue.id}
                   onClick={() => onSelectIssue(issue)}
-                  className={`py-4 px-1 border-b cursor-pointer transition-all flex items-start gap-4 group ${
+                  className={`p-5 rounded-2xl border cursor-pointer transition-all flex items-start gap-5 backdrop-blur-[20px] group ${
                     theme === 'dark' 
-                      ? 'bg-black border-neutral-900 hover:bg-neutral-950/40' 
-                      : 'bg-transparent border-gray-200 hover:bg-gray-100/30'
+                      ? 'bg-white/[0.03] border-white/5 hover:bg-white/[0.06] hover:border-white/10 text-white shadow-md' 
+                      : 'bg-white/40 border-neutral-200/40 hover:bg-white/60 hover:border-neutral-300 text-neutral-900 shadow-xs'
                   }`}
                 >
-                  <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 border border-gray-800/50">
+                  <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-neutral-800/20">
                     <img
                       src={getIssueImage(issue)}
                       alt={issue.title}

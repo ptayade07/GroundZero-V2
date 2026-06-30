@@ -185,8 +185,8 @@ export default function UserProfile({
 
   return (
     <div
-      className={`w-full max-w-lg mx-auto border rounded-xl p-6 md:p-8 space-y-6 overflow-y-auto max-h-[85vh] scrollbar-none ${
-        theme === "dark" ? "bg-black border-neutral-900 text-white" : "bg-white border-gray-200 text-neutral-900"
+      className={`w-full max-w-lg mx-auto border rounded-[24px] p-8 md:p-10 space-y-8 overflow-y-auto max-h-[85vh] scrollbar-none backdrop-blur-[20px] transition-all duration-500 shadow-2xl ${
+        theme === "dark" ? "bg-white/[0.05] border-white/10 text-white" : "bg-white/60 border-neutral-200/50 text-neutral-900"
       }`}
       id="user-profile-view"
     >
@@ -335,8 +335,8 @@ export default function UserProfile({
       </AnimatePresence>
 
       {/* Prominent Anonymous Mode Toggle */}
-      <div className={`p-4 border rounded-xl flex items-center justify-between ${
-        theme === "dark" ? "bg-neutral-950 border-neutral-900" : "bg-gray-50 border-gray-200"
+      <div className={`p-5 border rounded-2xl flex items-center justify-between backdrop-blur-[20px] transition-all duration-500 ${
+        theme === "dark" ? "bg-white/[0.03] border-white/5" : "bg-white/40 border-neutral-200/40 shadow-xs"
       }`} id="anon-mode-toggle-card">
         <div className="flex items-center gap-2.5">
           {user.isAnonymous ? (
@@ -377,10 +377,10 @@ export default function UserProfile({
       </div>
 
       {/* Trust Score & Impact Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4" id="trust-impact-metrics">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5" id="trust-impact-metrics">
         {/* Trust score dial */}
-        <div className={`p-4 border rounded-xl flex items-center gap-4 ${
-          theme === "dark" ? "bg-neutral-950 border-neutral-900" : "bg-gray-50 border-gray-200"
+        <div className={`p-5 border rounded-2xl flex items-center gap-5 backdrop-blur-[20px] transition-all duration-500 ${
+          theme === "dark" ? "bg-white/[0.03] border-white/5" : "bg-white/40 border-neutral-200/40 shadow-xs"
         }`}>
           <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
             <svg className="w-full h-full transform -rotate-90">
@@ -411,11 +411,11 @@ export default function UserProfile({
         </div>
 
         {/* My Impact card */}
-        <div className={`p-4 border rounded-xl flex items-center gap-4 ${
-          theme === "dark" ? "bg-neutral-950 border-neutral-900" : "bg-gray-50 border-gray-200"
+        <div className={`p-5 border rounded-2xl flex items-center gap-5 backdrop-blur-[20px] transition-all duration-500 ${
+          theme === "dark" ? "bg-white/[0.03] border-white/5" : "bg-white/40 border-neutral-200/40 shadow-xs"
         }`}>
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
-            theme === "dark" ? "bg-neutral-900 border border-neutral-850 text-white" : "bg-gray-200 border border-gray-300 text-neutral-800"
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border backdrop-blur-md ${
+            theme === "dark" ? "bg-white/[0.04] border-white/10 text-white" : "bg-white/80 border-neutral-200/40 text-neutral-800 shadow-sm"
           }`}>
             <Sparkles className="w-6 h-6" />
           </div>
@@ -435,11 +435,11 @@ export default function UserProfile({
       </div>
 
       {/* Stats Row */}
-      <div className={`grid grid-cols-3 gap-0 border rounded-xl overflow-hidden ${
-        theme === "dark" ? "border-neutral-900 bg-black" : "border-gray-200 bg-gray-50"
+      <div className={`grid grid-cols-3 gap-0 border rounded-2xl overflow-hidden backdrop-blur-[20px] transition-all duration-500 ${
+        theme === "dark" ? "border-white/5 bg-white/[0.02]" : "border-neutral-200/40 bg-white/30"
       }`} id="profile-stats-row">
         {/* Total Posts */}
-        <div className={`p-3 text-center border-r ${theme === "dark" ? "bg-black border-neutral-900" : "bg-gray-50 border-gray-200"}`}>
+        <div className={`p-4 text-center border-r ${theme === "dark" ? "border-white/5" : "border-neutral-200/40"}`}>
           <p className="text-[9px] font-mono text-gray-500 uppercase tracking-widest leading-none mb-1.5">Posts</p>
           <div className={`flex items-center justify-center gap-1.5 ${theme === "dark" ? "text-white" : "text-neutral-900"}`}>
             <FileText className="w-3.5 h-3.5" />
@@ -448,7 +448,7 @@ export default function UserProfile({
         </div>
 
         {/* Reactions Received */}
-        <div className={`p-3 text-center border-r ${theme === "dark" ? "bg-black border-neutral-900" : "bg-gray-50 border-gray-200"}`}>
+        <div className={`p-4 text-center border-r ${theme === "dark" ? "border-white/5" : "border-neutral-200/40"}`}>
           <p className="text-[9px] font-mono text-gray-500 uppercase tracking-widest leading-none mb-1.5">Reactions</p>
           <div className={`flex items-center justify-center gap-1.5 ${theme === "dark" ? "text-white" : "text-neutral-900"}`}>
             <ThumbsUp className="w-3.5 h-3.5" />
@@ -457,7 +457,7 @@ export default function UserProfile({
         </div>
 
         {/* People Reached */}
-        <div className={`p-3 text-center ${theme === "dark" ? "bg-black" : "bg-gray-50"}`}>
+        <div className="p-4 text-center">
           <p className="text-[9px] font-mono text-gray-500 uppercase tracking-widest leading-none mb-1.5">Reached</p>
           <div className={`flex items-center justify-center gap-1.5 ${theme === "dark" ? "text-white" : "text-neutral-900"}`}>
             <Users className="w-3.5 h-3.5" />
@@ -482,10 +482,14 @@ export default function UserProfile({
             return (
               <div
                 key={badge.id}
-                className={`p-2.5 border rounded-xl flex flex-col items-center text-center transition-all relative overflow-hidden ${
+                className={`p-3.5 border rounded-2xl flex flex-col items-center text-center transition-all relative overflow-hidden backdrop-blur-md ${
                   badge.earned
-                    ? (theme === "dark" ? "bg-neutral-950 border-neutral-850" : "bg-gray-50 border-gray-300 shadow-sm")
-                    : (theme === "dark" ? "bg-black border-neutral-900 opacity-30 select-none" : "bg-gray-100/50 border-gray-200 opacity-35 select-none")
+                    ? theme === "dark"
+                      ? "bg-white/[0.04] border-white/10"
+                      : "bg-white/80 border-neutral-200/50 shadow-sm"
+                    : theme === "dark"
+                      ? "bg-transparent border-white/5 opacity-30 select-none"
+                      : "bg-transparent border-gray-150 opacity-35 select-none"
                 }`}
                 title={badge.description}
               >
@@ -509,8 +513,8 @@ export default function UserProfile({
       </div>
 
       {/* Trust Score rules explanation / guide */}
-      <div className={`p-4 border rounded-lg text-[9px] space-y-2 font-sans ${
-        theme === "dark" ? "bg-neutral-950 border-neutral-900 text-gray-400" : "bg-gray-50 border-gray-200 text-gray-650"
+      <div className={`p-5 border rounded-2xl text-[9px] space-y-3 font-sans backdrop-blur-[20px] transition-all duration-500 ${
+        theme === "dark" ? "bg-white/[0.02] border-white/5 text-gray-400" : "bg-white/30 border-neutral-200/40 text-gray-650 shadow-xs"
       }`}>
         <p className={`font-bold flex items-center gap-1 text-[10px] uppercase font-mono ${theme === "dark" ? "text-white" : "text-neutral-900"}`}>
           <HelpCircle className="w-3.5 h-3.5 shrink-0" />

@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { MapPin, CheckCircle, Zap } from "lucide-react";
+import Logo from "./Logo";
 
 interface LandingPageProps {
   onLoginClick: () => void;
@@ -35,11 +36,7 @@ export default function LandingPage({
         className="flex flex-col items-center gap-3 mt-12"
         id="landing-logo-block"
       >
-        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border ${
-          theme === 'dark' ? 'bg-[#39FF14] text-black border-neutral-900' : 'bg-[#2ECC0F] text-white border-gray-200'
-        }`}>
-          <span className={`text-2xl font-black font-mono ${theme === 'dark' ? 'text-black' : 'text-white'}`}>GZ</span>
-        </div>
+        <Logo theme={theme} className="w-16 h-16 rounded-[14px] shadow-2xl" />
         <div className="text-center">
           <h1 className={`text-xl font-black tracking-widest uppercase leading-none ${
             theme === 'dark' ? 'text-white' : 'text-neutral-900'
