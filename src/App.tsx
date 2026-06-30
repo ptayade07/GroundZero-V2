@@ -442,51 +442,53 @@ export default function App() {
     <div className="w-full h-screen flex flex-col bg-[#0A0A0A] select-none text-white relative font-sans overflow-hidden" id="groundzero-root">
       
       {/* Top operational banner header */}
-      <header className="px-4 py-3 bg-[#0A0A0A]/95 border-b border-gray-900 flex items-center justify-between backdrop-blur shrink-0 z-50 shadow-md">
-        <div className="flex items-center gap-2">
-          <div className="px-2 py-1 bg-gradient-to-tr from-[#124d04] to-brand rounded text-xs font-black font-mono shadow-md shadow-brand/20 text-[#0A0A0A]">
-            GZ
-          </div>
-          <div className="flex flex-col justify-center">
-            <div className="flex items-center gap-1.5">
-              <h1 className="text-sm font-black tracking-tight uppercase leading-none text-white">
-                GROUND<span className="text-brand">ZERO</span>
-              </h1>
-              <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-950/80 border border-[#39FF14]/30 text-[#39FF14] text-[8px] font-black tracking-wider uppercase">
-                <span className="w-1 h-1 rounded-full bg-[#39FF14] animate-ping" />
-                <span className="animate-pulse">LIVE</span>
-              </span>
+      {view !== "feed" && (
+        <header className="px-4 py-3 bg-[#0A0A0A]/95 border-b border-gray-900 flex items-center justify-between backdrop-blur shrink-0 z-50 shadow-md">
+          <div className="flex items-center gap-2">
+            <div className="px-2 py-1 bg-gradient-to-tr from-[#124d04] to-brand rounded text-xs font-black font-mono shadow-md shadow-brand/20 text-[#0A0A0A]">
+              GZ
             </div>
-            <p className="text-[8px] text-gray-500 font-mono leading-none tracking-widest uppercase mt-0.5">
-              LIVE HYPERLOCAL CITIZEN GRID
-            </p>
+            <div className="flex flex-col justify-center">
+              <div className="flex items-center gap-1.5">
+                <h1 className="text-sm font-black tracking-tight uppercase leading-none text-white">
+                  GROUND<span className="text-brand">ZERO</span>
+                </h1>
+                <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-950/80 border border-[#39FF14]/30 text-[#39FF14] text-[8px] font-black tracking-wider uppercase">
+                  <span className="w-1 h-1 rounded-full bg-[#39FF14] animate-ping" />
+                  <span className="animate-pulse">LIVE</span>
+                </span>
+              </div>
+              <p className="text-[8px] text-gray-500 font-mono leading-none tracking-widest uppercase mt-0.5">
+                LIVE HYPERLOCAL CITIZEN GRID
+              </p>
+            </div>
           </div>
-        </div>
 
-        {/* Live radar indicators and trust score */}
-        <div className="flex items-center gap-2">
-          {user ? (
-            <div
-              onClick={() => setView("profile")}
-              className="flex items-center gap-1.5 px-2.5 py-1 bg-[#0A0A0A] border border-gray-800 rounded-lg text-xs cursor-pointer hover:border-brand/40 transition-all font-mono"
-              id="top-profile-badge"
-            >
-              <span className="text-brand text-[10px] animate-pulse">●</span>
-              <span className="text-gray-400 font-sans font-medium line-clamp-1 max-w-[80px] text-[10px]">
-                {user.isAnonymous ? "Anonymous" : user.name.split(" ")[0]}
-              </span>
-              <span className="px-1 py-0.2 bg-brand/10 text-brand rounded text-[8px] font-bold">
-                {user.trustScore} TS
-              </span>
-            </div>
-          ) : (
-            <div className="text-[9px] text-gray-500 font-mono tracking-wider flex items-center gap-1.5 uppercase">
-              <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
-              OFFLINE GRIDS
-            </div>
-          )}
-        </div>
-      </header>
+          {/* Live radar indicators and trust score */}
+          <div className="flex items-center gap-2">
+            {user ? (
+              <div
+                onClick={() => setView("profile")}
+                className="flex items-center gap-1.5 px-2.5 py-1 bg-[#0A0A0A] border border-gray-800 rounded-lg text-xs cursor-pointer hover:border-brand/40 transition-all font-mono"
+                id="top-profile-badge"
+              >
+                <span className="text-brand text-[10px] animate-pulse">●</span>
+                <span className="text-gray-400 font-sans font-medium line-clamp-1 max-w-[80px] text-[10px]">
+                  {user.isAnonymous ? "Anonymous" : user.name.split(" ")[0]}
+                </span>
+                <span className="px-1 py-0.2 bg-brand/10 text-brand rounded text-[8px] font-bold">
+                  {user.trustScore} TS
+                </span>
+              </div>
+            ) : (
+              <div className="text-[9px] text-gray-500 font-mono tracking-wider flex items-center gap-1.5 uppercase">
+                <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
+                OFFLINE GRIDS
+              </div>
+            )}
+          </div>
+        </header>
+      )}
 
       {/* Main operational panel */}
       <main className="flex-1 relative overflow-hidden" id="main-grid-panel">
@@ -679,7 +681,7 @@ export default function App() {
           </div>
 
           {/* View 2: Social Feed */}
-          <div className={`w-full h-full absolute inset-0 overflow-y-auto px-4 py-6 ${view === "feed" ? "block" : "hidden"}`}>
+          <div className={`w-full h-full absolute inset-0 ${view === "feed" ? "block overflow-hidden" : "hidden"}`}>
             <SocialFeed
               issues={issuesFilteredByTime}
               currentUserId={user.id}
@@ -692,6 +694,7 @@ export default function App() {
               timeFilter={timeFilter}
               setTimeFilter={setTimeFilter}
               onSeeThisToo={handleSeeThisToo}
+              onNavigateToSearch={() => setView("search")}
             />
           </div>
 

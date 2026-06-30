@@ -303,9 +303,9 @@ export default function ReportForm({
       return;
     }
 
-    // Determine final latitude and longitude (India-wide seed fallback if absolutely nothing chosen)
-    let finalLat = 20.5937;
-    let finalLng = 78.9629;
+    // Determine final latitude and longitude (Default to London center if absolutely nothing chosen)
+    let finalLat = 51.5074;
+    let finalLng = -0.1278;
 
     if (selectedLocation) {
       finalLat = selectedLocation.lat;
@@ -316,9 +316,6 @@ export default function ReportForm({
         finalLat = found.lat;
         finalLng = found.lng;
       }
-    } else {
-      setErrorMessage("Please select a report location on the map, trigger GPS, or pick a neighborhood.");
-      return;
     }
 
     setIsPending(true);
@@ -385,7 +382,7 @@ export default function ReportForm({
         {/* Step 1: Upload Photo / Video (up to 5 photos or 1 video) */}
         <div>
           <label className="block text-[10px] font-mono uppercase tracking-wider text-gray-400 mb-1.5">
-            STEP 1: SNAP & UPLOAD EVIDENCE (UP TO 5 PHOTOS OR 1 VIDEO)
+            STEP 1: ADD PHOTO OR VIDEO (OPTIONAL)
           </label>
           
           <input
@@ -609,7 +606,7 @@ export default function ReportForm({
         {/* Step 4: Coordinates Location selection */}
         <div>
           <label className="block text-[10px] font-mono uppercase tracking-wider text-gray-400 mb-1">
-            STEP 4: REPORT LOCATION & AREA
+            STEP 4: REPORT LOCATION & AREA (OPTIONAL)
           </label>
           
           <div className="flex flex-col gap-2">

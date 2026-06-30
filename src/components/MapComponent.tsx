@@ -77,21 +77,35 @@ export default function MapComponent({
   const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({ lat: 51.5074, lng: -0.1278 }); // Default to London center
   const [hasGPS, setHasGPS] = useState(false);
 
+  // Helper functions to prevent LatLng NaN errors
+  const safeLat = (val: any): number => {
+    const n = Number(val);
+    return isNaN(n) ? 51.5074 : n;
+  };
+
+  const safeLng = (val: any): number => {
+    const n = Number(val);
+    return isNaN(n) ? -0.1278 : n;
+  };
+
   // Attempt to detect GPS location automatically on load
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const newCenter = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-          setMapCenter(newCenter);
-          setHasGPS(true);
+          const lat = Number(position.coords.latitude);
+          const lng = Number(position.coords.longitude);
+          if (!isNaN(lat) && !isNaN(lng)) {
+            setMapCenter({ lat, lng });
+            setHasGPS(true);
+          } else {
+            setMapCenter({ lat: 51.5074, lng: -0.1278 });
+            setHasGPS(false);
+          }
         },
         (error) => {
-          console.warn("GPS request denied/unavailable. Defaulting to India-centered view.", error);
-          setMapCenter({ lat: 20.5937, lng: 78.9629 });
+          console.warn("GPS request denied/unavailable. Defaulting to London center view.", error);
+          setMapCenter({ lat: 51.5074, lng: -0.1278 });
           setHasGPS(false);
         },
         { enableHighAccuracy: true, timeout: 8000 }
@@ -100,7 +114,11 @@ export default function MapComponent({
   }, []);
 
   // Dynamically compute active center around selection or default GPS/center coordinates
-  const activeCenter = selectedLocation || (selectedIssue ? { lat: selectedIssue.lat, lng: selectedIssue.lng } : mapCenter);
+  const rawActiveCenter = selectedLocation || (selectedIssue ? { lat: selectedIssue.lat, lng: selectedIssue.lng } : mapCenter);
+  const activeCenter = {
+    lat: safeLat(rawActiveCenter?.lat),
+    lng: safeLng(rawActiveCenter?.lng)
+  };
 
   // Poll for window.L loading
   useEffect(() => {
@@ -242,7 +260,7 @@ export default function MapComponent({
         iconAnchor: [12, 12]
       });
 
-      L.marker([mapCenter.lat, mapCenter.lng], { icon: userIcon, zIndexOffset: 1000 })
+      L.marker([safeLat(mapCenter.lat), safeLng(mapCenter.lng)], { icon: userIcon, zIndexOffset: 1000 })
         .bindPopup("<div class='text-[#0A0A0A] font-sans font-bold text-xs p-1'>Your Live GPS Location</div>")
         .addTo(markersGroupRef.current);
     }
@@ -273,8 +291,16 @@ export default function MapComponent({
       issues: Issue[];
     }[] = [];
 
+    // Filter out issues that have invalid / NaN coordinates
+    const validIssues = (issues || []).filter(issue => {
+      if (!issue) return false;
+      const lat = Number(issue.lat);
+      const lng = Number(issue.lng);
+      return !isNaN(lat) && !isNaN(lng);
+    });
+
     // Simple agglomerative clustering
-    issues.forEach(issue => {
+    validIssues.forEach(issue => {
       let found = false;
       for (const c of tempClusters) {
         const dist = Math.sqrt(Math.pow(c.lat - issue.lat, 2) + Math.pow(c.lng - issue.lng, 2));
@@ -314,10 +340,10 @@ export default function MapComponent({
           iconAnchor: [20, 20]
         });
 
-        const marker = L.marker([c.lat, c.lng], { icon: clusterIcon });
+        const marker = L.marker([safeLat(c.lat), safeLng(c.lng)], { icon: clusterIcon });
         marker.on("click", () => {
           const currentZoom = mapInstance.current.getZoom();
-          mapInstance.current.setView([c.lat, c.lng], Math.min(currentZoom + 2, 18), { animate: true });
+          mapInstance.current.setView([safeLat(c.lat), safeLng(c.lng)], Math.min(currentZoom + 2, 18), { animate: true });
         });
 
         // Add small hover popup showing titles inside the cluster
@@ -373,7 +399,7 @@ export default function MapComponent({
             iconAnchor: isSelected ? [18, 18] : [15, 15]
           });
 
-          const marker = L.marker([issue.lat, issue.lng], { icon: customIcon });
+          const marker = L.marker([safeLat(issue.lat), safeLng(issue.lng)], { icon: customIcon });
 
           marker.on("click", () => {
             onSelectIssue(issue);
@@ -412,7 +438,7 @@ export default function MapComponent({
         iconAnchor: [16, 32]
       });
 
-      L.marker([selectedLocation.lat, selectedLocation.lng], { icon: creationIcon })
+      L.marker([safeLat(selectedLocation.lat), safeLng(selectedLocation.lng)], { icon: creationIcon })
         .addTo(markersGroupRef.current);
     }
 
