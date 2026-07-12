@@ -22,7 +22,9 @@ import {
   Zap,
   Check,
   Flag,
-  AlertTriangle
+  AlertTriangle,
+  Sun,
+  Moon
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -33,6 +35,7 @@ interface UserProfileProps {
   onSelectIssue: (issue: Issue) => void;
   onUpdateUser: (updatedUser: UserType) => void;
   theme?: "light" | "dark";
+  onToggleTheme?: () => void;
 }
 
 export default function UserProfile({
@@ -41,7 +44,8 @@ export default function UserProfile({
   onLogout,
   onUpdateUser,
   onSelectIssue,
-  theme = "dark"
+  theme = "dark",
+  onToggleTheme
 }: UserProfileProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
@@ -375,6 +379,41 @@ export default function UserProfile({
           {user.isAnonymous ? "ACTIVE" : "DISABLED"}
         </button>
       </div>
+
+      {/* Theme Toggle Settings Card */}
+      {onToggleTheme && (
+        <div className={`p-5 border rounded-2xl flex items-center justify-between backdrop-blur-[20px] transition-all duration-500 ${
+          theme === "dark" ? "bg-white/[0.03] border-white/5" : "bg-white/40 border-neutral-200/40 shadow-xs"
+        }`} id="theme-settings-card">
+          <div className="flex items-center gap-2.5">
+            <div className={`p-2 rounded-lg border ${
+              theme === "dark" ? "bg-neutral-900 border-neutral-850 text-white" : "bg-gray-200 border-gray-300 text-neutral-800"
+            }`}>
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </div>
+            <div>
+              <p className={`text-[10px] font-black tracking-wider uppercase font-mono leading-none ${theme === "dark" ? "text-gray-200" : "text-neutral-800"}`}>
+                DISPLAY MODE
+              </p>
+              <p className="text-[9px] text-gray-500 font-mono tracking-wide mt-0.5 uppercase">
+                {theme === "dark" ? "Dark Theme Engaged" : "Light Theme Engaged"}
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={onToggleTheme}
+            className={`px-3 py-1.5 rounded-lg text-[9px] font-mono uppercase font-black tracking-widest border transition-all cursor-pointer ${
+              theme === "dark"
+                ? "bg-transparent text-gray-400 border-neutral-900 hover:text-white"
+                : "bg-transparent text-gray-500 border-gray-200 hover:text-black"
+            }`}
+            id="toggle-theme-btn"
+          >
+            SWITCH TO {theme === "dark" ? "LIGHT" : "DARK"}
+          </button>
+        </div>
+      )}
 
       {/* Trust Score & Impact Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5" id="trust-impact-metrics">

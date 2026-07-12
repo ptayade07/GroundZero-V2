@@ -496,17 +496,17 @@ export default function MapComponent({
     <div className={`relative w-full h-full overflow-hidden select-none transition-colors duration-300 ${
       isDark ? 'bg-black text-white' : 'bg-gray-50 text-neutral-900'
     }`} id="map-container-wrapper">
-      {/* Map view controls in top right */}
-      <div className={`absolute top-4 right-4 z-[1000] flex items-center gap-1.5 p-1.5 rounded-2xl border shadow-xl backdrop-blur-[20px] transition-all duration-500 ${
-        isDark ? 'bg-white/[0.05] border-white/10' : 'bg-white/60 border-neutral-200/50'
+      {/* Map view controls in bottom right */}
+      <div className={`absolute bottom-4 right-4 z-[1000] flex items-center gap-1 p-1 rounded-xl border shadow-md backdrop-blur-md transition-all duration-500 ${
+        isDark ? 'bg-black/80 border-white/10' : 'bg-white/80 border-neutral-200/50'
       }`} id="map-view-controls">
         <button
           onClick={() => setViewMode("street")}
-          className={`px-3 py-1 text-[9px] font-mono tracking-wider transition-all cursor-pointer rounded-xl uppercase font-black border ${
+          className={`px-2.5 py-0.5 text-[8px] font-mono tracking-wider transition-all cursor-pointer rounded-lg uppercase font-black border ${
             viewMode === "street"
               ? isDark 
                 ? "bg-[#39FF14] text-black border-[#39FF14]"
-                : "bg-[#2ECC0F] text-white border-[#2ECC0F] shadow-xs"
+                : "bg-[#2ECC0F] text-white border-[#2ECC0F]"
               : isDark
                 ? "bg-transparent border-transparent text-gray-400 hover:text-white"
                 : "bg-transparent border-transparent text-gray-550 hover:text-neutral-900"
@@ -517,11 +517,11 @@ export default function MapComponent({
         </button>
         <button
           onClick={() => setViewMode("satellite")}
-          className={`px-3 py-1 text-[9px] font-mono tracking-wider transition-all cursor-pointer rounded-xl uppercase font-black border ${
+          className={`px-2.5 py-0.5 text-[8px] font-mono tracking-wider transition-all cursor-pointer rounded-lg uppercase font-black border ${
             viewMode === "satellite"
               ? isDark 
                 ? "bg-[#39FF14] text-black border-[#39FF14]"
-                : "bg-[#2ECC0F] text-white border-[#2ECC0F] shadow-xs"
+                : "bg-[#2ECC0F] text-white border-[#2ECC0F]"
               : isDark
                 ? "bg-transparent border-transparent text-gray-400 hover:text-white"
                 : "bg-transparent border-transparent text-gray-550 hover:text-neutral-900"

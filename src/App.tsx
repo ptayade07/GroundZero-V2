@@ -19,6 +19,32 @@ import Logo from "./components/Logo";
 import { Map, Plus, BarChart3, User as UserIcon, ShieldAlert, Navigation, Layers, AlertCircle, Sparkles, Check, ChevronDown, ListFilter, SlidersHorizontal, MessageSquare, Search, X, Sun, Moon, Eye, EyeOff } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
+const ALL_CATEGORIES: Category[] = [
+  "Civic Issue",
+  "Pothole",
+  "Flooding",
+  "Power Cut",
+  "Garbage",
+  "Corruption",
+  "Government Failure",
+  "Protest / Rally",
+  "Local Drama",
+  "Argument / Dispute",
+  "Harassment",
+  "Breaking News",
+  "Village Problem",
+  "Weather",
+  "War / Conflict",
+  "Other"
+];
+
+const ALL_STATUSES: Status[] = [
+  "Reported",
+  "Verified",
+  "Escalated",
+  "Resolved"
+];
+
 export default function App() {
   // State managers
   const [user, setUser] = useState<User | null>(null);
@@ -67,11 +93,46 @@ export default function App() {
   }, [theme]);
 
   // Filter and Search for Map/Feed list
-  const [categoryFilter, setCategoryFilter] = useState<Category | "all">("all");
-  const [statusFilter, setStatusFilter] = useState<Status | "all">("all");
+  const [categoryFilter, setCategoryFilter] = useState<Category[] | "all">("all");
+  const [statusFilter, setStatusFilter] = useState<Status[] | "all">("all");
+  const [draftCategoryFilter, setDraftCategoryFilter] = useState<Category[] | "all">("all");
+  const [draftStatusFilter, setDraftStatusFilter] = useState<Status[] | "all">("all");
+
+  const handleToggleDraftCategory = (cat: Category) => {
+    if (draftCategoryFilter === "all") {
+      setDraftCategoryFilter([cat]);
+    } else {
+      const exists = draftCategoryFilter.includes(cat);
+      if (exists) {
+        const next = draftCategoryFilter.filter(c => c !== cat);
+        setDraftCategoryFilter(next.length === 0 ? "all" : next);
+      } else {
+        const next = [...draftCategoryFilter, cat];
+        setDraftCategoryFilter(next.length === 16 ? "all" : next);
+      }
+    }
+  };
+
+  const handleToggleDraftStatus = (stat: Status) => {
+    if (draftStatusFilter === "all") {
+      setDraftStatusFilter([stat]);
+    } else {
+      const exists = draftStatusFilter.includes(stat);
+      if (exists) {
+        const next = draftStatusFilter.filter(s => s !== stat);
+        setDraftStatusFilter(next.length === 0 ? "all" : next);
+      } else {
+        const next = [...draftStatusFilter, stat];
+        setDraftStatusFilter(next.length === 4 ? "all" : next);
+      }
+    }
+  };
+
   const [timeFilter, setTimeFilter] = useState<"2hrs" | "today" | "week" | "all">("today");
   const [showFeedDrawer, setShowFeedDrawer] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
 
   // Report Form placement states
   const [isSelectingLocationMode, setIsSelectingLocationMode] = useState(false);
@@ -392,8 +453,8 @@ export default function App() {
 
   // Filter issues based on UI selections
   const filteredIssues = issues.filter(issue => {
-    const categoryMatches = categoryFilter === "all" || issue.category === categoryFilter;
-    const statusMatches = statusFilter === "all" || issue.status === statusFilter;
+    const categoryMatches = categoryFilter === "all" || categoryFilter.includes(issue.category);
+    const statusMatches = statusFilter === "all" || statusFilter.includes(issue.status);
     
     const query = searchQuery.trim().toLowerCase();
     let searchMatches = false;
@@ -526,20 +587,6 @@ export default function App() {
  
           {/* Live radar indicators and trust score */}
           <div className="flex items-center gap-2">
-            {/* Theme Toggle Button */}
-            <button
-              onClick={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
-              className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
-                theme === 'dark' 
-                  ? 'bg-[#0a0a0a] border-neutral-800 text-gray-400 hover:text-white hover:border-neutral-700' 
-                  : 'bg-white border-gray-200 text-gray-500 hover:text-black hover:border-gray-300 shadow-xs'
-              }`}
-              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-              id="top-theme-toggle"
-            >
-              {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
-            </button>
-
             {user ? (
               <div
                 onClick={() => setView("profile")}
@@ -589,204 +636,294 @@ export default function App() {
         <div className="w-full h-full relative">
           
           {/* View 1: Feed & Map (Google Maps Engine) */}
-          <div className={`w-full h-full absolute inset-0 ${view === "map" ? "block" : "hidden"}`}>
-            {/* Filter Floating controls on Map */}
-            <div className="absolute top-4 left-4 z-30 flex flex-col gap-2 w-auto max-w-[calc(100%-165px)] sm:max-w-xs">
-              
-              {/* Search Bar */}
-              <div className="relative flex items-center">
-                <Search className={`absolute left-2.5 w-3.5 h-3.5 ${
-                  theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
-                }`} />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search..."
-                  className={`w-full pl-8 pr-8 py-2.5 text-xs border rounded-xl outline-none focus:outline-none backdrop-blur-[20px] transition-all duration-305 ${
-                    theme === 'dark' 
-                      ? 'bg-[#121212]/75 border-white/10 text-white placeholder-gray-550 focus:border-[#39FF14]/50' 
-                      : 'bg-white/80 border-neutral-200/50 text-neutral-900 placeholder-gray-400 focus:border-[#2ECC0F]/50 shadow-xs'
-                  }`}
-                  id="radar-search-input"
-                />
-                {searchQuery && (
+          <div className={`w-full h-full absolute inset-0 ${view === "map" ? "flex flex-col" : "hidden"}`}>
+            {/* Time Filter & Merged Dropdown Filter Row (Requirement 6 & 4) */}
+            <div className={`w-full px-4 py-2 border-b flex items-center justify-between gap-2 overflow-x-auto scrollbar-none shrink-0 z-40 transition-colors duration-300 ${
+              theme === 'dark' ? 'bg-[#0A0A0A] border-neutral-900' : 'bg-white border-gray-200'
+            }`} id="time-filter-full-width-row">
+              <div className="flex gap-1.5 overflow-x-auto scrollbar-none items-center flex-1">
+                {(["2hrs", "today", "week", "all"] as const).map((filter) => (
                   <button
-                    onClick={() => setSearchQuery("")}
-                    className={`absolute right-2 text-xs font-bold transition-all ${
-                      theme === 'dark' ? 'text-gray-500 hover:text-white' : 'text-gray-400 hover:text-black'
+                    key={filter}
+                    onClick={() => setTimeFilter(filter)}
+                    className={`px-3 py-1 rounded-full text-[9px] font-mono uppercase tracking-wider font-extrabold transition-all duration-300 shrink-0 cursor-pointer border ${
+                      timeFilter === filter
+                        ? theme === 'dark'
+                          ? 'bg-[#39FF14] border-[#39FF14] text-black'
+                          : 'bg-[#2ECC0F] border-[#2ECC0F] text-white shadow-xs'
+                        : theme === 'dark'
+                          ? 'bg-neutral-900 border-neutral-800 text-gray-400 hover:text-white'
+                          : 'bg-gray-100 border-gray-200 text-gray-600 hover:text-black'
                     }`}
                   >
-                    ×
+                    {filter === "2hrs" ? "2hrs" : filter === "today" ? "today" : filter === "week" ? "this week" : "all time"}
                   </button>
-                )}
+                ))}
               </div>
 
-              {/* Filters Collapse Row */}
-              <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none" id="radar-filters-row">
-                {/* Category Filter selector */}
-                <select
-                  value={categoryFilter}
-                  onChange={(e) => setCategoryFilter(e.target.value as any)}
-                  className={`px-3 py-1.5 border rounded-xl text-[10px] font-mono outline-none transition-all backdrop-blur-md cursor-pointer ${
-                    theme === 'dark' 
-                      ? 'bg-[#121212]/75 border-white/10 text-gray-300 focus:border-[#39FF14]/50' 
-                      : 'bg-white/80 border-neutral-200/50 text-gray-700 focus:border-[#2ECC0F]/50 shadow-xs'
-                  }`}
-                >
-                  <option value="all">ALL SECTORS</option>
-                  <option value="Civic Issue">CIVIC ISSUES</option>
-                  <option value="Pothole">POTHOLES</option>
-                  <option value="Flooding">FLOODS</option>
-                  <option value="Power Cut">POWER CUTS</option>
-                  <option value="Garbage">GARBAGE</option>
-                  <option value="Corruption">CORRUPTION</option>
-                  <option value="Government Failure">GOVT FAILURE</option>
-                  <option value="Protest / Rally">PROTESTS</option>
-                  <option value="Local Drama">LOCAL DRAMA</option>
-                  <option value="Argument / Dispute">DISPUTES</option>
-                  <option value="Harassment">HARASSMENT</option>
-                  <option value="Breaking News">BREAKING NEWS</option>
-                  <option value="Village Problem">VILLAGE PROBS</option>
-                  <option value="Weather">WEATHER</option>
-                  <option value="War / Conflict">CONFLICTS</option>
-                  <option value="Other">OTHER</option>
-                </select>
-
-                {/* Status Filter selector */}
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value as any)}
-                  className={`px-3 py-1.5 border rounded-xl text-[10px] font-mono outline-none transition-all backdrop-blur-md cursor-pointer ${
-                    theme === 'dark' 
-                      ? 'bg-[#121212]/75 border-white/10 text-gray-300 focus:border-[#39FF14]/50' 
-                      : 'bg-white/80 border-neutral-200/50 text-gray-700 focus:border-[#2ECC0F]/50 shadow-xs'
-                  }`}
-                >
-                  <option value="all">ALL STATUS</option>
-                  <option value="Reported">REPORTED</option>
-                  <option value="Verified">VERIFIED</option>
-                  <option value="Escalated">ESCALATED</option>
-                  <option value="Resolved">RESOLVED</option>
-                </select>
-
-                {/* Toggle Drawer button */}
+              {/* Merged Compact Filter Button & Dropdown Panel */}
+              <div className="relative shrink-0">
                 <button
-                  onClick={() => setShowFeedDrawer(!showFeedDrawer)}
-                  className={`px-3 py-1.5 border rounded-xl text-[10px] font-mono flex items-center gap-1 shrink-0 transition-all cursor-pointer backdrop-blur-md ${
-                    showFeedDrawer 
-                      ? theme === 'dark' 
-                        ? "bg-[#39FF14] border-[#39FF14] text-black font-black" 
-                        : "bg-[#2ECC0F] border-[#2ECC0F] text-white font-black shadow-xs"
-                      : theme === 'dark' 
-                        ? "bg-white/[0.03] border-white/5 text-gray-400 hover:text-white hover:border-white/20" 
-                        : "bg-white/50 border-neutral-200/50 text-gray-600 hover:text-black shadow-xs"
+                  onClick={() => {
+                    setDraftCategoryFilter(categoryFilter);
+                    setDraftStatusFilter(statusFilter);
+                    setIsFilterDropdownOpen(true);
+                  }}
+                  className={`px-3 py-1 rounded-full text-[9px] font-mono uppercase tracking-wider font-extrabold flex items-center gap-1.5 transition-all duration-300 cursor-pointer border ${
+                    categoryFilter !== "all" || statusFilter !== "all"
+                      ? theme === 'dark'
+                        ? 'bg-[#39FF14]/15 border-[#39FF14] text-[#39FF14]'
+                        : 'bg-[#2ECC0F]/15 border-[#2ECC0F] text-[#2ECC0F]'
+                      : theme === 'dark'
+                        ? 'bg-neutral-900 border-neutral-800 text-gray-400 hover:text-white'
+                        : 'bg-gray-100 border-gray-200 text-gray-600 hover:text-black'
                   }`}
+                  id="map-filter-toggle-btn"
                 >
-                  <span>FEED ({filteredIssues.length})</span>
+                  <ListFilter className="w-3 h-3" />
+                  <span>Filter</span>
+                  
+                  {/* Green dot indicator when active (Requirement 5) */}
+                  {(categoryFilter !== "all" || statusFilter !== "all") && (
+                    <span className="relative flex h-1.5 w-1.5 animate-pulse" id="filter-active-indicator">
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#39FF14]"></span>
+                    </span>
+                  )}
                 </button>
+
+                {/* Bottom Sheet Backdrop & Panel */}
+                <AnimatePresence>
+                  {isFilterDropdownOpen && (
+                    <>
+                      {/* Backdrop (Requirement 6) */}
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 0.5 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/60 z-[1100]"
+                        onClick={() => setIsFilterDropdownOpen(false)}
+                      />
+
+                      {/* Bottom Sheet Panel (Requirement 6) */}
+                      <motion.div
+                        initial={{ y: "100%" }}
+                        animate={{ y: 0 }}
+                        exit={{ y: "100%" }}
+                        transition={{ type: "spring", damping: 25, stiffness: 220 }}
+                        className={`fixed bottom-0 left-0 right-0 max-w-lg mx-auto rounded-t-[24px] border-t shadow-2xl z-[1200] flex flex-col max-h-[85vh] p-5 pb-6 backdrop-blur-[20px] transition-colors duration-300 ${
+                          theme === 'dark' 
+                            ? 'bg-neutral-950/95 border-neutral-850 text-white' 
+                            : 'bg-white/95 border-gray-200 text-neutral-900'
+                        }`}
+                        id="map-filter-bottom-sheet"
+                      >
+                        {/* Drag Handle (Requirement 6) */}
+                        <div 
+                          className="w-12 h-1 rounded-full bg-neutral-500/40 mx-auto mb-5 shrink-0 cursor-pointer hover:bg-neutral-500/60 transition-colors" 
+                          onClick={() => setIsFilterDropdownOpen(false)} 
+                          id="bottom-sheet-drag-handle"
+                        />
+
+                        {/* Title Row */}
+                        <div className="flex items-center justify-between mb-4 shrink-0">
+                          <h3 className="text-[10px] font-mono font-black tracking-widest uppercase text-gray-500">
+                            MAP FILTER BOARD
+                          </h3>
+                          <button
+                            onClick={() => {
+                              setDraftCategoryFilter("all");
+                              setDraftStatusFilter("all");
+                              triggerToast("Draft filters reset to All");
+                            }}
+                            className={`text-[9px] font-mono uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-md transition-all cursor-pointer border ${
+                              theme === 'dark'
+                                ? 'border-neutral-800 bg-neutral-900/40 text-gray-400 hover:text-white hover:border-neutral-700'
+                                : 'border-gray-200 bg-gray-50 text-gray-600 hover:text-black hover:border-gray-300'
+                            }`}
+                            id="filter-reset-action"
+                          >
+                            Reset Draft
+                          </button>
+                        </div>
+
+                        {/* Scrollable Content */}
+                        <div className="flex-1 overflow-y-auto space-y-5 pr-1 scrollbar-none mb-6">
+                          
+                          {/* 1. Category Section (Requirement 1) */}
+                          <div className="flex flex-col gap-2.5">
+                            <span className="text-[9px] font-mono uppercase text-gray-400 font-extrabold tracking-wider flex items-center gap-1">
+                              <span>SECTOR / CATEGORY</span>
+                              <span className="text-gray-500 font-normal">
+                                ({draftCategoryFilter === "all" ? "All Selected" : `${draftCategoryFilter.length} Selected`})
+                              </span>
+                            </span>
+                            
+                            <div className="flex flex-wrap gap-1.5">
+                              {/* Category 'All' Pill */}
+                              <button
+                                onClick={() => setDraftCategoryFilter("all")}
+                                className={`px-2.5 py-1 rounded-full text-[9px] font-mono uppercase tracking-wider font-bold transition-all duration-300 cursor-pointer border ${
+                                  draftCategoryFilter === "all"
+                                    ? theme === 'dark'
+                                      ? 'bg-[#39FF14] border-[#39FF14] text-black font-extrabold shadow-sm'
+                                      : 'bg-[#2ECC0F] border-[#2ECC0F] text-white font-extrabold shadow-sm'
+                                    : theme === 'dark'
+                                      ? 'bg-neutral-900/60 border-neutral-850 text-gray-400 hover:text-white hover:border-neutral-700'
+                                      : 'bg-gray-50 border-gray-200 text-gray-600 hover:text-black hover:border-gray-300'
+                                }`}
+                              >
+                                ALL CATEGORIES
+                              </button>
+
+                              {/* 16 Category Pills */}
+                              {ALL_CATEGORIES.map((cat) => {
+                                const isSelected = draftCategoryFilter !== "all" && draftCategoryFilter.includes(cat);
+                                return (
+                                  <button
+                                    key={cat}
+                                    onClick={() => handleToggleDraftCategory(cat)}
+                                    className={`px-2.5 py-1 rounded-full text-[9px] font-mono uppercase tracking-wider font-bold transition-all duration-300 cursor-pointer border ${
+                                      isSelected
+                                        ? theme === 'dark'
+                                          ? 'bg-[#39FF14]/20 border-[#39FF14] text-[#39FF14] font-extrabold shadow-xs'
+                                          : 'bg-[#2ECC0F]/15 border-[#2ECC0F] text-[#2ECC0F] font-extrabold shadow-xs'
+                                        : theme === 'dark'
+                                          ? 'bg-neutral-900/30 border-neutral-850 text-gray-400 hover:text-white hover:border-neutral-700'
+                                          : 'bg-gray-50 border-gray-200 text-gray-600 hover:text-black hover:border-gray-300'
+                                    }`}
+                                  >
+                                    {cat}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+
+                          {/* 2. Status Section (Requirement 2) */}
+                          <div className="flex flex-col gap-2.5">
+                            <span className="text-[9px] font-mono uppercase text-gray-400 font-extrabold tracking-wider flex items-center gap-1">
+                              <span>MUNICIPAL RESOLUTION STATUS</span>
+                              <span className="text-gray-500 font-normal">
+                                ({draftStatusFilter === "all" ? "All Selected" : `${draftStatusFilter.length} Selected`})
+                              </span>
+                            </span>
+
+                            <div className="flex flex-wrap gap-1.5">
+                              {/* Status 'All' Pill */}
+                              <button
+                                onClick={() => setDraftStatusFilter("all")}
+                                className={`px-2.5 py-1 rounded-full text-[9px] font-mono uppercase tracking-wider font-bold transition-all duration-300 cursor-pointer border ${
+                                  draftStatusFilter === "all"
+                                    ? theme === 'dark'
+                                      ? 'bg-[#39FF14] border-[#39FF14] text-black font-extrabold shadow-sm'
+                                      : 'bg-[#2ECC0F] border-[#2ECC0F] text-white font-extrabold shadow-sm'
+                                    : theme === 'dark'
+                                      ? 'bg-neutral-900/60 border-neutral-850 text-gray-400 hover:text-white hover:border-neutral-700'
+                                      : 'bg-gray-50 border-gray-200 text-gray-600 hover:text-black hover:border-gray-300'
+                                }`}
+                              >
+                                ALL STATUSES
+                              </button>
+
+                              {/* 4 Status Pills */}
+                              {ALL_STATUSES.map((stat) => {
+                                const isSelected = draftStatusFilter !== "all" && draftStatusFilter.includes(stat);
+                                return (
+                                  <button
+                                    key={stat}
+                                    onClick={() => handleToggleDraftStatus(stat)}
+                                    className={`px-2.5 py-1 rounded-full text-[9px] font-mono uppercase tracking-wider font-bold transition-all duration-300 cursor-pointer border ${
+                                      isSelected
+                                        ? theme === 'dark'
+                                          ? 'bg-[#39FF14]/20 border-[#39FF14] text-[#39FF14] font-extrabold shadow-xs'
+                                          : 'bg-[#2ECC0F]/15 border-[#2ECC0F] text-[#2ECC0F] font-extrabold shadow-xs'
+                                        : theme === 'dark'
+                                          ? 'bg-neutral-900/30 border-neutral-850 text-gray-400 hover:text-white hover:border-neutral-700'
+                                          : 'bg-gray-50 border-gray-200 text-gray-600 hover:text-black hover:border-gray-300'
+                                    }`}
+                                  >
+                                    {stat}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+
+                        </div>
+
+                        {/* Bottom Actions Row */}
+                        <div className="flex items-center gap-3 mt-auto shrink-0 border-t pt-4 border-neutral-800/10 dark:border-white/5">
+                          {/* Reset Option (Requirement 4) */}
+                          <button
+                            onClick={() => {
+                              setCategoryFilter("all");
+                              setStatusFilter("all");
+                              setIsFilterDropdownOpen(false);
+                              triggerToast("All filters reset successfully!");
+                            }}
+                            className={`flex-1 py-3 rounded-xl text-[10px] font-mono uppercase tracking-widest font-black transition-all cursor-pointer border text-center ${
+                              theme === 'dark'
+                                ? 'border-red-950 bg-red-950/20 text-red-400 hover:bg-red-950/40'
+                                : 'border-red-100 bg-red-50 text-red-600 hover:bg-red-100'
+                            }`}
+                            id="bottom-sheet-reset-all"
+                          >
+                            Reset
+                          </button>
+
+                          {/* Apply Filters (Requirement 3) */}
+                          <button
+                            onClick={() => {
+                              setCategoryFilter(draftCategoryFilter);
+                              setStatusFilter(draftStatusFilter);
+                              setIsFilterDropdownOpen(false);
+                              triggerToast("Map filters applied successfully!");
+                            }}
+                            className={`flex-2 py-3 rounded-xl text-[10px] font-mono uppercase tracking-widest font-black transition-all cursor-pointer border text-center ${
+                              theme === 'dark'
+                                ? 'bg-[#39FF14] border-[#39FF14] text-black hover:bg-[#39FF14]/90'
+                                : 'bg-[#2ECC0F] border-[#2ECC0F] text-white hover:bg-[#2ECC0F]/90 shadow-md'
+                            }`}
+                            id="bottom-sheet-apply-filters"
+                          >
+                            Apply Filters
+                          </button>
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
 
-            {/* Collapsible Feed Drawer (Bottom/Side slide overlay list) */}
-            <AnimatePresence>
-              {showFeedDrawer && (
-                <motion.div
-                  initial={{ opacity: 0, x: -300 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -300 }}
-                  className={`absolute top-18 bottom-4 left-4 z-30 w-72 border rounded-xl p-3 flex flex-col backdrop-blur max-h-[72vh] md:max-h-[80vh] shadow-2xl ${
-                    theme === 'dark' ? 'bg-black border-neutral-900 text-white' : 'bg-white/95 border-gray-200 text-neutral-900'
-                  }`}
-                  id="feed-list-drawer"
-                >
-                  <div className={`flex items-center justify-between border-b pb-2 mb-2 ${
-                    theme === 'dark' ? 'border-neutral-900' : 'border-gray-150'
-                  }`}>
-                    <span className={`text-[10px] font-mono font-bold uppercase ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                      CIVIC COMPLAINT FEED
-                    </span>
-                    <button
-                      onClick={() => setShowFeedDrawer(false)}
-                      className={`p-1.5 rounded-lg transition-all shrink-0 cursor-pointer ${
-                        theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-black'
-                      }`}
-                      id="close-feed-drawer-btn"
-                      title="Close Feed"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-
-                  <div className="flex-1 overflow-y-auto space-y-2 pr-1 scrollbar-none">
-                    {filteredIssues.length === 0 ? (
-                      <p className="text-xs text-gray-600 italic text-center py-8">No issues logged on selected filters.</p>
-                    ) : (
-                      filteredIssues.map(issue => (
-                        <div
-                          key={issue.id}
-                          onClick={() => {
-                            setSelectedIssue(issue);
-                            setShowFeedDrawer(false); // Close feed to show map pin zoom
-                          }}
-                          className={`p-2 border rounded-lg cursor-pointer transition-all flex flex-col gap-1 ${
-                            selectedIssue?.id === issue.id 
-                              ? theme === 'dark' 
-                                ? "border-[#39FF14] bg-neutral-950" 
-                                : "border-[#2ECC0F] bg-emerald-50/50 shadow-xs" 
-                              : theme === 'dark' 
-                                ? "bg-black hover:bg-neutral-950 border-neutral-900" 
-                                : "bg-gray-50 hover:bg-gray-100/50 border-gray-150 shadow-xs"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className={`text-[8px] px-1 py-0.2 rounded font-bold uppercase ${
-                              theme === 'dark' ? 'bg-white/10 text-gray-300' : 'bg-gray-200/60 text-gray-700'
-                            }`}>
-                              {issue.category}
-                            </span>
-                            <span className="text-[8px] font-mono text-gray-500">{issue.area}</span>
-                          </div>
-                          <h4 className={`text-xs font-bold leading-tight line-clamp-1 ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>{issue.title}</h4>
-                          <p className={`text-[10px] line-clamp-1 leading-snug ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{issue.description}</p>
-                          <div className="flex items-center justify-between text-[8px] text-gray-500 font-mono mt-0.5">
-                            <span className="flex items-center gap-0.5"><Check className="w-2.5 h-2.5 text-emerald-500" /> {issue.reactions.verified} vouches</span>
-                            <span className={`uppercase font-bold ${theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}`}>{issue.status}</span>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
             {/* Google Maps Canvas Layer */}
-            <MapComponent
-              issues={filteredIssues}
-              selectedIssue={selectedIssue}
-              onSelectIssue={setSelectedIssue}
-              onSelectLocationForNewIssue={handleSelectLocationForNewIssue}
-              isSelectingLocationMode={isSelectingLocationMode}
-              selectedLocation={selectedLocation}
-              theme={theme}
-            />
+            <div className="flex-1 w-full relative h-full">
+              <MapComponent
+                issues={filteredIssues}
+                selectedIssue={selectedIssue}
+                onSelectIssue={setSelectedIssue}
+                onSelectLocationForNewIssue={handleSelectLocationForNewIssue}
+                isSelectingLocationMode={isSelectingLocationMode}
+                selectedLocation={selectedLocation}
+                theme={theme}
+              />
 
-             {/* Clicked Map Pin Info Overlay Popup */}
-            <AnimatePresence>
-              {selectedIssue && (
-                <IssuePopup
-                  issue={selectedIssue}
-                  allIssues={issues}
-                  currentUserId={user.id}
-                  onClose={() => setSelectedIssue(null)}
-                  onReact={handleReactToIssue}
-                  onAddPerspective={handleAddPerspective}
-                  onSelectPerspective={setSelectedIssue}
-                  onSeeThisToo={handleSeeThisToo}
-                />
-              )}
-            </AnimatePresence>
+              {/* Clicked Map Pin Info Overlay Popup */}
+              <AnimatePresence>
+                {selectedIssue && (
+                  <IssuePopup
+                    issue={selectedIssue}
+                    allIssues={issues}
+                    currentUserId={user.id}
+                    onClose={() => setSelectedIssue(null)}
+                    onReact={handleReactToIssue}
+                    onAddPerspective={handleAddPerspective}
+                    onSelectPerspective={setSelectedIssue}
+                    onSeeThisToo={handleSeeThisToo}
+                  />
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
           {/* View 2: Social Feed */}
@@ -896,6 +1033,7 @@ export default function App() {
                   setView("map"); // Swaps to map to highlight selected history complaint
                 }}
                 theme={theme}
+                onToggleTheme={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
               />
             ) : (
               <AnalyticsDashboard metrics={dashboardMetrics} theme={theme} />
