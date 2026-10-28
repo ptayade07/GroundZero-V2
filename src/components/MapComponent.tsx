@@ -328,9 +328,9 @@ export default function MapComponent({
       }
     });
 
-    const activeBg = theme === "dark" ? "#0A0A0A" : "#FFFFFF";
-    const activeBorderColor = theme === "dark" ? "#0A0A0A" : "#FFFFFF";
-    const greenColor = theme === "dark" ? "#39FF14" : "#2ECC0F";
+    const activeBg = theme === "dark" ? "#111111" : "#FFFFFF";
+    const activeBorderColor = theme === "dark" ? "#111111" : "#FFFFFF";
+    const greenColor = theme === "dark" ? "#B7FF38" : "#537A00";
 
     // Now plot items: either cluster bubble (>= 3) or individual pins (< 3)
     tempClusters.forEach(c => {
@@ -338,8 +338,8 @@ export default function MapComponent({
         // Render as a high-visibility green cluster circle showing count
         const clusterHtml = `
           <div class="relative flex items-center justify-center">
-            <span class="animate-ping absolute inline-flex h-10 w-10 rounded-full bg-emerald-500 opacity-30"></span>
-            <div class="relative flex items-center justify-center w-9 h-9 rounded-full bg-${theme === 'dark' ? '[#0A0A0A]' : 'white'} border-2 border-${greenColor} text-${greenColor} font-black text-xs shadow-[0_0_15px_rgba(57,255,20,0.5)] transition-all transform hover:scale-110" style="color: ${greenColor}; border-color: ${greenColor};">
+            <span class="animate-ping absolute inline-flex h-10 w-10 rounded-full bg-[#B7FF38] opacity-30"></span>
+            <div class="relative flex items-center justify-center w-9 h-9 rounded-full bg-${theme === 'dark' ? '[#111111]' : 'white'} border-2 text-xs font-black font-mono shadow-[0_0_15px_rgba(183,255,56,0.4)] transition-all transform hover:scale-110" style="color: ${greenColor}; border-color: ${greenColor};">
               ${c.issues.length}
             </div>
           </div>
@@ -360,12 +360,12 @@ export default function MapComponent({
         // Add small hover popup showing titles inside the cluster
         const titleSnippet = c.issues.slice(0, 3).map(i => `• ${i.title}`).join("<br/>") + (c.issues.length > 3 ? `<br/>...and ${c.issues.length - 3} more` : "");
         marker.bindPopup(`
-          <div class="text-[#0A0A0A] font-sans p-1 max-w-[180px]">
+          <div class="text-[#0A0A0A] font-sans p-1.5 max-w-[200px]">
             <h4 class="font-bold text-xs leading-snug">Incident Cluster (${c.issues.length} reports)</h4>
-            <div class="text-[9px] text-gray-600 mt-1.5 leading-normal">
+            <div class="text-xs text-gray-700 mt-1.5 leading-normal">
               ${titleSnippet}
             </div>
-            <p class="text-[8px] text-brand/80 font-mono mt-1 uppercase font-bold">Tap to zoom in</p>
+            <p class="text-xs text-[#537A00] font-mono mt-1.5 uppercase font-bold">Tap to zoom in</p>
           </div>
         `);
 
@@ -391,7 +391,7 @@ export default function MapComponent({
             const extraGlowRadius = Math.min(confirmCount * 3.5, 25);
             const overlayOpacity = Math.min(0.3 + (confirmCount * 0.1), 0.9);
             // Stack multiple shadow glows for intense, hyper-vibrant radial bloom
-            shadowStyle = `box-shadow: ${baseShadow}, 0 0 ${10 + extraGlowRadius}px rgba(57,255,20,${overlayOpacity}), 0 0 ${18 + extraGlowRadius * 1.5}px ${color};`;
+            shadowStyle = `box-shadow: ${baseShadow}, 0 0 ${10 + extraGlowRadius}px rgba(183,255,56,${overlayOpacity}), 0 0 ${18 + extraGlowRadius * 1.5}px ${color};`;
           }
 
           const pinHtml = `
@@ -417,12 +417,12 @@ export default function MapComponent({
           });
 
           marker.bindPopup(`
-            <div class="text-[#0A0A0A] font-sans p-1 max-w-[180px]">
+            <div class="text-[#0A0A0A] font-sans p-1.5 max-w-[200px]">
               <h4 class="font-bold text-xs leading-snug line-clamp-2">${issue.title}</h4>
-              <p class="text-[9px] text-gray-500 uppercase font-black tracking-wider mt-1" style="color: ${color};">
+              <p class="text-xs text-gray-700 uppercase font-bold tracking-wider mt-1" style="color: ${color};">
                 ${issue.category}
               </p>
-              <p class="text-[8px] text-gray-400 mt-0.5">${issue.area}</p>
+              <p class="text-xs text-gray-500 mt-0.5">${issue.area}</p>
             </div>
           `);
 
@@ -490,41 +490,43 @@ export default function MapComponent({
   };
 
   const isDark = theme === "dark";
-  const activeGreen = isDark ? "#39FF14" : "#2ECC0F";
+  const activeGreen = isDark ? "#B7FF38" : "#537A00";
 
   return (
-    <div className={`relative w-full h-full overflow-hidden select-none transition-colors duration-300 ${
-      isDark ? 'bg-black text-white' : 'bg-gray-50 text-neutral-900'
+    <div className={`relative w-full h-full overflow-hidden select-none transition-colors duration-300 font-ui ${
+      isDark ? 'bg-black text-white' : 'bg-[#FAFCFA] text-[#171B18]'
     }`} id="map-container-wrapper">
       {/* Map view controls in bottom right */}
-      <div className={`absolute bottom-4 right-4 z-[1000] flex items-center gap-1 p-1 rounded-xl border shadow-md backdrop-blur-md transition-all duration-500 ${
-        isDark ? 'bg-black/80 border-white/10' : 'bg-white/80 border-neutral-200/50'
+      <div className={`absolute bottom-4 right-4 z-[1000] flex items-center gap-1 p-1 rounded-[10px] border shadow-lg backdrop-blur-xl transition-all duration-300 ${
+        isDark ? 'bg-[#111111] border-[#303030]' : 'bg-white border-[#E1E5DF]'
       }`} id="map-view-controls">
         <button
+          type="button"
           onClick={() => setViewMode("street")}
-          className={`px-2.5 py-0.5 text-[8px] font-mono tracking-wider transition-all cursor-pointer rounded-lg uppercase font-black border ${
+          className={`px-3 py-1.5 text-[10.5px] font-meta uppercase font-bold transition-all cursor-pointer rounded-[8px] min-h-[30px] flex items-center justify-center border ${
             viewMode === "street"
               ? isDark 
-                ? "bg-[#39FF14] text-black border-[#39FF14]"
-                : "bg-[#2ECC0F] text-white border-[#2ECC0F]"
+                ? "bg-[#B7FF38] text-black border-[#B7FF38] shadow-xs"
+                : "bg-[#537A00] text-white border-[#537A00] shadow-xs"
               : isDark
-                ? "bg-transparent border-transparent text-gray-400 hover:text-white"
-                : "bg-transparent border-transparent text-gray-550 hover:text-neutral-900"
+                ? "bg-transparent border-transparent text-[#A3A3A3] hover:text-white"
+                : "bg-transparent border-transparent text-[#626862] hover:text-[#171B18]"
           }`}
           id="btn-street-mode"
         >
           Street
         </button>
         <button
+          type="button"
           onClick={() => setViewMode("satellite")}
-          className={`px-2.5 py-0.5 text-[8px] font-mono tracking-wider transition-all cursor-pointer rounded-lg uppercase font-black border ${
+          className={`px-3 py-1.5 text-[10.5px] font-meta uppercase font-bold transition-all cursor-pointer rounded-[8px] min-h-[30px] flex items-center justify-center border ${
             viewMode === "satellite"
               ? isDark 
-                ? "bg-[#39FF14] text-black border-[#39FF14]"
-                : "bg-[#2ECC0F] text-white border-[#2ECC0F]"
+                ? "bg-[#B7FF38] text-black border-[#B7FF38] shadow-xs"
+                : "bg-[#537A00] text-white border-[#537A00] shadow-xs"
               : isDark
-                ? "bg-transparent border-transparent text-gray-400 hover:text-white"
-                : "bg-transparent border-transparent text-gray-550 hover:text-neutral-900"
+                ? "bg-transparent border-transparent text-[#A3A3A3] hover:text-white"
+                : "bg-transparent border-transparent text-[#626862] hover:text-[#171B18]"
           }`}
           id="btn-satellite-mode"
         >
@@ -541,13 +543,13 @@ export default function MapComponent({
             exit={{ opacity: 0, y: -20 }}
             className="absolute top-4 left-4 z-[1000] right-16 pr-12 md:pr-0 md:max-w-xs pointer-events-none"
           >
-            <div className={`px-3 py-2 text-xs font-black rounded-lg shadow-lg border flex items-center gap-2 backdrop-blur animate-pulse ${
+            <div className={`px-3.5 py-2 text-xs font-bold font-meta rounded-[10px] shadow-lg border flex items-center gap-2 backdrop-blur-md animate-pulse ${
               isDark 
-                ? 'bg-[#39FF14] text-[#0A0A0A] border-[#39FF14]' 
-                : 'bg-[#2ECC0F] text-white border-[#2ECC0F]'
+                ? 'bg-[#B7FF38] text-black border-[#B7FF38]' 
+                : 'bg-[#537A00] text-white border-[#537A00]'
             }`}>
-              <MapPin className="w-4 h-4 animate-bounce" />
-              <span>TAP ON MAP TO SELECT LOCATION</span>
+              <MapPin className="w-3.5 h-3.5 animate-bounce shrink-0" />
+              <span>TAP MAP TO PLACE PIN</span>
             </div>
           </motion.div>
         )}
@@ -557,10 +559,10 @@ export default function MapComponent({
       <div className="w-full h-full relative" id="leaflet-map-view">
         {!leafletLoaded && (
           <div className={`absolute inset-0 flex flex-col items-center justify-center gap-2 transition-colors duration-300 ${
-            isDark ? 'bg-black text-gray-400' : 'bg-gray-100 text-gray-650'
+            isDark ? 'bg-black text-[#A3A3A3]' : 'bg-[#FAFCFA] text-[#626862]'
           }`}>
-            <Loader2 className={`w-8 h-8 animate-spin ${isDark ? 'text-[#39FF14]' : 'text-[#2ECC0F]'}`} />
-            <p className="text-xs font-mono">Launching OpenStreetMap Engine...</p>
+            <Loader2 className={`w-8 h-8 animate-spin ${isDark ? 'text-[#B7FF38]' : 'text-[#537A00]'}`} />
+            <p className="text-xs font-meta">Launching OpenStreetMap Engine...</p>
           </div>
         )}
         <div ref={mapContainerRef} className="w-full h-full z-10" />
@@ -569,36 +571,38 @@ export default function MapComponent({
       {/* Elegant Compass / Legend Footer (Floating and Collapsible) */}
       <div className="absolute bottom-4 left-4 z-[1000] flex flex-col items-start gap-2" id="map-legend-container">
         {isLegendOpen ? (
-          <div className={`flex flex-col gap-2 p-4 border rounded-2xl text-[9px] backdrop-blur-[20px] min-w-[155px] shadow-2xl transition-all duration-500 ${
-            isDark ? 'bg-white/[0.05] border-white/10 text-gray-400' : 'bg-white/60 border-neutral-200/50 text-gray-600'
+          <div className={`flex flex-col gap-2 p-3 border rounded-[14px] text-xs min-w-[160px] shadow-2xl transition-all duration-300 font-ui ${
+            isDark ? 'bg-[#111111] border-[#303030] text-white' : 'bg-white border-[#E1E5DF] text-[#171B18]'
           }`}>
-            <div className={`flex items-center justify-between w-full pb-1 border-b gap-4 ${
-              isDark ? 'border-neutral-900' : 'border-gray-100'
+            <div className={`flex items-center justify-between w-full pb-1 border-b gap-3 ${
+              isDark ? 'border-[#303030]' : 'border-[#E1E5DF]'
             }`}>
-              <p className={`font-bold font-sans tracking-wide ${isDark ? 'text-gray-300' : 'text-neutral-800'}`}>RADAR LEGEND</p>
+              <p className={`font-bold font-meta text-[10px] uppercase tracking-wider ${isDark ? 'text-[#A3A3A3]' : 'text-[#626862]'}`}>Radar Legend</p>
               <button 
+                type="button"
                 onClick={() => setIsLegendOpen(false)}
-                className={`text-[9px] cursor-pointer ${isDark ? 'text-gray-500 hover:text-white' : 'text-gray-400 hover:text-black'}`}
+                className={`text-xs p-1 rounded-[6px] hover:bg-white/10 cursor-pointer ${isDark ? 'text-[#A3A3A3] hover:text-white' : 'text-[#626862] hover:text-[#171B18]'}`}
               >
                 ✕
               </button>
             </div>
-            <div className="flex flex-col gap-1 font-mono max-h-36 overflow-y-auto pr-1 scrollbar-none w-full">
+            <div className="flex flex-col gap-1 max-h-36 overflow-y-auto pr-1 scrollbar-none w-full">
               {(Object.keys(CATEGORY_COLORS) as Category[]).map(cat => (
-                <div key={cat} className="flex items-center gap-1.5 text-[8.5px]">
+                <div key={cat} className="flex items-center gap-1.5 text-xs">
                   <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: CATEGORY_COLORS[cat].hex }} />
-                  <span className="truncate">{cat}</span>
+                  <span className="truncate text-[10px] font-medium">{cat}</span>
                 </div>
               ))}
             </div>
           </div>
         ) : (
           <button
+            type="button"
             onClick={() => setIsLegendOpen(true)}
-            className={`w-10 h-10 rounded-2xl border flex items-center justify-center shadow-xl backdrop-blur-[20px] cursor-pointer transition-all duration-500 ${
+            className={`w-9 h-9 rounded-[10px] border flex items-center justify-center shadow-lg cursor-pointer transition-all duration-300 ${
               isDark 
-                ? 'bg-white/[0.05] border-white/10 text-gray-400 hover:text-[#39FF14] hover:border-white/20' 
-                : 'bg-white/60 border-neutral-200/50 text-gray-500 hover:text-[#2ECC0F] hover:border-neutral-400'
+                ? 'bg-[#111111] border-[#303030] text-[#A3A3A3] hover:text-[#B7FF38] hover:border-[#B7FF38]/40' 
+                : 'bg-white border-[#E1E5DF] text-[#626862] hover:text-[#537A00] hover:border-[#537A00]/40'
             }`}
             title="Show Radar Legend"
             id="toggle-legend-btn"

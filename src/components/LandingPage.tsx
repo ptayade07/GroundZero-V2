@@ -18,14 +18,14 @@ export default function LandingPage({
 }: LandingPageProps) {
   return (
     <div
-      className={`w-full min-h-screen flex flex-col justify-between items-center p-6 relative overflow-hidden transition-all duration-300 ${
-        theme === 'dark' ? 'bg-black text-white' : 'bg-[#FAFAFA] text-neutral-900'
+      className={`w-full min-h-screen flex flex-col justify-between items-center p-6 relative overflow-hidden transition-all duration-300 font-ui ${
+        theme === 'dark' ? 'bg-black text-white' : 'bg-[#FAFCFA] text-[#171B18]'
       }`}
       id="landing-page-screen"
     >
       {/* Background radial glow */}
       <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-[120px] pointer-events-none ${
-        theme === 'dark' ? 'bg-[#39FF14]/5' : 'bg-[#2ECC0F]/5'
+        theme === 'dark' ? 'bg-[#B7FF38]/5' : 'bg-[#537A00]/5'
       }`} />
 
       {/* Top Center: Logo and GZ icon */}
@@ -38,12 +38,12 @@ export default function LandingPage({
       >
         <Logo theme={theme} className="w-16 h-16 rounded-[14px] shadow-2xl" />
         <div className="text-center">
-          <h1 className={`text-xl font-black tracking-widest uppercase leading-none ${
-            theme === 'dark' ? 'text-white' : 'text-neutral-900'
+          <h1 className={`text-xl font-display font-black tracking-widest uppercase leading-none ${
+            theme === 'dark' ? 'text-white' : 'text-[#171B18]'
           }`}>
-            GROUND<span className={theme === 'dark' ? 'text-[#39FF14]' : 'text-[#2ECC0F]'}>ZERO</span>
+            GROUND<span className={theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'}>ZERO</span>
           </h1>
-          <p className="text-[9px] text-gray-500 font-mono tracking-[0.3em] uppercase mt-1">
+          <p className="text-xs text-[#A3A3A3] font-meta tracking-[0.2em] uppercase mt-1.5">
             Live Hyperlocal Citizen Grid
           </p>
         </div>
@@ -58,15 +58,15 @@ export default function LandingPage({
           transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
           className="space-y-4"
         >
-          <h2 className={`text-4xl md:text-6xl font-black tracking-tighter uppercase font-sans ${
-            theme === 'dark' ? 'text-white' : 'text-neutral-900'
+          <h2 className={`text-4xl md:text-6xl font-display font-black tracking-tighter uppercase ${
+            theme === 'dark' ? 'text-white' : 'text-[#171B18]'
           }`}>
-            You are the <span className={theme === 'dark' ? 'text-[#39FF14]' : 'text-[#2ECC0F]'}>reporter.</span>
+            You are the <span className={theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'}>reporter.</span>
           </h2>
-          <p className={`text-sm md:text-base font-mono max-w-lg mx-auto leading-relaxed uppercase tracking-wider ${
-            theme === 'dark' ? 'text-gray-400' : 'text-gray-650'
+          <p className={`text-sm md:text-base font-meta max-w-lg mx-auto leading-relaxed uppercase tracking-wider ${
+            theme === 'dark' ? 'text-[#A3A3A3]' : 'text-[#626862]'
           }`}>
-            No editors. No agenda. No filter. <span className={theme === 'dark' ? 'text-white font-bold' : 'text-neutral-950 font-bold'}>Just truth.</span>
+            No editors. No agenda. No filter. <span className={theme === 'dark' ? 'text-white font-bold' : 'text-[#171B18] font-bold'}>Just truth.</span>
           </p>
         </motion.div>
 
@@ -79,48 +79,48 @@ export default function LandingPage({
           id="landing-features"
         >
           {/* Post what you see */}
-          <div className={`flex flex-col items-center p-4 border rounded-xl transition-all ${
-            theme === 'dark' ? 'bg-black border-neutral-900 hover:border-neutral-800' : 'bg-white border-gray-200 hover:border-gray-300 shadow-xs'
+          <div className={`flex flex-col items-center p-4 border rounded-[14px] transition-all ${
+            theme === 'dark' ? 'bg-[#111111] border-[#303030]' : 'bg-white border-[#E1E5DF] shadow-xs'
           }`}>
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-3 border ${
-              theme === 'dark' ? 'bg-[#39FF14]/10 border-[#39FF14]/20 text-[#39FF14]' : 'bg-[#2ECC0F]/10 border-[#2ECC0F]/20 text-[#2ECC0F]'
+            <div className={`w-10 h-10 rounded-[10px] flex items-center justify-center mb-3 border ${
+              theme === 'dark' ? 'bg-[#B7FF38]/15 border-[#B7FF38]/30 text-[#B7FF38]' : 'bg-[#537A00]/15 border-[#537A00]/30 text-[#537A00]'
             }`}>
               <MapPin className="w-5 h-5" />
             </div>
-            <p className={`text-xs font-bold font-mono tracking-wider uppercase ${
-              theme === 'dark' ? 'text-gray-300' : 'text-neutral-800'
+            <p className={`text-xs font-bold font-meta tracking-wider uppercase ${
+              theme === 'dark' ? 'text-white' : 'text-[#171B18]'
             }`}>
               Post what you see
             </p>
           </div>
 
           {/* Verify what's real */}
-          <div className={`flex flex-col items-center p-4 border rounded-xl transition-all ${
-            theme === 'dark' ? 'bg-black border-neutral-900 hover:border-neutral-800' : 'bg-white border-gray-200 hover:border-gray-300 shadow-xs'
+          <div className={`flex flex-col items-center p-4 border rounded-[14px] transition-all ${
+            theme === 'dark' ? 'bg-[#111111] border-[#303030]' : 'bg-white border-[#E1E5DF] shadow-xs'
           }`}>
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-3 border ${
-              theme === 'dark' ? 'bg-[#39FF14]/10 border-[#39FF14]/20 text-[#39FF14]' : 'bg-[#2ECC0F]/10 border-[#2ECC0F]/20 text-[#2ECC0F]'
+            <div className={`w-10 h-10 rounded-[10px] flex items-center justify-center mb-3 border ${
+              theme === 'dark' ? 'bg-[#B7FF38]/15 border-[#B7FF38]/30 text-[#B7FF38]' : 'bg-[#537A00]/15 border-[#537A00]/30 text-[#537A00]'
             }`}>
               <CheckCircle className="w-5 h-5" />
             </div>
-            <p className={`text-xs font-bold font-mono tracking-wider uppercase ${
-              theme === 'dark' ? 'text-gray-300' : 'text-neutral-800'
+            <p className={`text-xs font-bold font-meta tracking-wider uppercase ${
+              theme === 'dark' ? 'text-white' : 'text-[#171B18]'
             }`}>
               Verify what's real
             </p>
           </div>
 
           {/* Hold power accountable */}
-          <div className={`flex flex-col items-center p-4 border rounded-xl transition-all ${
-            theme === 'dark' ? 'bg-black border-neutral-900 hover:border-neutral-800' : 'bg-white border-gray-200 hover:border-gray-300 shadow-xs'
+          <div className={`flex flex-col items-center p-4 border rounded-[14px] transition-all ${
+            theme === 'dark' ? 'bg-[#111111] border-[#303030]' : 'bg-white border-[#E1E5DF] shadow-xs'
           }`}>
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-3 border ${
-              theme === 'dark' ? 'bg-[#39FF14]/10 border-[#39FF14]/20 text-[#39FF14]' : 'bg-[#2ECC0F]/10 border-[#2ECC0F]/20 text-[#2ECC0F]'
+            <div className={`w-10 h-10 rounded-[10px] flex items-center justify-center mb-3 border ${
+              theme === 'dark' ? 'bg-[#B7FF38]/15 border-[#B7FF38]/30 text-[#B7FF38]' : 'bg-[#537A00]/15 border-[#537A00]/30 text-[#537A00]'
             }`}>
               <Zap className="w-5 h-5" />
             </div>
-            <p className={`text-xs font-bold font-mono tracking-wider uppercase ${
-              theme === 'dark' ? 'text-gray-300' : 'text-neutral-800'
+            <p className={`text-xs font-bold font-meta tracking-wider uppercase ${
+              theme === 'dark' ? 'text-white' : 'text-[#171B18]'
             }`}>
               Hold power accountable
             </p>
@@ -137,8 +137,8 @@ export default function LandingPage({
           <div className="flex gap-4 w-full">
             <button
               onClick={onSignUpClick}
-              className={`flex-1 py-3 font-black rounded-xl text-xs tracking-widest uppercase transition-all cursor-pointer ${
-                theme === 'dark' ? 'bg-[#39FF14] text-black' : 'bg-[#2ECC0F] text-white hover:opacity-95 shadow-md'
+              className={`flex-1 min-h-[44px] font-bold rounded-[10px] text-xs tracking-wider uppercase transition-all cursor-pointer font-ui ${
+                theme === 'dark' ? 'bg-[#B7FF38] hover:bg-[#A6ED27] active:bg-[#94D91F] text-black shadow-md' : 'bg-[#537A00] text-white shadow-md'
               }`}
               id="landing-signup-btn"
             >
@@ -146,10 +146,10 @@ export default function LandingPage({
             </button>
             <button
               onClick={onLoginClick}
-              className={`flex-1 py-3 font-black rounded-xl text-xs tracking-widest uppercase transition-all cursor-pointer border ${
+              className={`flex-1 min-h-[44px] font-bold rounded-[10px] text-xs tracking-wider uppercase transition-all cursor-pointer border font-ui ${
                 theme === 'dark' 
-                  ? 'bg-black border-neutral-900 hover:border-neutral-800 hover:bg-neutral-950 text-white' 
-                  : 'bg-white border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-neutral-800 shadow-xs'
+                  ? 'bg-[#111111] border-[#303030] hover:border-[#B7FF38]/50 text-white' 
+                  : 'bg-white border-[#E1E5DF] hover:border-[#537A00]/50 text-[#171B18] shadow-xs'
               }`}
               id="landing-login-btn"
             >
@@ -159,8 +159,8 @@ export default function LandingPage({
 
           <button
             onClick={onContinueAnonymously}
-            className={`text-xs font-bold font-mono transition-all uppercase tracking-widest underline mt-2 cursor-pointer ${
-              theme === 'dark' ? 'text-gray-400 hover:text-[#39FF14]' : 'text-gray-600 hover:text-[#2ECC0F]'
+            className={`text-xs font-bold font-meta transition-all uppercase tracking-widest underline mt-2 cursor-pointer ${
+              theme === 'dark' ? 'text-[#A3A3A3] hover:text-[#B7FF38]' : 'text-[#626862] hover:text-[#537A00]'
             }`}
             id="landing-anon-link"
           >
@@ -174,7 +174,7 @@ export default function LandingPage({
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.5 }}
         transition={{ delay: 0.6 }}
-        className="text-center mt-6 text-[10px] text-gray-600 font-mono tracking-widest uppercase shrink-0"
+        className="text-center mt-6 text-[10px] text-[#A3A3A3] font-meta tracking-widest uppercase shrink-0"
         id="landing-footer"
       >
         GroundZero — Live Hyperlocal Citizen Grid

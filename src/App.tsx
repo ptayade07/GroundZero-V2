@@ -16,7 +16,7 @@ import SocialFeed from "./components/SocialFeed";
 import Onboarding from "./components/Onboarding";
 import SearchPage from "./components/SearchPage";
 import Logo from "./components/Logo";
-import { Map, Plus, BarChart3, User as UserIcon, ShieldAlert, Navigation, Layers, AlertCircle, Sparkles, Check, ChevronDown, ListFilter, SlidersHorizontal, MessageSquare, Search, X, Sun, Moon, Eye, EyeOff } from "lucide-react";
+import { Map, Plus, BarChart3, User as UserIcon, ShieldAlert, Navigation, Layers, AlertCircle, Sparkles, Check, ChevronDown, ListFilter, SlidersHorizontal, MessageSquare, Search, X, Sun, Moon, Eye, EyeOff, LogOut, Shield, FileText } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 const ALL_CATEGORIES: Category[] = [
@@ -86,6 +86,7 @@ export default function App() {
     if (typeof window !== "undefined") {
       try {
         localStorage.setItem("theme", theme);
+        document.documentElement.setAttribute("data-theme", theme);
       } catch (e) {
         // Ignore
       }
@@ -133,6 +134,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   // Report Form placement states
   const [isSelectingLocationMode, setIsSelectingLocationMode] = useState(false);
@@ -553,33 +555,33 @@ export default function App() {
       );
     }
   }  return (
-    <div className={`w-full h-screen flex flex-col select-none relative font-sans overflow-hidden transition-all duration-300 ${
-      theme === "dark" ? "bg-[#0A0A0A] text-white" : "bg-[#FAFAFA] text-neutral-900"
-    }`} id="groundzero-root">
+    <div className={`w-full h-screen flex flex-col select-none relative font-ui overflow-hidden transition-all duration-180 ${
+      theme === "dark" ? "bg-black text-white" : "bg-[#FAFCFA] text-[#171B18]"
+    }`} id="groundzero-root" data-theme={theme}>
       
       {/* Top operational banner header */}
       {view !== "feed" && (
-        <header className={`px-4 py-3 border-b flex items-center justify-between backdrop-blur shrink-0 z-50 shadow-md ${
-          theme === 'dark' ? 'bg-[#0A0A0A]/95 border-neutral-900 text-white' : 'bg-white/95 border-gray-200 text-neutral-900'
+        <header className={`px-3 h-10 border-b flex items-center justify-between backdrop-blur-md shrink-0 z-50 ${
+          theme === 'dark' ? 'bg-black/95 border-[#303030] text-white' : 'bg-white/95 border-[#E1E5DF] text-[#171B18]'
         }`}>
           <div className="flex items-center gap-2">
-            <Logo theme={theme} className="w-7 h-7 rounded-lg" />
+            <Logo theme={theme} className="w-6 h-6 rounded-[6px] shrink-0" />
             <div className="flex flex-col justify-center">
               <div className="flex items-center gap-1.5">
-                <h1 className={`text-sm font-black tracking-tight uppercase leading-none ${
-                  theme === 'dark' ? 'text-white' : 'text-neutral-900'
+                <h1 className={`text-xs sm:text-sm font-bold font-display tracking-wider uppercase leading-none ${
+                  theme === 'dark' ? 'text-white' : 'text-[#171B18]'
                 }`}>
-                  GROUND<span className={theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}>ZERO</span>
+                  GROUND<span className={theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'}>ZERO</span>
                 </h1>
-                <span className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-black tracking-wider uppercase border ${
+                <span className={`flex items-center gap-1 px-1.5 py-0.5 rounded-[5px] text-[9.5px] font-bold font-meta tracking-wider uppercase border ${
                   theme === 'dark' 
-                    ? 'bg-emerald-950/80 border-[#39FF14]/30 text-[#39FF14]' 
-                    : 'bg-emerald-50 border-[#2ECC0F]/30 text-[#2ECC0F]'
+                    ? 'bg-[#111111] border-[#303030] text-[#B7FF38]' 
+                    : 'bg-[#F1F4EF] border-[#E1E5DF] text-[#537A00]'
                 }`}>
-                  <span className={`w-1 h-1 rounded-full animate-ping ${
-                    theme === 'dark' ? 'bg-[#39FF14]' : 'bg-[#2ECC0F]'
+                  <span className={`w-1.5 h-1.5 rounded-full ${
+                    theme === 'dark' ? 'bg-[#B7FF38]' : 'bg-[#537A00]'
                   }`} />
-                  <span className="animate-pulse">LIVE</span>
+                  <span>LIVE</span>
                 </span>
               </div>
             </div>
@@ -588,40 +590,210 @@ export default function App() {
           {/* Live radar indicators and trust score */}
           <div className="flex items-center gap-2">
             {user ? (
-              <div
-                onClick={() => setView("profile")}
-                className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs cursor-pointer transition-all font-mono border ${
-                  theme === 'dark' 
-                    ? 'bg-[#0A0A0A] border-gray-800 text-white hover:border-brand/40' 
-                    : 'bg-white border-gray-250 text-neutral-850 hover:border-[#2ECC0F]/40 shadow-xs'
-                }`}
-                id="top-profile-badge"
+              <div 
+                className="relative" 
+                id="top-profile-badge-container"
+                onMouseLeave={() => setIsProfileDropdownOpen(false)}
               >
-                {/* Profile picture or icon */}
-                <div className={`w-5 h-5 rounded-full overflow-hidden flex items-center justify-center shrink-0 border ${
-                  theme === 'dark' ? 'bg-neutral-900 border-neutral-800' : 'bg-gray-100 border-gray-200'
-                }`}>
-                  {user.isAnonymous ? (
-                    <EyeOff className="w-3 h-3 text-gray-400" />
-                  ) : user.avatarUrl ? (
-                    user.avatarUrl.startsWith("data:") || user.avatarUrl.startsWith("http") ? (
-                      <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                <button
+                  type="button"
+                  onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                  onMouseEnter={() => setIsProfileDropdownOpen(true)}
+                  className={`flex items-center gap-1.5 px-2 py-0.5 min-h-[30px] rounded-[8px] text-xs cursor-pointer transition-all font-meta border ${
+                    theme === 'dark' 
+                      ? 'bg-[#111111] border-[#303030] text-white hover:border-[#B7FF38]/60 hover:bg-[#191919]' 
+                      : 'bg-white border-[#E1E5DF] text-[#171B18] hover:border-[#537A00]/60 hover:bg-[#F1F4EF]'
+                  }`}
+                  id="top-profile-badge"
+                  aria-label="User Profile Menu"
+                >
+                  {/* Profile picture or icon */}
+                  <div className={`w-5 h-5 rounded-[5px] overflow-hidden flex items-center justify-center shrink-0 border ${
+                    theme === 'dark' ? 'bg-[#191919] border-[#303030]' : 'bg-[#F1F4EF] border-[#E1E5DF]'
+                  }`}>
+                    {user.isAnonymous ? (
+                      <EyeOff className="w-3 h-3 text-[#A3A3A3]" />
+                    ) : user.avatarUrl ? (
+                      user.avatarUrl.startsWith("data:") || user.avatarUrl.startsWith("http") ? (
+                        <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                      ) : (
+                        <span className="text-[10px] font-bold leading-none select-none">{user.avatarUrl}</span>
+                      )
                     ) : (
-                      <span className="text-[10px] leading-none select-none">{user.avatarUrl}</span>
-                    )
-                  ) : (
-                    <UserIcon className="w-3 h-3 text-gray-500" />
-                  )}
-                </div>
+                      <UserIcon className="w-3 h-3 text-[#A3A3A3]" />
+                    )}
+                  </div>
 
-                <span className={`px-1.5 py-0.5 rounded-full text-[8px] font-bold ${
-                  theme === 'dark' ? 'bg-brand/10 text-brand' : 'bg-[#2ECC0F]/10 text-[#2ECC0F]'
-                }`}>
-                  {user.trustScore} TS
-                </span>
+                  <span className={`px-1.5 py-0.5 rounded-[5px] text-[11px] font-bold font-meta tracking-wide ${
+                    theme === 'dark' ? 'bg-[#B7FF38]/15 text-[#B7FF38]' : 'bg-[#B7FF38]/25 text-[#537A00]'
+                  }`}>
+                    {user.trustScore} TS
+                  </span>
+                </button>
+
+                {/* Sleek Dropdown Panel */}
+                <AnimatePresence>
+                  {isProfileDropdownOpen && (
+                    <>
+                      {/* Invisible backdrop to click outside and close */}
+                      <div 
+                        className="fixed inset-0 z-45" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsProfileDropdownOpen(false);
+                        }} 
+                        id="profile-dropdown-backdrop"
+                      />
+                      
+                      <motion.div
+                        initial={{ opacity: 0, y: 6, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                        transition={{ duration: 0.1, ease: "easeOut" }}
+                        className="absolute right-0 mt-1.5 w-56 rounded-[12px] border border-[#303030] bg-[#191919]/98 backdrop-blur-2xl text-white shadow-2xl p-2.5 flex flex-col gap-2 z-50 select-none max-w-[240px]"
+                        id="profile-dropdown-panel"
+                      >
+                        {/* Top Profile Summary: Avatar, username, and trust score badge */}
+                        <div className="flex items-center gap-2.5 pb-2 border-b border-[#303030]">
+                          {/* Avatar Initials / Image */}
+                          <div className="w-8 h-8 rounded-[6px] bg-[#111111] border border-[#303030] overflow-hidden flex items-center justify-center text-xs font-meta font-bold shrink-0 text-white shadow-inner">
+                            {user.isAnonymous ? (
+                              <EyeOff className="w-3.5 h-3.5 text-[#A3A3A3]" />
+                            ) : user.avatarUrl && (user.avatarUrl.startsWith("data:") || user.avatarUrl.startsWith("http")) ? (
+                              <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                            ) : (
+                              <span>{user.avatarUrl || user.name.slice(0, 2).toUpperCase()}</span>
+                            )}
+                          </div>
+                          {/* Name + Trust score */}
+                          <div className="flex flex-col min-w-0">
+                            <span className="text-xs font-bold tracking-tight font-ui truncate text-white">
+                              {user.isAnonymous ? "Anonymous User" : user.name}
+                            </span>
+                            <div className="flex items-center gap-1 mt-0.5">
+                              <span className="px-1.5 py-0.5 rounded-[4px] text-[10px] font-bold bg-[#B7FF38]/15 text-[#B7FF38] border border-[#B7FF38]/30 font-meta tracking-wide leading-none uppercase">
+                                {user.trustScore} TS
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Menu Items */}
+                        <div className="flex flex-col gap-1.5">
+                          
+                          {/* 1. Civic Tea Feed */}
+                          <button
+                            onClick={() => {
+                              setView("feed");
+                              setIsProfileDropdownOpen(false);
+                            }}
+                            className="w-full text-left py-1.5 px-2.5 rounded-[8px] hover:bg-white/[0.08] active:bg-white/[0.12] text-xs font-ui font-medium text-gray-200 hover:text-white flex items-center gap-2 transition-all cursor-pointer min-h-[32px] border border-transparent hover:border-[#303030]"
+                            id="profile-dropdown-civic-tea"
+                          >
+                            <MessageSquare className="w-3.5 h-3.5 text-[#B7FF38] shrink-0" />
+                            <span>Civic Tea Feed</span>
+                          </button>
+
+                          {/* 2. My Profile */}
+                          <button
+                            onClick={() => {
+                              setView("profile");
+                              setProfileSubTab("registry");
+                              setIsProfileDropdownOpen(false);
+                            }}
+                            className="w-full text-left py-1.5 px-2.5 rounded-[8px] hover:bg-white/[0.08] active:bg-white/[0.12] text-xs font-ui font-medium text-gray-200 hover:text-white flex items-center gap-2 transition-all cursor-pointer min-h-[32px] border border-transparent hover:border-[#303030]"
+                            id="profile-dropdown-my-profile"
+                          >
+                            <UserIcon className="w-3.5 h-3.5 text-[#B7FF38] shrink-0" />
+                            <span>My Profile</span>
+                          </button>
+
+                          {/* 2. My Stories */}
+                          <button
+                            onClick={() => {
+                              setView("profile");
+                              setProfileSubTab("registry");
+                              setIsProfileDropdownOpen(false);
+                              setTimeout(() => {
+                                const el = document.getElementById("reporter-history-section");
+                                if (el) {
+                                  el.scrollIntoView({ behavior: "smooth", block: "start" });
+                                }
+                              }, 100);
+                            }}
+                            className="w-full text-left py-1.5 px-2.5 rounded-[8px] hover:bg-white/[0.08] active:bg-white/[0.12] text-xs font-ui font-medium text-gray-200 hover:text-white flex items-center gap-2 transition-all cursor-pointer min-h-[32px] border border-transparent hover:border-[#303030]"
+                            id="profile-dropdown-my-stories"
+                          >
+                            <FileText className="w-3.5 h-3.5 text-[#B7FF38] shrink-0" />
+                            <span>My Stories</span>
+                          </button>
+
+                          {/* 3. Anonymous Shield toggle */}
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const updated = { ...user, isAnonymous: !user.isAnonymous };
+                              handleUpdateUser(updated);
+                            }}
+                            className="w-full text-left py-1.5 px-2.5 rounded-[8px] hover:bg-white/[0.08] active:bg-white/[0.12] text-xs font-ui font-medium text-gray-200 hover:text-white flex items-center justify-between transition-all cursor-pointer min-h-[32px] border border-transparent hover:border-[#303030]"
+                            id="profile-dropdown-anon-shield"
+                          >
+                            <div className="flex items-center gap-2">
+                              <Shield className={`w-3.5 h-3.5 shrink-0 ${user.isAnonymous ? "text-[#B7FF38]" : "text-[#A3A3A3]"}`} />
+                              <span>Anon Shield</span>
+                            </div>
+                            <div className={`w-7 h-4 rounded-full p-0.5 border border-[#303030] transition-all ${user.isAnonymous ? "bg-[#B7FF38]" : "bg-[#111111]"}`}>
+                              <div className={`w-3 h-3 rounded-full bg-black transition-all transform ${user.isAnonymous ? "translate-x-3" : "translate-x-0"}`} />
+                            </div>
+                          </div>
+
+                          {/* 4. Theme switcher */}
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const nextTheme = theme === 'dark' ? 'light' : 'dark';
+                              setTheme(nextTheme);
+                              triggerToast(`Theme set to ${nextTheme.toUpperCase()}`);
+                            }}
+                            className="w-full text-left py-1.5 px-2.5 rounded-[8px] hover:bg-white/[0.08] active:bg-white/[0.12] text-xs font-ui font-medium text-gray-200 hover:text-white flex items-center justify-between transition-all cursor-pointer min-h-[32px] border border-transparent hover:border-[#303030]"
+                            id="profile-dropdown-theme"
+                          >
+                            <div className="flex items-center gap-2">
+                              {theme === 'dark' ? (
+                                <Moon className="w-3.5 h-3.5 text-[#A3A3A3] shrink-0" />
+                              ) : (
+                                <Sun className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                              )}
+                              <span>Theme: <span className="font-meta uppercase text-[11px]">{theme}</span></span>
+                            </div>
+                            <div className={`w-7 h-4 rounded-full p-0.5 border border-[#303030] transition-all ${theme === 'dark' ? "bg-[#B7FF38]" : "bg-gray-300"}`}>
+                              <div className={`w-3 h-3 rounded-full bg-black transition-all transform ${theme === 'dark' ? "translate-x-3" : "translate-x-0"}`} />
+                            </div>
+                          </div>
+
+                        </div>
+
+                        {/* 5. Exit / Logout Button */}
+                        <div className="border-t border-[#303030] pt-2 mt-0.5">
+                          <button
+                            onClick={() => {
+                              setIsProfileDropdownOpen(false);
+                              handleLogout();
+                            }}
+                            className="w-full py-1.5 px-2.5 rounded-[8px] bg-red-950/40 border border-red-900/60 hover:bg-red-900/40 active:bg-red-900/60 text-xs font-meta tracking-wider font-bold text-red-400 hover:text-red-200 flex items-center justify-center gap-1.5 transition-all cursor-pointer min-h-[32px]"
+                            id="profile-dropdown-logout"
+                          >
+                            <LogOut className="w-3.5 h-3.5 shrink-0" />
+                            <span>EXIT OPERATION</span>
+                          </button>
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
               </div>
             ) : (
-              <div className="text-[9px] text-gray-500 font-mono tracking-wider flex items-center gap-1.5 uppercase">
+              <div className="text-xs text-gray-500 font-mono tracking-wider flex items-center gap-1.5 uppercase">
                 <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
                 OFFLINE GRIDS
               </div>
@@ -637,26 +809,24 @@ export default function App() {
           
           {/* View 1: Feed & Map (Google Maps Engine) */}
           <div className={`w-full h-full absolute inset-0 ${view === "map" ? "flex flex-col" : "hidden"}`}>
-            {/* Time Filter & Merged Dropdown Filter Row (Requirement 6 & 4) */}
-            <div className={`w-full px-4 py-2 border-b flex items-center justify-between gap-2 overflow-x-auto scrollbar-none shrink-0 z-40 transition-colors duration-300 ${
-              theme === 'dark' ? 'bg-[#0A0A0A] border-neutral-900' : 'bg-white border-gray-200'
+            {/* Time Filter & Merged Dropdown Filter Row */}
+            <div className={`w-full px-3 py-1.5 border-b flex items-center justify-between gap-2 overflow-x-auto scrollbar-none shrink-0 z-40 transition-colors duration-180 ${
+              theme === 'dark' ? 'bg-black border-[#303030]' : 'bg-[#FAFCFA] border-[#E1E5DF]'
             }`} id="time-filter-full-width-row">
-              <div className="flex gap-1.5 overflow-x-auto scrollbar-none items-center flex-1">
+              <div className="flex gap-1.5 overflow-x-auto scrollbar-none items-center flex-1 py-0.5">
                 {(["2hrs", "today", "week", "all"] as const).map((filter) => (
                   <button
                     key={filter}
                     onClick={() => setTimeFilter(filter)}
-                    className={`px-3 py-1 rounded-full text-[9px] font-mono uppercase tracking-wider font-extrabold transition-all duration-300 shrink-0 cursor-pointer border ${
+                    className={`px-3 py-1 rounded-[10px] text-xs font-ui capitalize tracking-normal font-semibold transition-all duration-120 shrink-0 cursor-pointer border min-h-[28px] flex items-center justify-center ${
                       timeFilter === filter
-                        ? theme === 'dark'
-                          ? 'bg-[#39FF14] border-[#39FF14] text-black'
-                          : 'bg-[#2ECC0F] border-[#2ECC0F] text-white shadow-xs'
+                        ? 'bg-[#B7FF38] border-[#B7FF38] text-black shadow-xs font-bold'
                         : theme === 'dark'
-                          ? 'bg-neutral-900 border-neutral-800 text-gray-400 hover:text-white'
-                          : 'bg-gray-100 border-gray-200 text-gray-600 hover:text-black'
+                          ? 'bg-[#111111] border-[#303030] text-[#A3A3A3] hover:text-white hover:border-neutral-500'
+                          : 'bg-[#F1F4EF] border-[#E1E5DF] text-[#626862] hover:text-[#171B18] hover:border-gray-400'
                     }`}
                   >
-                    {filter === "2hrs" ? "2hrs" : filter === "today" ? "today" : filter === "week" ? "this week" : "all time"}
+                    {filter === "2hrs" ? "2 hrs" : filter === "today" ? "Today" : filter === "week" ? "This week" : "All time"}
                   </button>
                 ))}
               </div>
@@ -664,29 +834,31 @@ export default function App() {
               {/* Merged Compact Filter Button & Dropdown Panel */}
               <div className="relative shrink-0">
                 <button
+                  type="button"
                   onClick={() => {
                     setDraftCategoryFilter(categoryFilter);
                     setDraftStatusFilter(statusFilter);
                     setIsFilterDropdownOpen(true);
                   }}
-                  className={`px-3 py-1 rounded-full text-[9px] font-mono uppercase tracking-wider font-extrabold flex items-center gap-1.5 transition-all duration-300 cursor-pointer border ${
+                  className={`px-3 py-1 rounded-[10px] text-xs font-ui font-semibold flex items-center gap-1.5 transition-all duration-120 cursor-pointer border min-h-[28px] ${
                     categoryFilter !== "all" || statusFilter !== "all"
                       ? theme === 'dark'
-                        ? 'bg-[#39FF14]/15 border-[#39FF14] text-[#39FF14]'
-                        : 'bg-[#2ECC0F]/15 border-[#2ECC0F] text-[#2ECC0F]'
+                        ? 'bg-[#B7FF38]/20 border-[#B7FF38] text-[#B7FF38] font-bold'
+                        : 'bg-[#B7FF38]/30 border-[#537A00] text-[#537A00] font-bold'
                       : theme === 'dark'
-                        ? 'bg-neutral-900 border-neutral-800 text-gray-400 hover:text-white'
-                        : 'bg-gray-100 border-gray-200 text-gray-600 hover:text-black'
+                        ? 'bg-[#111111] border-[#303030] text-[#A3A3A3] hover:text-white hover:border-neutral-500'
+                        : 'bg-[#F1F4EF] border-[#E1E5DF] text-[#626862] hover:text-[#171B18] hover:border-gray-400'
                   }`}
                   id="map-filter-toggle-btn"
+                  aria-label="Filter Map Markers"
                 >
-                  <ListFilter className="w-3 h-3" />
+                  <ListFilter className="w-3.5 h-3.5 shrink-0" />
                   <span>Filter</span>
                   
-                  {/* Green dot indicator when active (Requirement 5) */}
+                  {/* Green dot indicator when active */}
                   {(categoryFilter !== "all" || statusFilter !== "all") && (
-                    <span className="relative flex h-1.5 w-1.5 animate-pulse" id="filter-active-indicator">
-                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#39FF14]"></span>
+                    <span className="relative flex h-2 w-2" id="filter-active-indicator">
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B7FF38]"></span>
                     </span>
                   )}
                 </button>
@@ -695,50 +867,53 @@ export default function App() {
                 <AnimatePresence>
                   {isFilterDropdownOpen && (
                     <>
-                      {/* Backdrop (Requirement 6) */}
+                      {/* Backdrop */}
                       <motion.div
                         initial={{ opacity: 0 }}
-                        animate={{ opacity: 0.5 }}
+                        animate={{ opacity: 0.6 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/60 z-[1100]"
+                        className="fixed inset-0 bg-black/75 z-[1100]"
                         onClick={() => setIsFilterDropdownOpen(false)}
                       />
 
-                      {/* Bottom Sheet Panel (Requirement 6) */}
+                      {/* Bottom Sheet Panel */}
                       <motion.div
                         initial={{ y: "100%" }}
                         animate={{ y: 0 }}
                         exit={{ y: "100%" }}
-                        transition={{ type: "spring", damping: 25, stiffness: 220 }}
-                        className={`fixed bottom-0 left-0 right-0 max-w-lg mx-auto rounded-t-[24px] border-t shadow-2xl z-[1200] flex flex-col max-h-[85vh] p-5 pb-6 backdrop-blur-[20px] transition-colors duration-300 ${
+                        transition={{ type: "spring", damping: 28, stiffness: 260 }}
+                        className={`fixed bottom-0 left-0 right-0 max-w-lg mx-auto rounded-t-[14px] border-t shadow-2xl z-[1200] flex flex-col max-h-[85vh] p-3.5 pb-4.5 backdrop-blur-2xl transition-colors duration-180 ${
                           theme === 'dark' 
-                            ? 'bg-neutral-950/95 border-neutral-850 text-white' 
-                            : 'bg-white/95 border-gray-200 text-neutral-900'
+                            ? 'bg-[#191919] border-[#303030] text-white' 
+                            : 'bg-white border-[#E1E5DF] text-[#171B18]'
                         }`}
                         id="map-filter-bottom-sheet"
                       >
-                        {/* Drag Handle (Requirement 6) */}
+                        {/* Drag Handle */}
                         <div 
-                          className="w-12 h-1 rounded-full bg-neutral-500/40 mx-auto mb-5 shrink-0 cursor-pointer hover:bg-neutral-500/60 transition-colors" 
+                          className={`w-10 h-1 rounded-full mx-auto mb-2.5 shrink-0 cursor-pointer ${
+                            theme === 'dark' ? 'bg-[#303030]' : 'bg-[#E1E5DF]'
+                          }`}
                           onClick={() => setIsFilterDropdownOpen(false)} 
                           id="bottom-sheet-drag-handle"
                         />
 
                         {/* Title Row */}
-                        <div className="flex items-center justify-between mb-4 shrink-0">
-                          <h3 className="text-[10px] font-mono font-black tracking-widest uppercase text-gray-500">
-                            MAP FILTER BOARD
+                        <div className="flex items-center justify-between mb-2.5 shrink-0">
+                          <h3 className="text-xs font-meta font-bold tracking-wider uppercase text-[#A3A3A3]">
+                            Map Filters
                           </h3>
                           <button
+                            type="button"
                             onClick={() => {
                               setDraftCategoryFilter("all");
                               setDraftStatusFilter("all");
                               triggerToast("Draft filters reset to All");
                             }}
-                            className={`text-[9px] font-mono uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-md transition-all cursor-pointer border ${
+                            className={`text-xs font-ui font-medium px-2.5 py-1 rounded-[10px] transition-all cursor-pointer border min-h-[26px] ${
                               theme === 'dark'
-                                ? 'border-neutral-800 bg-neutral-900/40 text-gray-400 hover:text-white hover:border-neutral-700'
-                                : 'border-gray-200 bg-gray-50 text-gray-600 hover:text-black hover:border-gray-300'
+                                ? 'border-[#303030] bg-[#111111] text-[#A3A3A3] hover:text-white hover:border-neutral-500'
+                                : 'border-[#E1E5DF] bg-[#F1F4EF] text-[#626862] hover:text-[#171B18] hover:border-gray-400'
                             }`}
                             id="filter-reset-action"
                           >
@@ -747,32 +922,31 @@ export default function App() {
                         </div>
 
                         {/* Scrollable Content */}
-                        <div className="flex-1 overflow-y-auto space-y-5 pr-1 scrollbar-none mb-6">
+                        <div className="flex-1 overflow-y-auto space-y-3 pr-1 scrollbar-none mb-3">
                           
-                          {/* 1. Category Section (Requirement 1) */}
-                          <div className="flex flex-col gap-2.5">
-                            <span className="text-[9px] font-mono uppercase text-gray-400 font-extrabold tracking-wider flex items-center gap-1">
-                              <span>SECTOR / CATEGORY</span>
-                              <span className="text-gray-500 font-normal">
-                                ({draftCategoryFilter === "all" ? "All Selected" : `${draftCategoryFilter.length} Selected`})
+                          {/* 1. Category Section */}
+                          <div className="flex flex-col gap-2">
+                            <span className="text-xs font-meta uppercase text-[#A3A3A3] font-bold tracking-wider flex items-center justify-between">
+                              <span>Categories</span>
+                              <span className="text-[#A3A3A3] font-meta font-normal text-[11px]">
+                                {draftCategoryFilter === "all" ? "All active" : `${draftCategoryFilter.length} active`}
                               </span>
                             </span>
                             
                             <div className="flex flex-wrap gap-1.5">
                               {/* Category 'All' Pill */}
                               <button
+                                type="button"
                                 onClick={() => setDraftCategoryFilter("all")}
-                                className={`px-2.5 py-1 rounded-full text-[9px] font-mono uppercase tracking-wider font-bold transition-all duration-300 cursor-pointer border ${
+                                className={`px-3 py-1.5 rounded-[10px] text-xs font-ui font-semibold transition-all duration-120 cursor-pointer border min-h-[32px] flex items-center ${
                                   draftCategoryFilter === "all"
-                                    ? theme === 'dark'
-                                      ? 'bg-[#39FF14] border-[#39FF14] text-black font-extrabold shadow-sm'
-                                      : 'bg-[#2ECC0F] border-[#2ECC0F] text-white font-extrabold shadow-sm'
+                                    ? 'bg-[#B7FF38] border-[#B7FF38] text-black font-bold shadow-xs'
                                     : theme === 'dark'
-                                      ? 'bg-neutral-900/60 border-neutral-850 text-gray-400 hover:text-white hover:border-neutral-700'
-                                      : 'bg-gray-50 border-gray-200 text-gray-600 hover:text-black hover:border-gray-300'
+                                      ? 'bg-[#111111] border-[#303030] text-[#A3A3A3] hover:text-white hover:border-neutral-500'
+                                      : 'bg-[#F1F4EF] border-[#E1E5DF] text-[#626862] hover:text-[#171B18] hover:border-gray-400'
                                 }`}
                               >
-                                ALL CATEGORIES
+                                All Categories
                               </button>
 
                               {/* 16 Category Pills */}
@@ -781,15 +955,14 @@ export default function App() {
                                 return (
                                   <button
                                     key={cat}
+                                    type="button"
                                     onClick={() => handleToggleDraftCategory(cat)}
-                                    className={`px-2.5 py-1 rounded-full text-[9px] font-mono uppercase tracking-wider font-bold transition-all duration-300 cursor-pointer border ${
+                                    className={`px-3 py-1.5 rounded-[10px] text-xs font-ui font-medium transition-all duration-120 cursor-pointer border min-h-[32px] flex items-center ${
                                       isSelected
-                                        ? theme === 'dark'
-                                          ? 'bg-[#39FF14]/20 border-[#39FF14] text-[#39FF14] font-extrabold shadow-xs'
-                                          : 'bg-[#2ECC0F]/15 border-[#2ECC0F] text-[#2ECC0F] font-extrabold shadow-xs'
+                                        ? 'bg-[#B7FF38] border-[#B7FF38] text-black font-bold shadow-xs'
                                         : theme === 'dark'
-                                          ? 'bg-neutral-900/30 border-neutral-850 text-gray-400 hover:text-white hover:border-neutral-700'
-                                          : 'bg-gray-50 border-gray-200 text-gray-600 hover:text-black hover:border-gray-300'
+                                          ? 'bg-[#111111] border-[#303030] text-[#A3A3A3] hover:text-white hover:border-neutral-500'
+                                          : 'bg-[#F1F4EF] border-[#E1E5DF] text-[#626862] hover:text-[#171B18] hover:border-gray-400'
                                     }`}
                                   >
                                     {cat}
@@ -799,30 +972,29 @@ export default function App() {
                             </div>
                           </div>
 
-                          {/* 2. Status Section (Requirement 2) */}
-                          <div className="flex flex-col gap-2.5">
-                            <span className="text-[9px] font-mono uppercase text-gray-400 font-extrabold tracking-wider flex items-center gap-1">
-                              <span>MUNICIPAL RESOLUTION STATUS</span>
-                              <span className="text-gray-500 font-normal">
-                                ({draftStatusFilter === "all" ? "All Selected" : `${draftStatusFilter.length} Selected`})
+                          {/* 2. Status Section */}
+                          <div className="flex flex-col gap-2">
+                            <span className="text-xs font-meta uppercase text-[#A3A3A3] font-bold tracking-wider flex items-center justify-between">
+                              <span>Resolution Status</span>
+                              <span className="text-[#A3A3A3] font-meta font-normal text-[11px]">
+                                {draftStatusFilter === "all" ? "All active" : `${draftStatusFilter.length} active`}
                               </span>
                             </span>
 
                             <div className="flex flex-wrap gap-1.5">
                               {/* Status 'All' Pill */}
                               <button
+                                type="button"
                                 onClick={() => setDraftStatusFilter("all")}
-                                className={`px-2.5 py-1 rounded-full text-[9px] font-mono uppercase tracking-wider font-bold transition-all duration-300 cursor-pointer border ${
+                                className={`px-3 py-1.5 rounded-[10px] text-xs font-ui font-semibold transition-all duration-120 cursor-pointer border min-h-[32px] flex items-center ${
                                   draftStatusFilter === "all"
-                                    ? theme === 'dark'
-                                      ? 'bg-[#39FF14] border-[#39FF14] text-black font-extrabold shadow-sm'
-                                      : 'bg-[#2ECC0F] border-[#2ECC0F] text-white font-extrabold shadow-sm'
+                                    ? 'bg-[#B7FF38] border-[#B7FF38] text-black font-bold shadow-xs'
                                     : theme === 'dark'
-                                      ? 'bg-neutral-900/60 border-neutral-850 text-gray-400 hover:text-white hover:border-neutral-700'
-                                      : 'bg-gray-50 border-gray-200 text-gray-600 hover:text-black hover:border-gray-300'
+                                      ? 'bg-[#111111] border-[#303030] text-[#A3A3A3] hover:text-white hover:border-neutral-500'
+                                      : 'bg-[#F1F4EF] border-[#E1E5DF] text-[#626862] hover:text-[#171B18] hover:border-gray-400'
                                 }`}
                               >
-                                ALL STATUSES
+                                All Statuses
                               </button>
 
                               {/* 4 Status Pills */}
@@ -831,15 +1003,14 @@ export default function App() {
                                 return (
                                   <button
                                     key={stat}
+                                    type="button"
                                     onClick={() => handleToggleDraftStatus(stat)}
-                                    className={`px-2.5 py-1 rounded-full text-[9px] font-mono uppercase tracking-wider font-bold transition-all duration-300 cursor-pointer border ${
+                                    className={`px-3 py-1.5 rounded-[10px] text-xs font-ui font-medium transition-all duration-120 cursor-pointer border min-h-[32px] flex items-center ${
                                       isSelected
-                                        ? theme === 'dark'
-                                          ? 'bg-[#39FF14]/20 border-[#39FF14] text-[#39FF14] font-extrabold shadow-xs'
-                                          : 'bg-[#2ECC0F]/15 border-[#2ECC0F] text-[#2ECC0F] font-extrabold shadow-xs'
+                                        ? 'bg-[#B7FF38] border-[#B7FF38] text-black font-bold shadow-xs'
                                         : theme === 'dark'
-                                          ? 'bg-neutral-900/30 border-neutral-850 text-gray-400 hover:text-white hover:border-neutral-700'
-                                          : 'bg-gray-50 border-gray-200 text-gray-600 hover:text-black hover:border-gray-300'
+                                          ? 'bg-[#111111] border-[#303030] text-[#A3A3A3] hover:text-white hover:border-neutral-500'
+                                          : 'bg-[#F1F4EF] border-[#E1E5DF] text-[#626862] hover:text-[#171B18] hover:border-gray-400'
                                     }`}
                                   >
                                     {stat}
@@ -852,38 +1023,38 @@ export default function App() {
                         </div>
 
                         {/* Bottom Actions Row */}
-                        <div className="flex items-center gap-3 mt-auto shrink-0 border-t pt-4 border-neutral-800/10 dark:border-white/5">
-                          {/* Reset Option (Requirement 4) */}
+                        <div className={`flex items-center gap-2.5 mt-auto shrink-0 border-t pt-3 ${
+                          theme === 'dark' ? 'border-[#303030]' : 'border-[#E1E5DF]'
+                        }`}>
+                          {/* Reset Option */}
                           <button
+                            type="button"
                             onClick={() => {
                               setCategoryFilter("all");
                               setStatusFilter("all");
                               setIsFilterDropdownOpen(false);
                               triggerToast("All filters reset successfully!");
                             }}
-                            className={`flex-1 py-3 rounded-xl text-[10px] font-mono uppercase tracking-widest font-black transition-all cursor-pointer border text-center ${
+                            className={`flex-1 py-2 rounded-[10px] text-xs font-ui font-bold uppercase tracking-wider transition-all cursor-pointer border text-center min-h-[44px] flex items-center justify-center ${
                               theme === 'dark'
-                                ? 'border-red-950 bg-red-950/20 text-red-400 hover:bg-red-950/40'
-                                : 'border-red-100 bg-red-50 text-red-600 hover:bg-red-100'
+                                ? 'border-red-950/60 bg-red-950/20 text-red-400 hover:bg-red-950/40'
+                                : 'border-red-200 bg-red-50 text-red-600 hover:bg-red-100'
                             }`}
                             id="bottom-sheet-reset-all"
                           >
-                            Reset
+                            Reset All
                           </button>
 
-                          {/* Apply Filters (Requirement 3) */}
+                          {/* Apply Filters: Signature Primary Button */}
                           <button
+                            type="button"
                             onClick={() => {
                               setCategoryFilter(draftCategoryFilter);
                               setStatusFilter(draftStatusFilter);
                               setIsFilterDropdownOpen(false);
                               triggerToast("Map filters applied successfully!");
                             }}
-                            className={`flex-2 py-3 rounded-xl text-[10px] font-mono uppercase tracking-widest font-black transition-all cursor-pointer border text-center ${
-                              theme === 'dark'
-                                ? 'bg-[#39FF14] border-[#39FF14] text-black hover:bg-[#39FF14]/90'
-                                : 'bg-[#2ECC0F] border-[#2ECC0F] text-white hover:bg-[#2ECC0F]/90 shadow-md'
-                            }`}
+                            className="flex-2 py-2 rounded-[10px] text-xs font-ui font-bold uppercase tracking-wider transition-all cursor-pointer border border-transparent bg-[#B7FF38] hover:bg-[#A6ED27] active:bg-[#94D91F] text-black text-center min-h-[44px] flex items-center justify-center"
                             id="bottom-sheet-apply-filters"
                           >
                             Apply Filters
@@ -926,10 +1097,10 @@ export default function App() {
             </div>
           </div>
 
-          {/* View 2: Social Feed */}
+          {/* View 2: Social Feed (Civic Tea) */}
           <div className={`w-full h-full absolute inset-0 ${view === "feed" ? "block overflow-hidden" : "hidden"}`}>
             <SocialFeed
-              issues={issuesFilteredByTime}
+              issues={issues}
               currentUserId={user.id}
               onSelectIssue={(issue) => {
                 setSelectedIssue(issue);
@@ -943,11 +1114,13 @@ export default function App() {
               onNavigateToSearch={() => setView("search")}
               onRefreshIssues={fetchIssues}
               onTriggerToast={triggerToast}
+              theme={theme}
+              onToggleTheme={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
             />
           </div>
 
           {/* View: Search Page */}
-          <div className={`w-full h-full absolute inset-0 overflow-y-auto px-4 py-6 ${view === "search" ? "block" : "hidden"}`}>
+          <div className={`w-full h-full absolute inset-0 overflow-y-auto px-3.5 py-4 ${view === "search" ? "block" : "hidden"}`}>
             <SearchPage
               issues={issues}
               currentUserId={user.id}
@@ -961,7 +1134,7 @@ export default function App() {
           </div>
 
           {/* View 3: Report Form */}
-          <div className={`w-full h-full absolute inset-0 overflow-y-auto px-4 py-6 ${view === "report" ? "block" : "hidden"}`}>
+          <div className={`w-full h-full absolute inset-0 overflow-y-auto px-3.5 py-4 ${view === "report" ? "block" : "hidden"}`}>
             <ReportForm
               onSubmit={handleReportSubmit}
               onCancel={() => {
@@ -984,20 +1157,18 @@ export default function App() {
           </div>
 
           {/* View 4: Profile & Dashboard combined */}
-          <div className={`w-full h-full absolute inset-0 overflow-y-auto px-4 py-6 ${view === "profile" ? "block" : "hidden"}`}>
-            <div className={`max-w-lg mx-auto mb-4 border rounded-xl p-1 flex transition-all ${
-              theme === "dark" ? "bg-black border-neutral-900" : "bg-gray-150 border-gray-200 shadow-xs"
+          <div className={`w-full h-full absolute inset-0 overflow-y-auto px-3.5 py-4 ${view === "profile" ? "block" : "hidden"}`}>
+            <div className={`max-w-lg mx-auto mb-3 border rounded-[10px] p-0.5 flex transition-all ${
+              theme === "dark" ? "bg-[#111111] border-[#303030]" : "bg-[#F1F4EF] border-[#E1E5DF] shadow-xs"
             }`}>
               <button
                 onClick={() => setProfileSubTab("registry")}
-                className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                className={`flex-1 py-1.5 text-xs font-bold uppercase tracking-wider rounded-[8px] transition-all cursor-pointer flex items-center justify-center gap-1.5 font-ui ${
                   profileSubTab === "registry"
-                    ? theme === "dark"
-                      ? "bg-[#39FF14] text-black font-black"
-                      : "bg-[#2ECC0F] text-white font-black shadow-xs"
+                    ? "bg-[#B7FF38] text-black font-bold shadow-xs"
                     : theme === "dark"
-                      ? "text-gray-400 hover:text-white"
-                      : "text-gray-500 hover:text-neutral-900"
+                      ? "text-[#A3A3A3] hover:text-white"
+                      : "text-[#626862] hover:text-[#171B18]"
                 }`}
                 id="profile-subtab-registry"
               >
@@ -1006,14 +1177,12 @@ export default function App() {
               </button>
               <button
                 onClick={() => setProfileSubTab("dashboard")}
-                className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                className={`flex-1 py-1.5 text-xs font-bold uppercase tracking-wider rounded-[8px] transition-all cursor-pointer flex items-center justify-center gap-1.5 font-ui ${
                   profileSubTab === "dashboard"
-                    ? theme === "dark"
-                      ? "bg-[#39FF14] text-black font-black"
-                      : "bg-[#2ECC0F] text-white font-black shadow-xs"
+                    ? "bg-[#B7FF38] text-black font-bold shadow-xs"
                     : theme === "dark"
-                      ? "text-gray-400 hover:text-white"
-                      : "text-gray-500 hover:text-neutral-900"
+                      ? "text-[#A3A3A3] hover:text-white"
+                      : "text-[#626862] hover:text-[#171B18]"
                 }`}
                 id="profile-subtab-dashboard"
               >
@@ -1045,114 +1214,121 @@ export default function App() {
 
       {/* Global Bottom Navigation bar */}
       {user && (
-        <nav className={`px-4 py-2 border-t flex items-center justify-around shrink-0 z-50 backdrop-blur transition-all duration-300 ${
+        <nav className={`h-11 px-2 sm:px-6 border-t flex items-center justify-around shrink-0 z-50 backdrop-blur-md transition-all duration-180 ${
           theme === "dark" 
-            ? "bg-black border-neutral-900" 
-            : "bg-white border-gray-200 shadow-md text-neutral-800"
+            ? "bg-black/95 border-[#303030] text-[#A3A3A3]" 
+            : "bg-white/95 border-[#E1E5DF] shadow-md text-[#626862]"
         }`}>
           {/* Map Feed tab */}
           <button
+            type="button"
             onClick={() => {
               setView("map");
               setIsSelectingLocationMode(false);
             }}
-            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all cursor-pointer ${
+            className={`min-h-[34px] min-w-[44px] flex flex-col items-center justify-center gap-0.5 py-0.5 px-2 rounded-[8px] transition-all cursor-pointer active:scale-95 ${
               view === "map" 
                 ? theme === "dark" 
-                  ? "text-[#39FF14] font-extrabold" 
-                  : "text-[#2ECC0F] font-extrabold"
+                  ? "text-[#B7FF38] font-bold" 
+                  : "text-[#537A00] font-bold"
                 : theme === "dark" 
-                  ? "text-gray-400 hover:text-white" 
-                  : "text-gray-500 hover:text-neutral-900"
+                  ? "text-[#A3A3A3] hover:text-white" 
+                  : "text-[#626862] hover:text-[#171B18]"
             }`}
             id="nav-map-btn"
           >
-            <Map className="w-5 h-5" />
-            <span className="text-[8px] font-mono uppercase tracking-wide">Map</span>
+            <Map className="w-4 h-4 shrink-0" />
+            <span className="text-[10px] font-ui font-semibold tracking-tight">Map</span>
           </button>
  
           {/* Social Feed Tab */}
           <button
+            type="button"
             onClick={() => {
               setView("feed");
               setIsSelectingLocationMode(false);
             }}
-            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all cursor-pointer ${
+            className={`min-h-[34px] min-w-[44px] flex flex-col items-center justify-center gap-0.5 py-0.5 px-2 rounded-[8px] transition-all cursor-pointer active:scale-95 ${
               view === "feed" 
                 ? theme === "dark" 
-                  ? "text-[#39FF14] font-extrabold" 
-                  : "text-[#2ECC0F] font-extrabold"
+                  ? "text-[#B7FF38] font-bold" 
+                  : "text-[#537A00] font-bold"
                 : theme === "dark" 
-                  ? "text-gray-400 hover:text-white" 
-                  : "text-gray-500 hover:text-neutral-900"
+                  ? "text-[#A3A3A3] hover:text-white" 
+                  : "text-[#626862] hover:text-[#171B18]"
             }`}
             id="nav-feed-btn"
           >
-            <MessageSquare className="w-5 h-5" />
-            <span className="text-[8px] font-mono uppercase tracking-wide">Civic Tea</span>
+            <MessageSquare className="w-4 h-4 shrink-0" />
+            <span className="text-[10px] font-ui font-semibold tracking-tight">Civic Tea</span>
           </button>
  
           {/* Search Tab */}
           <button
+            type="button"
             onClick={() => {
               setView("search");
               setIsSelectingLocationMode(false);
             }}
-            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all cursor-pointer ${
+            className={`min-h-[34px] min-w-[44px] flex flex-col items-center justify-center gap-0.5 py-0.5 px-2 rounded-[8px] transition-all cursor-pointer active:scale-95 ${
               view === "search" 
                 ? theme === "dark" 
-                  ? "text-[#39FF14] font-extrabold" 
-                  : "text-[#2ECC0F] font-extrabold"
+                  ? "text-[#B7FF38] font-bold" 
+                  : "text-[#537A00] font-bold"
                 : theme === "dark" 
-                  ? "text-gray-400 hover:text-white" 
-                  : "text-gray-500 hover:text-neutral-900"
+                  ? "text-[#A3A3A3] hover:text-white" 
+                  : "text-[#626862] hover:text-[#171B18]"
             }`}
             id="nav-search-btn"
           >
-            <Search className="w-5 h-5" />
-            <span className="text-[8px] font-mono uppercase tracking-wide">Search</span>
+            <Search className="w-4 h-4 shrink-0" />
+            <span className="text-[10px] font-ui font-semibold tracking-tight">Search</span>
           </button>
  
           {/* Report Tab */}
           <button
+            type="button"
             onClick={() => {
               setView("report");
               setIsSelectingLocationMode(false);
             }}
-            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all cursor-pointer ${
+            className={`min-h-[34px] min-w-[44px] flex flex-col items-center justify-center gap-0.5 py-0.5 px-2 rounded-[8px] transition-all cursor-pointer active:scale-95 ${
               view === "report" 
                 ? theme === "dark" 
-                  ? "text-[#39FF14] font-extrabold" 
-                  : "text-[#2ECC0F] font-extrabold"
+                  ? "text-[#B7FF38] font-bold" 
+                  : "text-[#537A00] font-bold"
                 : theme === "dark" 
-                  ? "text-gray-400 hover:text-white" 
-                  : "text-gray-500 hover:text-neutral-900"
+                  ? "text-[#A3A3A3] hover:text-white" 
+                  : "text-[#626862] hover:text-[#171B18]"
             }`}
             id="nav-report-btn"
           >
-            <Plus className="w-5 h-5" />
-            <span className="text-[8px] font-mono uppercase tracking-wide">Post</span>
+            <div className={`p-0.5 rounded-[5px] ${view === "report" ? (theme === "dark" ? "bg-[#B7FF38]/20 border border-[#B7FF38]/50" : "bg-[#B7FF38]/30 border border-[#537A00]/50") : ""}`}>
+              <Plus className="w-4 h-4 shrink-0" />
+            </div>
+            <span className="text-[10px] font-ui font-semibold tracking-tight">Post</span>
           </button>
  
           {/* Profile tab */}
           <button
+            type="button"
             onClick={() => {
               setView("profile");
               setIsSelectingLocationMode(false);
             }}
-            className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-xl transition-all cursor-pointer ${
+            className={`min-h-[34px] min-w-[44px] flex flex-col items-center justify-center gap-0.5 py-0.5 px-2 rounded-[8px] transition-all cursor-pointer active:scale-95 ${
               view === "profile" 
                 ? theme === "dark" 
-                  ? "text-[#39FF14] font-extrabold" 
-                  : "text-[#2ECC0F] font-extrabold"
+                  ? "text-[#B7FF38] font-bold" 
+                  : "text-[#537A00] font-bold"
                 : theme === "dark" 
-                  ? "text-gray-400 hover:text-white" 
-                  : "text-gray-500 hover:text-neutral-900"
+                  ? "text-[#A3A3A3] hover:text-white" 
+                  : "text-[#626862] hover:text-[#171B18]"
             }`}
             id="nav-profile-btn"
           >
-            <UserIcon className="w-5 h-5" />
-            <span className="text-[8px] font-mono uppercase tracking-wide">Profile</span>
+            <UserIcon className="w-4 h-4 shrink-0" />
+            <span className="text-[10px] font-ui font-semibold tracking-tight">Profile</span>
           </button>
         </nav>
       )}
@@ -1166,12 +1342,8 @@ export default function App() {
             exit={{ opacity: 0, y: 50 }}
             className="absolute bottom-20 left-4 right-4 z-50 max-w-sm mx-auto pointer-events-none"
           >
-            <div className={`px-3 py-2.5 border text-xs font-black rounded-xl flex items-center gap-2 backdrop-blur transition-all ${
-              theme === "dark"
-                ? "bg-[#39FF14] border-[#39FF14] text-black"
-                : "bg-[#2ECC0F] border-[#2ECC0F] text-white"
-            }`}>
-              <Sparkles className={`w-4 h-4 animate-pulse ${theme === "dark" ? "text-black" : "text-white"}`} />
+            <div className="px-3.5 py-2.5 border border-[#B7FF38] text-xs font-bold font-ui rounded-[10px] flex items-center gap-2 backdrop-blur transition-all shadow-xl bg-[#B7FF38] text-black">
+              <Sparkles className="w-4 h-4 text-black shrink-0" />
               <span>{toastMessage}</span>
             </div>
           </motion.div>

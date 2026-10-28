@@ -22,8 +22,8 @@ export default function Logo({ theme = "dark", className = "w-16 h-16", showBack
           <rect
             width="400"
             height="400"
-            rx="48"
-            fill={isDark ? "#0D0D0D" : "#FFFFFF"}
+            rx="32"
+            fill={isDark ? "#111111" : "#FFFFFF"}
           />
         )}
         <g transform="translate(200,208)">
@@ -33,17 +33,17 @@ export default function Logo({ theme = "dark", className = "w-16 h-16", showBack
           <path
             d="M0 -104 C52 -104 88 -60 88 -4 C88 56 0 116 0 116 C0 116 -88 56 -88 -4 C-88 -60 -52 -104 0 -104 Z"
             fill="none"
-            stroke={isDark ? "#39FF6B" : "#0DA84B"}
+            stroke={isDark ? "#B7FF38" : "#537A00"}
             strokeWidth="3"
-            opacity="0.5"
+            opacity="0.6"
           />
           <g clipPath={`url(#${clipId}-clip)`}>
-            <circle cx="20" cy="-24" r="12" fill="none" stroke={isDark ? "#39FF6B" : "#0DA84B"} strokeWidth="8" />
-            <circle cx="20" cy="-24" r="32" fill="none" stroke={isDark ? "#39FF6B" : "#0DA84B"} strokeWidth="8" />
-            <circle cx="20" cy="-24" r="52" fill="none" stroke={isDark ? "#39FF6B" : "#0DA84B"} strokeWidth="8" />
-            <circle cx="20" cy="-24" r="72" fill="none" stroke={isDark ? "#39FF6B" : "#0DA84B"} strokeWidth="8" />
-            <circle cx="20" cy="-24" r="92" fill="none" stroke={isDark ? "#39FF6B" : "#0DA84B"} strokeWidth="8" />
-            <circle cx="20" cy="-24" r="112" fill="none" stroke={isDark ? "#39FF6B" : "#0DA84B"} strokeWidth="8" />
+            <circle cx="20" cy="-24" r="12" fill="none" stroke={isDark ? "#B7FF38" : "#537A00"} strokeWidth="8" />
+            <circle cx="20" cy="-24" r="32" fill="none" stroke={isDark ? "#B7FF38" : "#537A00"} strokeWidth="8" />
+            <circle cx="20" cy="-24" r="52" fill="none" stroke={isDark ? "#B7FF38" : "#537A00"} strokeWidth="8" />
+            <circle cx="20" cy="-24" r="72" fill="none" stroke={isDark ? "#B7FF38" : "#537A00"} strokeWidth="8" />
+            <circle cx="20" cy="-24" r="92" fill="none" stroke={isDark ? "#B7FF38" : "#537A00"} strokeWidth="8" />
+            <circle cx="20" cy="-24" r="112" fill="none" stroke={isDark ? "#B7FF38" : "#537A00"} strokeWidth="8" />
           </g>
         </g>
       </svg>

@@ -373,43 +373,44 @@ export default function ReportForm({
   };
 
   return (
-    <div className={`w-full max-w-lg mx-auto border rounded-[24px] shadow-2xl backdrop-blur-[20px] p-8 md:p-10 transition-all duration-500 ${
-      theme === 'dark' ? 'bg-white/[0.05] border-white/10 text-white' : 'bg-white/60 border-neutral-200/50 text-neutral-900'
+    <div className={`w-full max-w-xl mx-auto border rounded-[14px] shadow-2xl backdrop-blur-2xl p-4 sm:p-5 md:p-6 transition-all duration-180 font-ui ${
+      theme === 'dark' ? 'bg-[#111111]/98 border-[#303030] text-white' : 'bg-white/98 border-[#E1E5DF] text-[#171B18]'
     }`} id="report-creation-view">
-      <div className="flex items-center gap-2 mb-6">
+      <div className={`flex items-center gap-2.5 mb-3.5 pb-2.5 border-b ${theme === 'dark' ? 'border-[#303030]' : 'border-[#E1E5DF]'}`}>
         <button
           type="button"
           onClick={onCancel}
-          className={`p-1.5 rounded-lg transition-all mr-1 cursor-pointer ${
-            theme === 'dark' ? 'bg-neutral-900 text-gray-400 hover:text-white' : 'bg-gray-100 text-gray-600 hover:text-black border border-gray-200'
+          className={`p-1.5 min-h-[32px] min-w-[32px] flex items-center justify-center rounded-[10px] transition-all cursor-pointer border ${
+            theme === 'dark' ? 'bg-[#191919] text-[#A3A3A3] hover:text-white border-[#303030]' : 'bg-[#F1F4EF] text-[#626862] hover:text-[#171B18] border-[#E1E5DF]'
           }`}
           id="report-back-btn"
+          aria-label="Back to Map"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-3.5 h-3.5" />
         </button>
         <div>
-          <h2 className={`text-base font-extrabold tracking-tight uppercase ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>What's happening around you?</h2>
-          <p className={`text-[10px] font-mono ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>BE THE REPORTER IN YOUR NEIGHBORHOOD</p>
+          <h2 className={`text-sm sm:text-base font-bold font-ui tracking-tight ${theme === 'dark' ? 'text-white' : 'text-[#171B18]'}`}>Report a Local Incident</h2>
+          <p className="text-[11px] text-[#A3A3A3] font-ui">Broadcast verified updates to your community grid</p>
         </div>
       </div>
 
       {/* Linked Incident Banner if pre-linked parent post is active */}
       {parentIssue && (
-        <div className={`mb-6 p-4 rounded-xl flex items-center justify-between text-xs border ${
-          theme === 'dark' ? 'bg-neutral-950 border-neutral-850' : 'bg-gray-50 border-gray-200'
+        <div className={`mb-4 p-3 rounded-[10px] flex items-center justify-between text-xs border ${
+          theme === 'dark' ? 'bg-[#191919] border-[#303030]' : 'bg-[#F1F4EF] border-[#E1E5DF]'
         }`}>
           <div className="flex items-center gap-2">
-            <Link className="w-4 h-4 text-brand shrink-0" />
+            <Link className="w-3.5 h-3.5 text-[#B7FF38] shrink-0" />
             <div>
-              <p className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>Linked to Incident</p>
-              <p className="text-[10px] text-gray-400 line-clamp-1">"{parentIssue.title}"</p>
+              <p className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-[#171B18]'}`}>Linked to Incident</p>
+              <p className="text-xs text-[#A3A3A3] line-clamp-1">"{parentIssue.title}"</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClearParentIssue}
-            className={`px-2.5 py-1 rounded text-[9px] font-bold uppercase tracking-wider cursor-pointer ${
-              theme === 'dark' ? 'bg-neutral-900 hover:bg-neutral-850 text-gray-300' : 'bg-white border border-gray-200 hover:bg-gray-50 text-neutral-700'
+            className={`px-2.5 py-1 min-h-[30px] rounded-[8px] text-xs font-bold uppercase tracking-wider cursor-pointer border ${
+              theme === 'dark' ? 'bg-[#111111] hover:bg-[#191919] text-gray-300 border-[#303030]' : 'bg-white border-[#E1E5DF] hover:bg-gray-50 text-[#171B18]'
             }`}
           >
             Unlink
@@ -417,10 +418,10 @@ export default function ReportForm({
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3">
         {/* Step 1: Upload Photo / Video (up to 5 photos or 1 video) */}
         <div>
-          <label className={`block text-[10px] font-mono uppercase tracking-wider mb-1.5 ${
+          <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${
             theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
           }`}>
             STEP 1: ADD PHOTO OR VIDEO (OPTIONAL)
@@ -438,16 +439,16 @@ export default function ReportForm({
 
           <div
             onClick={() => fileInputRef.current?.click()}
-            className={`w-full h-28 border border-dashed rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-all gap-1.5 backdrop-blur-md ${
+            className={`w-full h-18 border border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all gap-0.5 backdrop-blur-md ${
               theme === 'dark' 
                 ? 'bg-white/[0.02] border-white/10 text-gray-350 hover:bg-white/[0.05] hover:border-white/20' 
-                : 'bg-white/40 border-neutral-200/50 text-gray-700 hover:bg-white/60 hover:border-neutral-400 shadow-xs'
+                : 'bg-white/40 border-neutral-300 text-gray-700 hover:bg-white/60 hover:border-neutral-400 shadow-xs'
             }`}
             id="upload-placeholder-box"
           >
-            <Camera className={`w-6 h-6 transition-all ${theme === 'dark' ? 'text-gray-500 hover:text-white' : 'text-gray-400 hover:text-neutral-950'}`} />
-            <span className="text-xs font-semibold">Upload Photos or Video / Capture</span>
-            <span className={`text-[9px] font-mono ${theme === 'dark' ? 'text-gray-600' : 'text-gray-500'}`}>Max 5 Photos or 1 Video clip (Max 25MB video, 8MB photo)</span>
+            <Camera className={`w-4 h-4 transition-all ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-neutral-950'}`} />
+            <span className="text-xs font-semibold font-ui">Upload Photos or Video / Capture</span>
+            <span className={`text-[11px] font-meta ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Max 5 Photos or 1 Video clip (Max 25MB video, 8MB photo)</span>
           </div>
 
           {/* Horizontal scrollable thumbnail row */}
@@ -456,8 +457,8 @@ export default function ReportForm({
               {mediaUrls.map((url, idx) => {
                 const isUrlVideo = mediaType === "video" || url.startsWith("data:video/");
                 return (
-                  <div key={idx} className={`relative w-16 h-16 rounded-lg overflow-hidden border shrink-0 group ${
-                    theme === 'dark' ? 'border-neutral-850 bg-black/40' : 'border-gray-250 bg-gray-50 shadow-xs'
+                  <div key={idx} className={`relative w-16 h-16 rounded-[10px] overflow-hidden border shrink-0 group ${
+                    theme === 'dark' ? 'border-[#303030] bg-black/40' : 'border-[#E1E5DF] bg-gray-50 shadow-xs'
                   }`}>
                     {isUrlVideo ? (
                       <video src={url} className="w-full h-full object-cover" />
@@ -478,11 +479,11 @@ export default function ReportForm({
                           return updated;
                         });
                       }}
-                      className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-[8px] font-bold cursor-pointer"
+                      className="absolute top-0.5 right-0.5 w-4.5 h-4.5 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-[10px] font-bold cursor-pointer"
                     >
                       ✕
                     </button>
-                    <div className="absolute bottom-0 inset-x-0 bg-black/60 text-[7px] text-center font-mono py-0.5">
+                    <div className="absolute bottom-0 inset-x-0 bg-black/70 text-[10px] text-center font-meta py-0.5 text-white">
                       {isUrlVideo ? "VIDEO" : `IMG ${idx+1}`}
                     </div>
                   </div>
@@ -492,26 +493,24 @@ export default function ReportForm({
           )}
 
           {isAiVisionLoading && (
-            <div className={`flex items-center gap-1.5 mt-2.5 p-3.5 border rounded-lg text-[10px] font-mono uppercase tracking-wide animate-pulse ${
-              theme === 'dark' ? 'bg-neutral-950 border-neutral-900 text-gray-300' : 'bg-emerald-50/40 border-emerald-100 text-emerald-700 font-medium'
+            <div className={`flex items-center gap-2 mt-2.5 p-3.5 border rounded-[10px] text-xs font-meta uppercase tracking-wide animate-pulse ${
+              theme === 'dark' ? 'bg-[#191919] border-[#303030] text-gray-300' : 'bg-emerald-50/50 border-emerald-200 text-emerald-800 font-medium'
             }`}>
-              <Loader2 className={`w-3.5 h-3.5 animate-spin ${theme === 'dark' ? 'text-gray-400' : 'text-emerald-500'}`} />
+              <Loader2 className={`w-4 h-4 animate-spin ${theme === 'dark' ? 'text-[#B7FF38]' : 'text-emerald-600'}`} />
               <span>Gemini Vision is inspecting uploaded evidence...</span>
             </div>
           )}
 
           {aiVisionResult && (
-            <div className={`mt-2.5 p-4 border rounded-lg space-y-2 ${
-              theme === 'dark' ? 'bg-neutral-950 border-neutral-900' : 'bg-emerald-50/40 border-emerald-100 text-neutral-850'
+            <div className={`mt-2.5 p-4 border rounded-[14px] space-y-2.5 ${
+              theme === 'dark' ? 'bg-[#111111] border-[#303030]' : 'bg-[#FAFCFA] border-[#E1E5DF] text-[#171B18]'
             }`} id="gemini-vision-card">
-              <p className="text-[11px] font-sans leading-relaxed flex items-center gap-1.5">
-                <Eye className="w-4 h-4 text-emerald-500 shrink-0" /> <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-emerald-800'}`}>AI Analysis:</span> {aiVisionResult.description}
+              <p className="text-xs font-ui leading-relaxed flex items-center gap-2">
+                <Eye className="w-4 h-4 text-[#B7FF38] shrink-0" /> <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-[#171B18]'}`}>AI Analysis:</span> {aiVisionResult.description}
               </p>
-              <div className="flex items-center gap-1.5 text-[9px] font-mono uppercase text-gray-500">
-                <Check className="w-3.5 h-3.5 text-emerald-500" /> <span>Auto-suggested category:</span>
-                <span className={`px-2 py-0.5 rounded font-black ${
-                  theme === 'dark' ? 'bg-[#39FF14] text-black' : 'bg-[#2ECC0F] text-white shadow-xs'
-                }`}>{aiVisionResult.suggestedCategory}</span>
+              <div className="flex items-center gap-2 text-xs font-meta uppercase text-[#A3A3A3]">
+                <Check className="w-4 h-4 text-[#B7FF38]" /> <span>Auto-suggested category:</span>
+                <span className="px-2.5 py-0.5 rounded-[6px] font-bold text-black bg-[#B7FF38] shadow-xs">{aiVisionResult.suggestedCategory}</span>
               </div>
             </div>
           )}
@@ -519,13 +518,13 @@ export default function ReportForm({
 
         {/* Step 2: SELECT CATEGORY */}
         <div className="space-y-1.5" id="manual-category-section">
-          <label className={`block text-[10px] font-mono uppercase tracking-wider mb-1 ${
-            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+          <label className={`block text-xs font-meta uppercase tracking-wider mb-1 ${
+            theme === 'dark' ? 'text-[#A3A3A3]' : 'text-[#626862]'
           }`}>
             STEP 2: SELECT CATEGORY
           </label>
           
-          <div className="flex gap-1.5 overflow-x-auto py-1.5 scrollbar-thin">
+          <div className="flex gap-1.5 overflow-x-auto py-0.5 scrollbar-thin">
             {CATEGORY_ITEMS.map((item) => {
               const IconComponent = item.icon;
               return (
@@ -535,14 +534,12 @@ export default function ReportForm({
                   onClick={() => {
                     setCategory(item.value);
                   }}
-                  className={`px-3 py-1.5 rounded-full border text-xs font-semibold shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-2.5 py-1.5 min-h-[30px] rounded-[8px] border text-xs font-semibold shrink-0 transition-all cursor-pointer flex items-center gap-1.5 font-ui ${
                     category === item.value
-                      ? theme === 'dark'
-                        ? "bg-[#39FF14] text-black border-[#39FF14] font-black shadow-md"
-                        : "bg-[#2ECC0F] text-white border-[#2ECC0F] font-black shadow-xs"
+                      ? "bg-[#B7FF38] text-black border-[#B7FF38] font-bold shadow-xs"
                       : theme === 'dark'
-                        ? "bg-white/[0.03] text-gray-400 border-white/5 hover:border-white/20 hover:text-white"
-                        : "bg-white/40 text-gray-650 border-neutral-200/40 hover:border-neutral-400 shadow-xs"
+                        ? "bg-[#191919] text-[#A3A3A3] border-[#303030] hover:border-neutral-500 hover:text-white"
+                        : "bg-[#F1F4EF] text-[#626862] border-[#E1E5DF] hover:border-gray-400"
                   }`}
                   id={`manual-cat-${item.value}`}
                 >
@@ -555,14 +552,14 @@ export default function ReportForm({
         </div>
 
         {/* AI Auto-categorize switch */}
-        <div className={`flex items-center justify-between p-5 border rounded-2xl backdrop-blur-md transition-all duration-500 ${
-          theme === 'dark' ? 'bg-white/[0.03] border-white/5' : 'bg-white/40 border-neutral-200/40 shadow-xs'
+        <div className={`flex items-center justify-between p-2.5 border rounded-[8px] backdrop-blur-md transition-all duration-180 ${
+          theme === 'dark' ? 'bg-[#191919] border-[#303030]' : 'bg-[#F1F4EF] border-[#E1E5DF]'
         }`}>
           <div className="flex items-center gap-2">
-            <Sparkles className={`w-4 h-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+            <Sparkles className={`w-3.5 h-3.5 ${theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'}`} />
             <div>
-              <p className={`text-xs font-bold ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>Gemini AI Auto-Categorizer</p>
-              <p className="text-[9px] text-gray-500">Classifies categories & crafts specific titles instantly</p>
+              <p className={`text-xs font-bold font-ui ${theme === 'dark' ? 'text-white' : 'text-[#171B18]'}`}>Gemini AI Auto-Categorizer</p>
+              <p className="text-[11px] text-[#A3A3A3] font-ui">Classifies categories & crafts specific titles instantly</p>
             </div>
           </div>
           <button
@@ -570,40 +567,40 @@ export default function ReportForm({
             onClick={() => {
               setUseAI(!useAI);
             }}
-            className={`w-10 h-6 rounded-full p-0.5 transition-colors cursor-pointer ${
+            className={`w-7 h-4 rounded-full p-0.5 border border-[#303030] transition-colors cursor-pointer ${
               useAI 
-                ? theme === 'dark' ? "bg-[#39FF14]" : "bg-[#2ECC0F]" 
-                : theme === 'dark' ? "bg-neutral-800" : "bg-gray-300"
+                ? "bg-[#B7FF38]" 
+                : theme === 'dark' ? "bg-[#111111]" : "bg-gray-300"
             }`}
             id="ai-categorize-toggle"
           >
-            <div className="w-5 h-5 rounded-full bg-white transition-transform duration-200" style={{ transform: useAI ? "translateX(16px)" : "translateX(0px)" }} />
+            <div className="w-3 h-3 rounded-full bg-black transition-transform duration-180" style={{ transform: useAI ? "translateX(12px)" : "translateX(0px)" }} />
           </button>
         </div>
 
         {/* Step 3: Description */}
         <div>
-          <label className={`block text-[10px] font-mono uppercase tracking-wider mb-1.5 ${
-            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+          <label className={`block text-xs font-meta uppercase tracking-wider mb-1 ${
+            theme === 'dark' ? 'text-[#A3A3A3]' : 'text-[#626862]'
           }`}>
             STEP 3: DETAILED CIVIC DESCRIPTION
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            rows={3}
+            rows={2}
             placeholder="Tell your story. What did you see, hear, or experience? Be the reporter."
-            className={`w-full p-4 text-xs border rounded-2xl font-sans resize-none focus:outline-none transition-all backdrop-blur-md ${
+            className={`w-full p-2.5 text-xs border rounded-[8px] font-ui resize-none focus:outline-none transition-all ${
               theme === 'dark' 
-                ? 'bg-white/[0.03] border-white/10 text-white placeholder-gray-500 focus:border-white/20 focus:bg-white/[0.05]' 
-                : 'bg-white/40 border-neutral-200/50 text-neutral-900 placeholder-gray-400 focus:border-neutral-400 shadow-xs'
+                ? 'bg-[#191919] border-[#303030] text-white placeholder-[#A3A3A3] focus:border-[#B7FF38]/50' 
+                : 'bg-white border-[#E1E5DF] text-[#171B18] placeholder-[#626862] focus:border-[#537A00]/50 shadow-xs'
             }`}
             id="report-desc-textarea"
           />
 
           {isAiReading && (
-            <div className="flex items-center gap-1.5 mt-2 text-emerald-500 text-[10px] font-mono uppercase tracking-wide animate-pulse">
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            <div className="flex items-center gap-2 mt-2 text-[#B7FF38] text-xs font-meta uppercase tracking-wide animate-pulse">
+              <Loader2 className="w-4 h-4 animate-spin" />
               <span>AI is reading your report...</span>
             </div>
           )}
@@ -615,28 +612,28 @@ export default function ReportForm({
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className={`mt-3 p-4 border rounded-xl space-y-3 relative overflow-hidden ${
-                  theme === 'dark' ? 'bg-neutral-950 border-neutral-900 text-white' : 'bg-emerald-50/40 border-emerald-100 text-neutral-900'
+                className={`mt-2.5 p-3.5 border rounded-[14px] space-y-2.5 relative overflow-hidden ${
+                  theme === 'dark' ? 'bg-[#111111] border-[#303030] text-white' : 'bg-[#FAFCFA] border-[#E1E5DF] text-[#171B18]'
                 }`}
                 id="gemini-ai-analysis-card"
               >
                 {/* Corner Glow */}
-                <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-xl pointer-events-none" />
+                <div className="absolute top-0 right-0 w-20 h-20 bg-[#B7FF38]/5 blur-xl pointer-events-none" />
 
                 <div className="flex justify-between items-start">
                   <div className="space-y-1.5">
-                    <p className={`text-xs font-black font-sans flex items-center gap-1.5 ${
-                      theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600'
+                    <p className={`text-xs font-bold font-ui flex items-center gap-2 ${
+                      theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'
                     }`}>
-                      <Cpu className="w-3.5 h-3.5 shrink-0 text-emerald-500" /> AI detected: {aiAnalysisResult.category}
+                      <Cpu className="w-4 h-4 shrink-0" /> AI detected: {aiAnalysisResult.category}
                     </p>
-                    <p className={`text-[11px] font-sans leading-relaxed flex items-center gap-1.5 ${theme === 'dark' ? 'text-gray-300' : 'text-neutral-800'}`}>
-                      <Newspaper className="w-3.5 h-3.5 shrink-0 text-emerald-500" /> <span className={`font-semibold ${theme === 'dark' ? 'text-emerald-300' : 'text-emerald-700'}`}>Suggested headline:</span> "{aiAnalysisResult.title}"
+                    <p className={`text-xs font-ui leading-relaxed flex items-center gap-2 ${theme === 'dark' ? 'text-gray-200' : 'text-[#171B18]'}`}>
+                      <Newspaper className="w-4 h-4 shrink-0 text-[#B7FF38]" /> <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-[#171B18]'}`}>Suggested headline:</span> "{aiAnalysisResult.title}"
                     </p>
-                    <p className={`text-[10px] font-mono uppercase tracking-wider font-bold flex items-center gap-1.5 ${
-                      theme === 'dark' ? 'text-emerald-500' : 'text-emerald-600'
+                    <p className={`text-xs font-meta uppercase tracking-wider font-bold flex items-center gap-2 ${
+                      theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'
                     }`}>
-                      <Check className="w-3.5 h-3.5 shrink-0 text-emerald-500" /> Auto-selected category: {aiAnalysisResult.category}
+                      <Check className="w-4 h-4 shrink-0 text-[#B7FF38]" /> Auto-selected category: {aiAnalysisResult.category}
                     </p>
                   </div>
                 </div>
@@ -651,11 +648,9 @@ export default function ReportForm({
                       setSuccessMsg(`Applied suggested category "${aiAnalysisResult.category}" & dynamic headline!`);
                       setTimeout(() => setSuccessMsg(""), 3000);
                     }}
-                    className={`px-3 py-1.5 text-[10px] font-mono font-black uppercase rounded-lg transition-all flex items-center gap-1 cursor-pointer ${
-                      theme === 'dark' ? 'bg-[#39FF14] hover:bg-[#39FF14]/90 text-black' : 'bg-[#2ECC0F] hover:bg-[#2ECC0F]/90 text-white shadow-xs'
-                    }`}
+                    className="px-3.5 py-2 text-xs font-ui font-bold uppercase rounded-[10px] transition-all flex items-center gap-1.5 cursor-pointer border border-[#B7FF38] bg-[#B7FF38] hover:bg-[#A6ED27] active:bg-[#94D91F] text-black shadow-xs min-h-[36px]"
                   >
-                    <Check className={`w-3.5 h-3.5 shrink-0 ${theme === 'dark' ? 'text-black' : 'text-white'}`} />
+                    <Check className="w-4 h-4 shrink-0 text-black" />
                     <span>Use this</span>
                   </button>
 
@@ -666,10 +661,10 @@ export default function ReportForm({
                       setSuccessMsg("Manual override active. Please pick category & enter headline manually.");
                       setTimeout(() => setSuccessMsg(""), 3000);
                     }}
-                    className={`px-3 py-1.5 border text-[10px] font-mono font-bold uppercase rounded-lg transition-all cursor-pointer ${
+                    className={`px-3.5 py-2 border text-xs font-ui font-bold uppercase rounded-[10px] transition-all cursor-pointer min-h-[36px] ${
                       theme === 'dark' 
-                        ? 'bg-black hover:bg-neutral-900 text-gray-300 hover:text-white border-neutral-900' 
-                        : 'bg-white hover:bg-gray-50 text-gray-600 hover:text-black border-gray-250'
+                        ? 'bg-[#191919] hover:bg-[#222222] text-[#A3A3A3] hover:text-white border-[#303030]' 
+                        : 'bg-[#F1F4EF] hover:bg-gray-200 text-[#626862] hover:text-[#171B18] border-[#E1E5DF]'
                     }`}
                   >
                     Edit manually
@@ -677,12 +672,12 @@ export default function ReportForm({
                 </div>
 
                 {/* Small "Powered by Gemini" badge */}
-                <div className={`pt-2.5 border-t flex items-center justify-between text-[8px] font-mono uppercase tracking-widest ${
-                  theme === 'dark' ? 'border-emerald-500/10 text-emerald-500/60' : 'border-emerald-500/20 text-emerald-600/70'
+                <div className={`pt-2.5 border-t flex items-center justify-between text-xs font-meta uppercase tracking-wider ${
+                  theme === 'dark' ? 'border-[#303030] text-[#A3A3A3]' : 'border-[#E1E5DF] text-[#626862]'
                 }`}>
                   <span>RADAR AI CORE v1.0</span>
-                  <span className={`flex items-center gap-1 font-bold ${theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600'}`}>
-                    <Sparkles className="w-2.5 h-2.5" />
+                  <span className={`flex items-center gap-1.5 font-bold ${theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'}`}>
+                    <Sparkles className="w-3.5 h-3.5" />
                     Powered by Gemini
                   </span>
                 </div>
@@ -693,8 +688,8 @@ export default function ReportForm({
 
         {/* Step 4: Coordinates Location selection */}
         <div>
-          <label className={`block text-[10px] font-mono uppercase tracking-wider mb-1 ${
-            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+          <label className={`block text-xs font-meta uppercase tracking-wider mb-1.5 ${
+            theme === 'dark' ? 'text-[#A3A3A3]' : 'text-[#626862]'
           }`}>
             STEP 4: REPORT LOCATION & AREA (OPTIONAL)
           </label>
@@ -705,14 +700,12 @@ export default function ReportForm({
               <button
                 type="button"
                 onClick={onEnterLocationSelectionMode}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 min-h-[34px] rounded-[8px] text-xs font-ui font-semibold border transition-all cursor-pointer ${
                   selectedLocation
-                    ? theme === 'dark'
-                      ? "bg-neutral-950 text-[#39FF14] border-neutral-800"
-                      : "bg-gray-100 text-[#2ECC0F] border-gray-300"
+                    ? "bg-[#B7FF38] text-black border-[#B7FF38] font-bold shadow-xs"
                     : theme === 'dark'
-                      ? "bg-[#39FF14] text-black border-[#39FF14] hover:bg-[#39FF14]/90 font-black"
-                      : "bg-[#2ECC0F] text-white border-[#2ECC0F] hover:bg-[#2ECC0F]/95 font-black shadow-xs"
+                      ? "bg-[#191919] text-[#A3A3A3] border-[#303030] hover:text-white hover:border-neutral-500"
+                      : "bg-[#F1F4EF] text-[#626862] border-[#E1E5DF] hover:text-[#171B18]"
                 }`}
                 id="select-on-map-btn"
               >
@@ -724,10 +717,10 @@ export default function ReportForm({
                 type="button"
                 onClick={handleAutoGPS}
                 disabled={locationStatus === "detecting"}
-                className={`flex items-center justify-center gap-1 px-3 py-2 border rounded-lg text-xs font-semibold transition-all disabled:opacity-50 cursor-pointer ${
+                className={`flex items-center justify-center gap-1.5 px-3 py-1.5 min-h-[34px] border rounded-[8px] text-xs font-ui font-semibold transition-all disabled:opacity-50 cursor-pointer ${
                   theme === 'dark'
-                    ? 'bg-neutral-950 border-neutral-900 hover:border-neutral-850 text-gray-300 hover:text-white'
-                    : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-600 hover:text-black shadow-xs'
+                    ? 'bg-[#191919] border-[#303030] hover:border-neutral-500 text-[#A3A3A3] hover:text-white'
+                    : 'bg-white border-[#E1E5DF] hover:bg-gray-50 text-[#626862] hover:text-[#171B18]'
                 }`}
                 id="gps-trigger-btn"
               >
@@ -742,20 +735,20 @@ export default function ReportForm({
 
             {/* Displaying selected location */}
             {selectedLocation ? (
-              <div className={`px-2.5 py-1.5 border rounded text-[10px] flex items-center gap-1.5 font-mono ${
-                theme === 'dark' ? 'bg-neutral-950 border-neutral-900 text-gray-300' : 'bg-gray-50 border-gray-200 text-neutral-800'
+              <div className={`px-2.5 py-1.5 border rounded-[6px] text-xs flex items-center gap-2 font-meta ${
+                theme === 'dark' ? 'bg-[#191919] border-[#303030] text-gray-200' : 'bg-[#F1F4EF] border-[#E1E5DF] text-[#171B18]'
               }`}>
-                <Check className="w-3.5 h-3.5 shrink-0" />
+                <Check className="w-3.5 h-3.5 shrink-0 text-[#B7FF38]" />
                 <span>Locked Coords: ({selectedLocation.lat.toFixed(4)}, {selectedLocation.lng.toFixed(4)}) at {selectedLocation.area}</span>
               </div>
             ) : (
               <div className="flex flex-col gap-1">
-                <span className="text-[9px] text-gray-500 font-sans italic">OR Choose Nearest Ward Neighborhood Center:</span>
+                <span className="text-[11px] text-[#A3A3A3] font-ui italic">OR Choose Nearest Ward Neighborhood Center:</span>
                 <select
                   value={manualArea}
                   onChange={handleManualAreaSelect}
-                  className={`w-full px-3 py-2 text-xs border rounded-xl focus:outline-none backdrop-blur-md ${
-                    theme === 'dark' ? 'bg-white/[0.03] border-white/10 text-gray-300' : 'bg-white/50 border-neutral-200/50 text-neutral-800'
+                  className={`w-full px-2.5 py-1.5 min-h-[34px] text-xs border rounded-[8px] focus:outline-none font-ui ${
+                    theme === 'dark' ? 'bg-[#191919] border-[#303030] text-gray-200' : 'bg-white border-[#E1E5DF] text-[#171B18]'
                   }`}
                   id="neighborhood-manual-select"
                 >
@@ -770,63 +763,63 @@ export default function ReportForm({
         </div>
 
         {/* Step 5: Anonymous Toggle */}
-        <div className={`flex items-center justify-between p-5 border rounded-2xl text-xs backdrop-blur-md transition-all duration-500 ${
-          theme === 'dark' ? 'bg-white/[0.03] border-white/5' : 'bg-white/40 border-neutral-200/40 shadow-xs'
+        <div className={`flex items-center justify-between p-2.5 border rounded-[8px] text-xs transition-all duration-180 ${
+          theme === 'dark' ? 'bg-[#191919] border-[#303030]' : 'bg-[#F1F4EF] border-[#E1E5DF]'
         }`}>
           <div className="flex items-center gap-2">
-            <EyeOff className={`w-4 h-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+            <EyeOff className={`w-3.5 h-3.5 ${theme === 'dark' ? 'text-[#A3A3A3]' : 'text-[#626862]'}`} />
             <div>
-              <p className={`font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-neutral-800'}`}>Submit Anonymously</p>
-              <p className="text-[9px] text-gray-500">Your real name won't be visible to others</p>
+              <p className={`font-semibold font-ui text-xs ${theme === 'dark' ? 'text-gray-200' : 'text-[#171B18]'}`}>Submit Anonymously</p>
+              <p className="text-[11px] text-[#A3A3A3] font-ui">Your real name won't be visible to others</p>
             </div>
           </div>
           <button
             type="button"
             onClick={() => setIsAnonymous(!isAnonymous)}
-            className={`w-10 h-6 rounded-full p-0.5 transition-colors cursor-pointer ${
+            className={`w-7 h-4 rounded-full p-0.5 border border-[#303030] transition-colors cursor-pointer ${
               isAnonymous 
-                ? theme === 'dark' ? 'bg-[#39FF14]' : 'bg-[#2ECC0F]' 
-                : theme === 'dark' ? 'bg-neutral-800' : 'bg-gray-300'
+                ? "bg-[#B7FF38]" 
+                : theme === 'dark' ? "bg-[#111111]" : "bg-gray-300"
             }`}
             id="anonymous-report-toggle"
           >
-            <div className="w-5 h-5 rounded-full bg-white transition-transform duration-200" style={{ transform: isAnonymous ? "translateX(16px)" : "translateX(0px)" }} />
+            <div className="w-3 h-3 rounded-full bg-black transition-transform duration-180" style={{ transform: isAnonymous ? "translateX(12px)" : "translateX(0px)" }} />
           </button>
         </div>
 
         {/* Errors & Success Feedback */}
         {errorMessage && (
-          <div className={`p-2.5 border rounded-lg text-xs flex items-center gap-2 ${
+          <div className={`p-2 border rounded-[8px] text-xs flex items-center gap-2 ${
             theme === 'dark' 
               ? 'bg-red-600/10 border-red-500/30 text-red-400' 
               : 'bg-red-50 border-red-200 text-red-600 font-medium'
           }`}>
-            <AlertCircle className="w-4 h-4 shrink-0" />
+            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
             <span>{errorMessage}</span>
           </div>
         )}
 
         {successMsg && (
-          <div className={`p-2.5 border rounded-lg text-xs flex items-center gap-2 ${
+          <div className={`p-2 border rounded-[8px] text-xs flex items-center gap-2 ${
             theme === 'dark' 
-              ? 'bg-green-600/10 border-green-500/30 text-green-400' 
-              : 'bg-green-50 border-green-200 text-green-600 font-medium'
+              ? 'bg-emerald-600/10 border-emerald-500/30 text-[#B7FF38]' 
+              : 'bg-emerald-50 border-emerald-200 text-[#537A00] font-medium'
           }`}>
-            <Check className="w-4 h-4 shrink-0" />
+            <Check className="w-3.5 h-3.5 shrink-0" />
             <span>{successMsg}</span>
           </div>
         )}
 
         {/* Submit Actions */}
-        <div className="flex gap-2.5 pt-2">
+        <div className="flex gap-2 pt-1">
           <button
             type="button"
             onClick={onCancel}
             disabled={isPending}
-            className={`flex-1 py-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+            className={`flex-1 py-1.5 min-h-[36px] rounded-[8px] text-xs font-ui font-semibold transition-all cursor-pointer border ${
               theme === 'dark' 
-                ? 'bg-[#141414] hover:bg-[#1a1a1a] text-gray-300 hover:text-white' 
-                : 'bg-gray-100 hover:bg-gray-200/80 text-gray-650 hover:text-black border border-gray-200'
+                ? 'bg-[#191919] hover:bg-[#222222] text-[#A3A3A3] hover:text-white border-[#303030]' 
+                : 'bg-[#F1F4EF] hover:bg-gray-200 text-[#626862] hover:text-[#171B18] border-[#E1E5DF]'
             }`}
             id="report-cancel-btn"
           >
@@ -836,22 +829,16 @@ export default function ReportForm({
           <button
             type="submit"
             disabled={isPending}
-            className={`flex-[2] py-2.5 rounded-lg text-xs font-black transition-all flex items-center justify-center gap-1.5 shadow-lg cursor-pointer ${
-              theme === 'dark' 
-                ? 'bg-[#39FF14] hover:bg-[#39FF14]/90 text-black shadow-brand/25' 
-                : 'bg-[#2ECC0F] hover:bg-[#2ECC0F]/90 text-white shadow-emerald-500/10'
-            }`}
+            className="flex-2 py-1.5 min-h-[36px] rounded-[8px] text-xs font-ui font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-md cursor-pointer border border-transparent bg-[#B7FF38] hover:bg-[#A6ED27] active:bg-[#94D91F] text-black"
             id="report-submit-btn"
           >
             {isPending ? (
               <>
-                <Loader2 className={`w-4 h-4 animate-spin ${theme === 'dark' ? 'text-black' : 'text-white'}`} />
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-black" />
                 <span>{useAI ? "Gemini Auto-Detecting..." : "Logging to Radar..."}</span>
               </>
             ) : (
-              <>
-                <span>POST TO GROUNDZERO</span>
-              </>
+              <span>POST TO GROUNDZERO</span>
             )}
           </button>
         </div>

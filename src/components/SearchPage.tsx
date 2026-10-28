@@ -145,69 +145,70 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
     }
   };
 
-  const activeGreen = theme === "dark" ? "#39FF14" : "#2ECC0F";
+  const activeGreen = theme === "dark" ? "#B7FF38" : "#537A00";
 
   return (
-    <div className="max-w-lg mx-auto flex flex-col gap-5 pb-16" id="search-page-container">
+    <div className="max-w-xl mx-auto flex flex-col gap-2.5 pb-14 font-ui" id="search-page-container">
       {/* Title Header */}
-      <div className="flex items-center gap-2 mt-2">
-        <div className="p-2 border border-transparent bg-transparent shadow-none">
-          <Search className="w-6 h-6 text-brand" />
+      <div className="flex items-center gap-2 mt-0.5">
+        <div className={`w-7 h-7 rounded-[8px] flex items-center justify-center shrink-0 border ${
+          theme === 'dark' ? 'bg-[#B7FF38]/15 border-[#B7FF38]/30 text-[#B7FF38]' : 'bg-[#537A00]/15 border-[#537A00]/30 text-[#537A00]'
+        }`}>
+          <Search className="w-3.5 h-3.5" />
         </div>
         <div>
-          <h1 className={`text-2xl font-black uppercase tracking-tight leading-none ${
-            theme === 'dark' ? 'text-white' : 'text-neutral-900'
+          <h1 className={`text-base font-display font-black tracking-tight leading-tight uppercase ${
+            theme === 'dark' ? 'text-white' : 'text-[#171B18]'
           }`}>Explore Grid</h1>
-          <p className={`text-[10px] font-mono uppercase ${
-            theme === 'dark' ? 'text-gray-500' : 'text-gray-600'
-          }`}>DISCOVER TRENDING CIVIC ACTIONS & REPORTINGS</p>
+          <p className="text-[11px] text-[#A3A3A3] font-meta">Discover live reports, civic alerts, and community updates</p>
         </div>
       </div>
 
       {/* Search Input Bar */}
       <div className="relative">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#A3A3A3]" />
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search reports, locations, reporters..."
-          className={`w-full pl-10 pr-4 py-3 rounded-2xl text-xs font-mono tracking-tight outline-none transition-all border backdrop-blur-[20px] ${
+          placeholder="Search reports, areas, or categories..."
+          className={`w-full pl-9 pr-14 py-1.5 min-h-[36px] rounded-[8px] text-xs font-ui outline-none transition-all border ${
             theme === 'dark'
-              ? 'bg-white/[0.05] border-white/10 text-white placeholder-gray-500 focus:border-white/20 focus:bg-white/[0.08]'
-              : 'bg-white/60 border-neutral-200/50 text-neutral-900 placeholder-gray-400 focus:border-neutral-400'
+              ? 'bg-[#111111] border-[#303030] text-white placeholder-gray-500 focus:border-[#B7FF38]/50'
+              : 'bg-white border-[#E1E5DF] text-[#171B18] placeholder-gray-400 focus:border-[#537A00]/50 shadow-xs'
           }`}
           id="search-input-field"
         />
         {query && (
           <button
+            type="button"
             onClick={() => setQuery("")}
-            className={`absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold ${
-              theme === 'dark' ? 'text-gray-500 hover:text-white' : 'text-gray-400 hover:text-black'
+            className={`absolute right-2 top-1/2 -translate-y-1/2 text-[11px] font-bold font-meta px-2 py-0.5 min-h-[26px] rounded-[6px] border cursor-pointer ${
+              theme === 'dark' ? 'text-[#A3A3A3] hover:text-white border-[#303030] bg-[#191919]' : 'text-[#626862] hover:text-[#171B18] border-[#E1E5DF] bg-[#F1F4EF]'
             }`}
           >
-            CLEAR
+            Clear
           </button>
         )}
       </div>
 
       {/* Trending Category Pills */}
-      <div className="flex flex-col gap-1.5">
-        <span className="text-[9px] font-mono font-bold text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
-          <TrendingUp className="w-3 h-3 text-brand" />
+      <div className="flex flex-col gap-1">
+        <span className={`text-[11px] font-meta font-bold text-[#A3A3A3] uppercase tracking-wider flex items-center gap-1.5`}>
+          <TrendingUp className={`w-3 h-3 ${theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'}`} />
           Trending Sectors
         </span>
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none scroll-smooth">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-none scroll-smooth">
           <button
             onClick={() => setActiveCategory(null)}
-            className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 border transition-all ${
+            className={`px-2.5 py-1 min-h-[30px] rounded-[8px] text-xs font-bold font-meta uppercase tracking-wider shrink-0 border transition-all ${
               !activeCategory
                 ? theme === 'dark'
-                  ? 'bg-[#39FF14] border-[#39FF14] text-black animate-pulse'
-                  : 'bg-[#2ECC0F] border-[#2ECC0F] text-white shadow-xs'
+                  ? 'bg-[#B7FF38] border-[#B7FF38] text-black'
+                  : 'bg-[#537A00] border-[#537A00] text-white shadow-xs'
                 : theme === 'dark'
-                  ? 'bg-black border-neutral-900 text-gray-400 hover:text-white hover:border-neutral-700'
-                  : 'bg-white border-gray-200 text-gray-500 hover:text-neutral-900 hover:border-gray-400'
+                  ? 'bg-[#191919] border-[#303030] text-[#A3A3A3] hover:text-white hover:border-[#B7FF38]/40'
+                  : 'bg-white border-[#E1E5DF] text-[#626862] hover:text-[#171B18] hover:border-[#537A00]/40'
             }`}
           >
             All Sectors
@@ -219,12 +220,14 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
               <button
                 key={cat}
                 onClick={() => handleCategoryPillClick(cat)}
-                className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 border transition-all flex items-center gap-1 ${
+                className={`px-2.5 py-1 min-h-[30px] rounded-[8px] text-xs font-bold font-meta uppercase tracking-wider shrink-0 border transition-all flex items-center gap-1 ${
                   isActive
                     ? theme === 'dark'
-                      ? 'bg-[#39FF14] border-[#39FF14] text-black'
-                      : 'bg-[#2ECC0F] border-[#2ECC0F] text-white shadow-xs'
-                    : `${style.bg} ${style.border} ${style.text} hover:opacity-80`
+                      ? 'bg-[#B7FF38] border-[#B7FF38] text-black'
+                      : 'bg-[#537A00] border-[#537A00] text-white shadow-xs'
+                    : theme === 'dark'
+                      ? 'bg-[#191919] border-[#303030] text-[#A3A3A3] hover:text-white'
+                      : 'bg-white border-[#E1E5DF] text-[#626862] hover:text-[#171B18]'
                 }`}
               >
                 {React.createElement(style.icon, { className: "w-3 h-3 shrink-0" })}
@@ -237,10 +240,10 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
 
       {/* If no search query and no category filter, show 'Trending Near You' Section */}
       {!query && !activeCategory && (
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-1.5">
           <div className="flex items-center justify-between">
-            <span className="text-[9px] font-mono font-bold text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
-              <Sparkles className="w-3 h-3 text-brand" />
+            <span className={`text-[11px] font-meta font-bold text-[#A3A3A3] uppercase tracking-wider flex items-center gap-1.5`}>
+              <Sparkles className={`w-3 h-3 ${theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'}`} />
               Trending Near You
             </span>
           </div>
@@ -252,13 +255,13 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
                 <div
                   key={issue.id}
                   onClick={() => onSelectIssue(issue)}
-                  className={`p-5 rounded-2xl border cursor-pointer transition-all flex items-start gap-5 backdrop-blur-[20px] group ${
+                  className={`p-2.5 rounded-[10px] border cursor-pointer transition-all flex items-start gap-2.5 group ${
                     theme === 'dark' 
-                      ? 'bg-white/[0.03] border-white/5 hover:bg-white/[0.06] hover:border-white/10 text-white shadow-md' 
-                      : 'bg-white/40 border-neutral-200/40 hover:bg-white/60 hover:border-neutral-300 text-neutral-900 shadow-xs'
+                      ? 'bg-[#111111] border-[#303030] hover:border-[#B7FF38]/40 text-white shadow-sm' 
+                      : 'bg-white border-[#E1E5DF] hover:border-[#537A00]/40 text-[#171B18] shadow-xs'
                   }`}
                 >
-                  <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-neutral-800/20">
+                  <div className={`w-12 h-12 rounded-[6px] overflow-hidden shrink-0 border ${theme === 'dark' ? 'border-[#303030]' : 'border-[#E1E5DF]'}`}>
                     <img
                       src={getIssueImage(issue)}
                       alt={issue.title}
@@ -268,40 +271,44 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className={`inline-flex items-center gap-1 px-1.5 py-0.2 rounded-md text-[8px] font-bold uppercase ${catInfo.bg} ${catInfo.text} ${catInfo.border} border`}>
+                      <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-[5px] text-[10px] font-meta font-bold uppercase ${
+                        theme === 'dark' ? 'bg-[#191919] border border-[#303030] text-[#A3A3A3]' : 'bg-[#F1F4EF] border border-[#E1E5DF] text-[#626862]'
+                      }`}>
                         {React.createElement(catInfo.icon, { className: "w-2.5 h-2.5 shrink-0" })}
                         <span>{catInfo.label}</span>
                       </span>
-                      <span className="text-[8px] text-gray-500 font-mono uppercase flex items-center gap-0.5">
-                        <MapPin className="w-2 h-2 text-brand" />
+                      <span className={`text-[10px] font-meta uppercase flex items-center gap-0.5 ${theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'}`}>
+                        <MapPin className="w-2.5 h-2.5" />
                         {issue.area}
                       </span>
                     </div>
-                    <h3 className={`text-xs font-bold mt-1 line-clamp-1 group-hover:text-brand transition-colors ${
-                      theme === 'dark' ? 'text-white' : 'text-neutral-900'
+                    <h3 className={`text-xs font-bold mt-1 line-clamp-1 transition-colors ${
+                      theme === 'dark' ? 'text-white group-hover:text-[#B7FF38]' : 'text-[#171B18] group-hover:text-[#537A00]'
                     }`}>
                       {issue.title}
                     </h3>
-                    <p className={`text-[10px] line-clamp-1 mt-0.5 leading-snug ${
+                    <p className={`text-[11px] line-clamp-1 mt-0.5 leading-snug ${
                       theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
                     }`}>
                       {issue.description}
                     </p>
-                    <div className="flex items-center gap-2 text-[8px] font-mono text-gray-500 mt-1.5">
-                      <span className="flex items-center gap-0.5"><User className="w-2.5 h-2.5 text-gray-400" /> {issue.isAnonymous ? "Anonymous" : issue.reporterName}</span>
+                    <div className="flex items-center gap-2 text-xs font-meta text-[#A3A3A3] mt-2">
+                      <span className="flex items-center gap-1"><User className="w-3 h-3 text-gray-400" /> {issue.isAnonymous ? "Anonymous" : issue.reporterName}</span>
                       <span>•</span>
-                      <span className="text-brand flex items-center gap-0.5"><Check className="w-2.5 h-2.5 text-emerald-500" /> {issue.reactions?.verified || 0} Vouches</span>
+                      <span className={`flex items-center gap-1 font-bold ${theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'}`}>
+                        <Check className="w-3 h-3" /> {issue.reactions?.verified || 0} Vouches
+                      </span>
                       {issue.seeThisTooCount ? (
                         <>
                           <span>•</span>
-                          <span className="text-pink-400 flex items-center gap-0.5">
-                            <Eye className="w-2 h-2" /> {issue.seeThisTooCount} see this
+                          <span className="text-pink-400 flex items-center gap-1 font-bold">
+                            <Eye className="w-3 h-3" /> {issue.seeThisTooCount} see this
                           </span>
                         </>
                       ) : null}
                     </div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-white self-center transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-[#A3A3A3] group-hover:text-white self-center transition-colors" />
                 </div>
               );
             })}
@@ -310,20 +317,20 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
       )}
 
       {/* Main Explore Photo Grid (2 Columns Instagram Layout) */}
-      <div className="flex flex-col gap-2.5">
-        <span className="text-[9px] font-mono font-bold text-gray-500 uppercase tracking-widest">
-          {query || activeCategory ? `Filtered Action Grid (${filteredIssues.length})` : "✨ Explore Grid"}
+      <div className="flex flex-col gap-2">
+        <span className="text-xs font-meta font-bold text-[#A3A3A3] uppercase tracking-wider">
+          {query || activeCategory ? `Filtered Action Grid (${filteredIssues.length})` : "Explore Grid"}
         </span>
 
         {filteredIssues.length === 0 ? (
-          <div className={`text-center py-12 border rounded-2xl flex flex-col items-center gap-2 ${
-            theme === 'dark' ? 'bg-black border-neutral-900' : 'bg-white border-gray-200 shadow-xs'
+          <div className={`text-center py-8 border rounded-[10px] flex flex-col items-center gap-2 ${
+            theme === 'dark' ? 'bg-[#191919] border-[#303030]' : 'bg-[#F1F4EF] border-[#E1E5DF] shadow-xs'
           }`}>
-            <Search className="w-6 h-6 text-gray-700 animate-pulse" />
-            <p className="text-xs text-gray-500 font-mono italic">No matches found. Try widening your criteria.</p>
+            <Search className="w-6 h-6 text-[#A3A3A3] animate-pulse" />
+            <p className="text-xs text-[#A3A3A3] font-meta">No matches found. Try widening your criteria.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-2" id="search-explore-grid">
+          <div className="grid grid-cols-2 gap-2.5" id="search-explore-grid">
             {filteredIssues.map((issue, idx) => {
               const catInfo = CATEGORY_MAP[issue.category] || CATEGORY_MAP["Other"];
               const imageSrc = getIssueImage(issue);
@@ -331,8 +338,8 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
                 <motion.div
                   key={issue.id}
                   onClick={() => onSelectIssue(issue)}
-                  className={`aspect-square relative rounded-xl overflow-hidden border group cursor-pointer ${
-                    theme === 'dark' ? 'border-neutral-900 bg-black' : 'border-gray-200 bg-white shadow-xs'
+                  className={`aspect-square relative rounded-[14px] overflow-hidden border group cursor-pointer ${
+                    theme === 'dark' ? 'border-[#303030] bg-[#111111]' : 'border-[#E1E5DF] bg-white shadow-xs'
                   }`}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -341,44 +348,48 @@ export default function SearchPage({ issues, currentUserId, onSelectIssue, theme
                   <img
                     src={imageSrc}
                     alt={issue.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-all duration-500 ease-out"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500 ease-out"
                     referrerPolicy="no-referrer"
                   />
                   {/* Glassmorphic/translucent overlay at the bottom always visible */}
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent p-2.5 flex flex-col justify-end transition-opacity duration-300">
-                    <span className="text-[8px] font-mono font-black text-brand uppercase tracking-wider mb-0.5 flex items-center gap-1 truncate">
-                      {React.createElement(catInfo.icon, { className: "w-2.5 h-2.5 text-brand shrink-0" })}
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/85 to-transparent p-3 flex flex-col justify-end transition-opacity duration-300">
+                    <span className={`text-xs font-meta font-black uppercase tracking-wider mb-1 flex items-center gap-1 truncate ${
+                      theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#B7FF38]'
+                    }`}>
+                      {React.createElement(catInfo.icon, { className: "w-3 h-3 shrink-0" })}
                       <span>{issue.category}</span>
                     </span>
-                    <h4 className="text-[10px] font-black text-white leading-tight line-clamp-1">
+                    <h4 className="text-xs sm:text-sm font-bold text-white leading-snug line-clamp-1">
                       {issue.title}
                     </h4>
-                    <span className="text-[8px] text-gray-400 font-mono block mt-0.5 truncate">
+                    <span className="text-xs text-[#A3A3A3] font-meta block mt-0.5 truncate">
                       📍 {issue.area}
                     </span>
                   </div>
 
                   {/* Instagram-style Hover Overlay (shows engagement: vouches, seeThisToo count) */}
-                  <div className="absolute inset-0 bg-black/85 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-3 text-center">
-                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider mb-2 border ${catInfo.bg} ${catInfo.text} ${catInfo.border}`}>
-                      {React.createElement(catInfo.icon, { className: "w-2.5 h-2.5 shrink-0" })}
+                  <div className="absolute inset-0 bg-black/90 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center p-3 text-center border-2 border-[#B7FF38] rounded-[14px]">
+                    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-[8px] text-xs font-meta font-bold uppercase tracking-wider mb-2 border ${
+                      theme === 'dark' ? 'bg-[#191919] border-[#303030] text-[#A3A3A3]' : 'bg-[#F1F4EF] border-[#E1E5DF] text-[#626862]'
+                    }`}>
+                      {React.createElement(catInfo.icon, { className: "w-3 h-3 shrink-0" })}
                       <span>{catInfo.label}</span>
                     </span>
-                    <p className="text-[11px] font-extrabold text-white line-clamp-2 leading-snug px-1 mb-3">
+                    <p className="text-xs font-bold text-white line-clamp-2 leading-relaxed px-1 mb-3">
                       "{issue.title}"
                     </p>
                     <div className="flex items-center gap-3 text-xs">
-                      <span className="text-brand font-black flex items-center gap-1 text-[11px]">
-                        <Check className="w-3.5 h-3.5 text-brand shrink-0" /> {issue.reactions?.verified || 0}
+                      <span className="text-[#B7FF38] font-meta font-black flex items-center gap-1 text-xs">
+                        <Check className="w-3.5 h-3.5 text-[#B7FF38] shrink-0" /> {issue.reactions?.verified || 0}
                       </span>
                       {issue.seeThisTooCount ? (
-                        <span className="text-pink-400 font-black flex items-center gap-1 text-[11px]">
-                          <Eye className="w-3.5 h-3.5" /> {issue.seeThisTooCount} <span className="text-[9px] font-mono text-gray-400 font-normal">see too</span>
+                        <span className="text-pink-400 font-meta font-black flex items-center gap-1 text-xs">
+                          <Eye className="w-3.5 h-3.5" /> {issue.seeThisTooCount} <span className="text-xs text-[#A3A3A3] font-normal">see too</span>
                         </span>
                       ) : null}
                     </div>
-                    <span className="text-[8px] text-gray-500 font-mono mt-3 uppercase tracking-widest bg-white/5 px-2 py-0.5 rounded">
-                      TAP TO VIEW
+                    <span className="text-xs text-black font-meta font-bold mt-3 uppercase tracking-wider bg-[#B7FF38] px-3 py-1.5 min-h-[32px] inline-flex items-center rounded-[8px]">
+                      VIEW REPORT
                     </span>
                   </div>
                 </motion.div>

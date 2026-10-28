@@ -155,52 +155,52 @@ export default function SocialFeed({
   );
 
   return (
-    <div className={`w-full h-full relative flex flex-col ${theme === 'dark' ? 'bg-black text-white' : 'bg-[#FAFAFA] text-neutral-900'}`} id="social-feed-tiktok-view">
+    <div className={`w-full h-full relative flex flex-col font-ui ${theme === 'dark' ? 'bg-black text-white' : 'bg-[#FAFCFA] text-[#171B18]'}`} id="social-feed-tiktok-view">
       
       {/* Top Bar Overlay */}
-      <div className="absolute top-0 inset-x-0 z-20 px-4 py-3.5 flex items-center justify-between bg-gradient-to-b from-black/90 via-black/40 to-transparent pointer-events-none">
+      <div className="absolute top-0 inset-x-0 z-20 px-4 py-3 flex items-center justify-between bg-gradient-to-b from-black/90 via-black/40 to-transparent pointer-events-none">
         <div className="flex items-center gap-2 pointer-events-auto">
-          <Logo theme="dark" className="w-7 h-7 rounded-lg" />
+          <Logo theme="dark" className="w-7 h-7 rounded-[8px]" />
           <div className="flex flex-col justify-center">
-            <div className="flex items-center gap-1.5">
-              <h1 className="text-xs font-black tracking-tight uppercase text-white leading-none">
-                GROUND<span className={theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}>ZERO</span>
+            <div className="flex items-center gap-2">
+              <h1 className="text-sm font-display font-black tracking-wider uppercase text-white leading-none">
+                GROUND<span className={theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'}>ZERO</span>
               </h1>
-              <span className={`flex items-center gap-0.5 px-1 py-0.2 rounded border text-[7px] font-black tracking-wider uppercase ${
-                theme === 'dark' ? 'bg-emerald-950/80 border-[#39FF14]/30 text-[#39FF14]' : 'bg-emerald-50/80 border-[#2ECC0F]/30 text-[#2ECC0F]'
+              <span className={`flex items-center gap-1.5 px-2 py-0.5 rounded-[6px] border text-[10px] font-meta font-bold tracking-wider uppercase ${
+                theme === 'dark' ? 'bg-[#B7FF38]/15 border-[#B7FF38]/40 text-[#B7FF38]' : 'bg-[#537A00]/15 border-[#537A00]/40 text-[#537A00]'
               }`}>
-                <span className={`w-1 h-1 rounded-full animate-ping ${theme === 'dark' ? 'bg-[#39FF14]' : 'bg-[#2ECC0F]'}`} />
+                <span className={`w-1.5 h-1.5 rounded-full animate-ping ${theme === 'dark' ? 'bg-[#B7FF38]' : 'bg-[#537A00]'}`} />
                 <span className="animate-pulse">LIVE</span>
               </span>
             </div>
-            <p className="text-[7px] text-gray-400 font-mono leading-none uppercase mt-0.5 tracking-wider">
+            <p className="text-xs text-[#A3A3A3] font-meta leading-none uppercase mt-1 tracking-wider">
               CIVIC TEA & BUZZ
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 pointer-events-auto">
+        <div className="flex items-center gap-2 pointer-events-auto">
           {/* Theme Toggle Button */}
           <button
             onClick={onToggleTheme}
-            className={`p-1.5 rounded-lg border transition-all flex items-center justify-center cursor-pointer ${
+            className={`p-2 rounded-[10px] border transition-all flex items-center justify-center cursor-pointer min-h-[36px] min-w-[36px] ${
               theme === 'dark'
-                ? 'bg-black/40 hover:bg-black/60 border-gray-800/40 text-gray-400 hover:text-white'
-                : 'bg-white/60 hover:bg-white/80 border-gray-300/40 text-gray-650 hover:text-black'
+                ? 'bg-[#111111]/80 hover:bg-[#191919] border-[#303030] text-[#A3A3A3] hover:text-white'
+                : 'bg-white/80 hover:bg-[#F1F4EF] border-[#E1E5DF] text-[#626862] hover:text-[#171B18]'
             }`}
             title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
             id="social-feed-theme-toggle"
           >
-            {theme === 'dark' ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
 
           {/* Action Button Link to Search Tab */}
           <button
             onClick={onNavigateToSearch}
-            className={`p-1.5 border rounded-lg transition-all flex items-center gap-1 font-mono text-[9px] uppercase font-bold cursor-pointer ${
+            className={`py-2 px-3 border rounded-[10px] min-h-[36px] transition-all flex items-center gap-1.5 font-meta text-xs uppercase font-bold cursor-pointer ${
               theme === 'dark'
-                ? 'bg-black/40 hover:bg-black/60 border-gray-800/40 text-gray-300 hover:text-brand'
-                : 'bg-white/60 hover:bg-white/80 border-gray-300/40 text-gray-700 hover:text-[#2ECC0F]'
+                ? 'bg-[#111111]/80 hover:bg-[#191919] border-[#303030] text-[#A3A3A3] hover:text-[#B7FF38]'
+                : 'bg-white/80 hover:bg-[#F1F4EF] border-[#E1E5DF] text-[#626862] hover:text-[#537A00]'
             }`}
             id="social-feed-top-search-btn"
           >
@@ -216,14 +216,14 @@ export default function SocialFeed({
           <div className={`w-full h-full flex flex-col items-center justify-center p-8 text-center gap-3 ${
             theme === 'dark' ? 'bg-[#0A0A0A] text-white' : 'bg-white text-neutral-900'
           }`}>
-            <div className={`p-4 rounded-full border ${
-              theme === 'dark' ? 'bg-brand/10 border-brand/20 text-brand' : 'bg-[#2ECC0F]/10 border-[#2ECC0F]/20 text-[#2ECC0F]'
+            <div className={`p-4 rounded-[14px] border ${
+              theme === 'dark' ? 'bg-[#B7FF38]/10 border-[#B7FF38]/20 text-[#B7FF38]' : 'bg-[#537A00]/10 border-[#537A00]/20 text-[#537A00]'
             }`}>
               <Sparkles className="w-8 h-8 animate-pulse" />
             </div>
             <div>
-              <p className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>No bulletins or neighborhood drama spilled yet.</p>
-              <p className={`text-[9px] font-mono mt-1 uppercase font-bold ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`}>TAP THE '+' TAB AT THE BOTTOM TO POST ONE!</p>
+              <p className={`text-sm font-mono ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>No bulletins or neighborhood drama spilled yet.</p>
+              <p className={`text-xs font-mono mt-1.5 uppercase font-bold tracking-wider ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>TAP THE '+' TAB AT THE BOTTOM TO POST ONE!</p>
             </div>
           </div>
         ) : (
@@ -272,24 +272,24 @@ export default function SocialFeed({
                 {/* 2. Overlaid Bottom Content (Details & Description Teaser) */}
                 <div className="absolute bottom-6 left-4 right-20 z-10 flex flex-col gap-1.5 pointer-events-auto text-left max-h-[25%] justify-end">
                   {/* Category and Location Badges */}
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase border flex items-center gap-1 ${
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className={`px-2.5 py-1 rounded-[6px] text-xs font-semibold uppercase border flex items-center gap-1.5 ${
                       isCardLight 
                         ? 'bg-neutral-100 border-neutral-200 text-neutral-800 shadow-xs' 
                         : `bg-black/60 ${catConfig.bg} ${catConfig.text} backdrop-blur-sm`
                     }`}>
-                      {React.createElement(catConfig.icon, { className: "w-2.5 h-2.5 shrink-0" })}
+                      {React.createElement(catConfig.icon, { className: "w-3.5 h-3.5 shrink-0" })}
                       <span>{catConfig.label}</span>
                     </span>
-                    <span className={`text-[8px] font-mono uppercase tracking-wider flex items-center gap-1 px-2 py-0.5 rounded-full border ${
+                    <span className={`text-xs font-meta uppercase tracking-wider flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] border ${
                       isCardLight 
                         ? 'bg-white/90 border-gray-200/80 text-gray-700 shadow-xs' 
                         : 'bg-black/60 border-gray-800/40 text-gray-300 backdrop-blur-sm'
                     }`}>
-                      <MapPin className="w-2.5 h-2.5 shrink-0 text-red-500" />
+                      <MapPin className="w-3.5 h-3.5 shrink-0 text-red-500" />
                       <span>{issue.area}</span>
                     </span>
-                    <span className={`text-[8px] font-mono px-1.5 py-0.5 rounded ${
+                    <span className={`text-xs font-meta px-2 py-1 rounded-[6px] ${
                       isCardLight 
                         ? 'bg-gray-100/80 text-gray-600 border border-gray-200/50' 
                         : 'bg-black/40 text-gray-400 backdrop-blur-sm'
@@ -299,7 +299,7 @@ export default function SocialFeed({
                   </div>
 
                   {/* Main Headline (compact, maximum 2 lines) */}
-                  <h2 className={`text-sm md:text-base font-black leading-tight uppercase tracking-tight line-clamp-2 ${
+                  <h2 className={`text-base md:text-lg font-black leading-tight uppercase tracking-tight line-clamp-2 ${
                     isCardLight 
                       ? 'text-neutral-900' 
                       : 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]'
@@ -308,45 +308,45 @@ export default function SocialFeed({
                   </h2>
 
                   {/* Reporter & Verification info */}
-                  <div className={`flex items-center gap-1.5 flex-wrap ${
+                  <div className={`flex items-center gap-2 flex-wrap ${
                     isCardLight ? 'text-gray-700' : 'text-gray-300'
                   }`}>
-                    <User className="w-3 h-3 text-gray-400" />
-                    <span className={`text-[10px] font-bold tracking-tight ${
+                    <User className="w-3.5 h-3.5 text-gray-400" />
+                    <span className={`text-xs font-bold tracking-tight font-ui ${
                       isCardLight ? 'text-neutral-900' : 'text-white drop-shadow-sm'
                     }`}>
                       {issue.isAnonymous ? "Anonymous Citizen" : issue.reporterName}
                     </span>
-                    <span className={`px-1 py-0.2 font-mono rounded text-[8px] font-black tracking-tight uppercase border flex items-center gap-0.5 ${
+                    <span className={`px-2 py-0.5 font-meta rounded-[6px] text-xs font-bold tracking-tight uppercase border flex items-center gap-1 ${
                       isCardLight 
-                        ? 'bg-[#2ECC0F]/10 border-[#2ECC0F]/20 text-[#2ECC0F]' 
-                        : 'bg-brand/15 border border-brand/35 text-brand'
+                        ? 'bg-[#537A00]/10 border-[#537A00]/25 text-[#537A00]' 
+                        : 'bg-[#B7FF38]/15 border-[#B7FF38]/35 text-[#B7FF38]'
                     }`}>
-                      <ShieldCheck className="w-2.5 h-2.5 text-emerald-400" />
+                      <ShieldCheck className="w-3 h-3 text-[#B7FF38]" />
                       <span>{issue.reporterTrustScore} TS</span>
                     </span>
                     {issue.isSpam && (
-                      <span className={`flex items-center gap-1 px-1.5 py-0.2 rounded text-[8px] font-mono uppercase font-black border flex items-center gap-0.5 ${
+                      <span className={`flex items-center gap-1 px-2 py-0.5 rounded-[6px] text-xs font-meta uppercase font-bold border ${
                         isCardLight 
                           ? 'bg-red-50 border-red-200 text-red-600' 
                           : 'bg-red-950/80 border border-red-500/40 text-red-400'
                       }`}>
-                        <AlertTriangle className="w-2.5 h-2.5 text-red-400" />
+                        <AlertTriangle className="w-3 h-3 text-red-400" />
                         <span>SPAM</span>
                       </span>
                     )}
                   </div>
 
-                  {/* Gentle interaction instruction */}
-                  <div className={`text-[8px] font-mono uppercase tracking-widest flex items-center gap-1 animate-pulse ${
-                    isCardLight ? 'text-neutral-500' : 'text-brand/80 drop-shadow-sm'
+                  {/* Interaction instruction */}
+                  <div className={`text-xs font-meta uppercase tracking-wider font-bold flex items-center gap-1.5 animate-pulse ${
+                    isCardLight ? 'text-[#537A00]' : 'text-[#B7FF38] drop-shadow-sm'
                   }`}>
                     <span>TAP FOR DETAILED BREAKDOWN</span>
                   </div>
                 </div>
 
                 {/* 3. Overlaid TikTok-style vertical icon column on the right side (Heart, Eye/SeeToo, MessageCircle, Share) */}
-                <div className="absolute bottom-8 right-3.5 z-10 flex flex-col items-center gap-4 pointer-events-auto">
+                <div className="absolute bottom-6 right-3 z-10 flex flex-col items-center gap-2.5 pointer-events-auto">
                   
                   {/* HEART (LIKE) */}
                   <button
@@ -370,22 +370,22 @@ export default function SocialFeed({
                     title="Like report"
                     id={`tiktok-like-${issue.id}`}
                   >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
+                    <div className={`w-9 h-9 rounded-[8px] flex items-center justify-center border transition-all ${
                       issue.likedUsers?.includes(currentUserId)
                         ? "bg-red-500 border-red-500 text-white shadow-[0_0_12px_rgba(239,68,68,0.55)]"
                         : isCardLight
-                          ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
-                          : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
+                          ? "bg-white/90 border-[#E1E5DF] text-[#171B18] hover:border-[#537A00]/50 shadow-xs"
+                          : "bg-[#111111]/80 border-[#303030] text-white hover:border-[#B7FF38]/50"
                     }`}>
-                      <Heart className={`w-5 h-5 ${issue.likedUsers?.includes(currentUserId) ? "fill-white" : ""}`} />
+                      <Heart className={`w-4 h-4 ${issue.likedUsers?.includes(currentUserId) ? "fill-white" : ""}`} />
                     </div>
-                    <span className={`text-[9px] font-mono font-black ${
-                      isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
+                    <span className={`text-[11px] font-meta font-bold ${
+                      isCardLight ? 'text-[#171B18]' : 'text-white drop-shadow'
                     }`}>
                       {issue.likesCount || 0}
                     </span>
-                    <span className={`text-[7px] font-mono font-extrabold uppercase tracking-tighter leading-none text-center ${
-                      isCardLight ? 'text-gray-500' : 'text-gray-400'
+                    <span className={`text-[9px] font-meta font-bold uppercase tracking-wider leading-none text-center ${
+                      isCardLight ? 'text-[#626862]' : 'text-[#A3A3A3]'
                     }`}>
                       LIKE
                     </span>
@@ -401,24 +401,24 @@ export default function SocialFeed({
                     title="I See This Too"
                     id={`tiktok-see-too-${issue.id}`}
                   >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
+                    <div className={`w-9 h-9 rounded-[8px] flex items-center justify-center border transition-all ${
                       issue.seeThisTooUsers?.includes(currentUserId)
                         ? isCardLight
-                          ? "bg-[#2ECC0F] border-[#2ECC0F] text-white shadow-md"
-                          : "bg-[#39FF14] border-[#39FF14] text-black shadow-[0_0_12px_rgba(57,255,20,0.55)]"
+                          ? "bg-[#537A00] border-[#537A00] text-white shadow-md"
+                          : "bg-[#B7FF38] border-[#B7FF38] text-black shadow-[0_0_12px_rgba(183,255,56,0.55)]"
                         : isCardLight
-                          ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
-                          : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
+                          ? "bg-white/90 border-[#E1E5DF] text-[#171B18] hover:border-[#537A00]/50 shadow-xs"
+                          : "bg-[#111111]/80 border-[#303030] text-white hover:border-[#B7FF38]/50"
                     }`}>
-                      <Eye className="w-5 h-5" />
+                      <Eye className="w-4 h-4" />
                     </div>
-                    <span className={`text-[9px] font-mono font-black ${
-                      isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
+                    <span className={`text-[11px] font-meta font-bold ${
+                      isCardLight ? 'text-[#171B18]' : 'text-white drop-shadow'
                     }`}>
                       {issue.seeThisTooCount || 0}
                     </span>
-                    <span className={`text-[7px] font-mono font-extrabold uppercase tracking-tighter leading-none text-center ${
-                      isCardLight ? 'text-gray-500' : 'text-gray-400'
+                    <span className={`text-[9px] font-meta font-bold uppercase tracking-wider leading-none text-center ${
+                      isCardLight ? 'text-[#626862]' : 'text-[#A3A3A3]'
                     }`}>
                       SEE TOO
                     </span>
@@ -434,26 +434,26 @@ export default function SocialFeed({
                     title="View Comments"
                     id={`tiktok-comment-${issue.id}`}
                   >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
+                    <div className={`w-9 h-9 rounded-[8px] flex items-center justify-center border transition-all ${
                       activeCommentsPost?.id === issue.id
                         ? isCardLight
-                          ? "bg-blue-500 border-blue-500 text-white shadow-md"
+                          ? "bg-blue-600 border-blue-600 text-white shadow-md"
                           : "bg-blue-600 border-blue-600 text-white shadow-[0_0_12px_rgba(59,130,246,0.55)]"
                         : isCardLight
-                          ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
-                          : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
+                          ? "bg-white/90 border-[#E1E5DF] text-[#171B18] hover:border-[#537A00]/50 shadow-xs"
+                          : "bg-[#111111]/80 border-[#303030] text-white hover:border-[#B7FF38]/50"
                     }`}>
-                      <MessageCircle className="w-5 h-5" />
+                      <MessageCircle className="w-4 h-4" />
                     </div>
-                    <span className={`text-[9px] font-mono font-black ${
-                      isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
+                    <span className={`text-[11px] font-meta font-bold ${
+                      isCardLight ? 'text-[#171B18]' : 'text-white drop-shadow'
                     }`}>
                       {issue.comments?.length || 0}
                     </span>
-                    <span className={`text-[7px] font-mono font-extrabold uppercase tracking-tighter leading-none text-center ${
-                      isCardLight ? 'text-gray-500' : 'text-gray-400'
+                    <span className={`text-[9px] font-meta font-bold uppercase tracking-wider leading-none text-center ${
+                      isCardLight ? 'text-[#626862]' : 'text-[#A3A3A3]'
                     }`}>
-                      COMMENT
+                      TALK
                     </span>
                   </button>
 
@@ -469,15 +469,20 @@ export default function SocialFeed({
                     title="Share report"
                     id={`tiktok-share-${issue.id}`}
                   >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
+                    <div className={`w-9 h-9 rounded-[8px] flex items-center justify-center border transition-all ${
                       isCardLight
-                        ? "bg-white/90 border-gray-200 text-gray-700 hover:border-gray-300 shadow-xs"
-                        : "bg-black/60 border-neutral-800 text-white hover:border-neutral-700"
+                        ? "bg-white/90 border-[#E1E5DF] text-[#171B18] hover:border-[#537A00]/50 shadow-xs"
+                        : "bg-[#111111]/80 border-[#303030] text-white hover:border-[#B7FF38]/50"
                     }`}>
-                      <Share2 className="w-5 h-5" />
+                      <Share2 className="w-4 h-4" />
                     </div>
-                    <span className={`text-[9px] font-mono font-black ${
-                      isCardLight ? 'text-neutral-800' : 'text-white drop-shadow'
+                    <span className={`text-[11px] font-meta font-bold ${
+                      isCardLight ? 'text-[#171B18]' : 'text-white drop-shadow'
+                    }`}>
+                      SHARE
+                    </span>
+                    <span className={`text-[9px] font-meta font-bold uppercase tracking-wider leading-none text-center ${
+                      isCardLight ? 'text-[#626862]' : 'text-[#A3A3A3]'
                     }`}>
                       SHARE
                     </span>
@@ -509,28 +514,28 @@ export default function SocialFeed({
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 220 }}
-              className={`absolute inset-x-0 bottom-0 max-h-[80%] border-t rounded-t-2xl z-40 px-6 py-8 flex flex-col gap-6 overflow-y-auto pointer-events-auto shadow-2xl text-left ${
-                theme === 'dark' ? 'bg-black border-neutral-900 text-white' : 'bg-white border-gray-200 text-neutral-900'
+              className={`absolute inset-x-0 bottom-0 max-h-[80%] border-t rounded-t-[14px] z-40 px-4 py-4 sm:px-5 sm:py-5 flex flex-col gap-3.5 overflow-y-auto pointer-events-auto shadow-2xl text-left font-ui ${
+                theme === 'dark' ? 'bg-[#111111] border-[#303030] text-white' : 'bg-white border-[#E1E5DF] text-[#171B18]'
               }`}
               id="details-bottom-sheet"
             >
               {/* Top drag handle indicator */}
-              <div className={`w-12 h-1 rounded-full mx-auto mb-1 shrink-0 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-300'}`} />
+              <div className={`w-10 h-1 rounded-full mx-auto mb-0.5 shrink-0 ${theme === 'dark' ? 'bg-[#303030]' : 'bg-[#E1E5DF]'}`} />
 
               {/* Header inside Bottom Sheet */}
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
-                  <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase border bg-black/40 ${CATEGORY_MAP[selectedDetailPost.category]?.bg || ""} ${CATEGORY_MAP[selectedDetailPost.category]?.text || ""}`}>
-                    {CATEGORY_MAP[selectedDetailPost.category]?.emoji} {selectedDetailPost.category}
+                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] text-xs font-meta font-bold uppercase border bg-black/40 ${CATEGORY_MAP[selectedDetailPost.category]?.bg || ""} ${CATEGORY_MAP[selectedDetailPost.category]?.text || ""}`}>
+                    {selectedDetailPost.category}
                   </span>
-                  <h2 className={`text-base font-black uppercase mt-2 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>
+                  <h2 className={`text-base sm:text-lg font-display font-black uppercase mt-2 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-[#171B18]'}`}>
                     {selectedDetailPost.title}
                   </h2>
                 </div>
                 <button
                   onClick={() => setSelectedDetailPost(null)}
-                  className={`p-1.5 rounded-lg transition-all shrink-0 cursor-pointer ${
-                    theme === 'dark' ? 'bg-neutral-900 text-gray-400 hover:text-white' : 'bg-gray-100 text-gray-500 hover:text-black'
+                  className={`p-2 rounded-[10px] border transition-all shrink-0 cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center ${
+                    theme === 'dark' ? 'bg-[#191919] border-[#303030] text-[#A3A3A3] hover:text-white' : 'bg-[#F1F4EF] border-[#E1E5DF] text-[#626862] hover:text-[#171B18]'
                   }`}
                   id="close-bottom-sheet-btn"
                   title="Close Detail Panel"
@@ -540,30 +545,30 @@ export default function SocialFeed({
               </div>
 
               {/* Local Info panel */}
-              <div className={`p-4 border-b space-y-3.5 text-xs ${theme === 'dark' ? 'bg-black border-neutral-900' : 'bg-gray-50 border-gray-200'}`}>
-                <div className="flex justify-between items-center text-[11px]">
-                  <span className="text-gray-500 font-mono uppercase">📍 Area Sector:</span>
-                  <span className={`font-bold uppercase font-mono ${theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}`}>{selectedDetailPost.area}</span>
+              <div className={`p-3.5 border rounded-[10px] space-y-2.5 text-xs font-ui ${theme === 'dark' ? 'bg-[#191919] border-[#303030]' : 'bg-[#F1F4EF] border-[#E1E5DF]'}`}>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-[#A3A3A3] font-meta uppercase">Area Sector:</span>
+                  <span className={`font-bold uppercase font-meta ${theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'}`}>{selectedDetailPost.area}</span>
                 </div>
-                <div className="flex justify-between items-center text-[11px]">
-                  <span className="text-gray-500 font-mono uppercase">⏰ Reported Time:</span>
-                  <span className={`font-mono ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{new Date(selectedDetailPost.createdAt).toLocaleString()}</span>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-[#A3A3A3] font-meta uppercase">Reported Time:</span>
+                  <span className={`font-meta ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{new Date(selectedDetailPost.createdAt).toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between items-center text-[11px]">
-                  <span className="text-gray-500 font-mono uppercase">👤 Reporter Name:</span>
-                  <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-[#A3A3A3] font-meta uppercase">Reporter Name:</span>
+                  <span className={`font-bold ${theme === 'dark' ? 'text-white' : 'text-[#171B18]'}`}>
                     {selectedDetailPost.isAnonymous ? "Anonymous Citizen" : selectedDetailPost.reporterName}
                   </span>
                 </div>
-                <div className="flex justify-between items-center text-[11px]">
-                  <span className="text-gray-500 font-mono uppercase">🛡️ Trust Score:</span>
-                  <span className={`font-black ${theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}`}>{selectedDetailPost.reporterTrustScore} / 100</span>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-[#A3A3A3] font-meta uppercase">Trust Score:</span>
+                  <span className={`font-meta font-bold ${theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'}`}>{selectedDetailPost.reporterTrustScore} / 100</span>
                 </div>
                 {selectedDetailPost.status && (
-                  <div className="flex justify-between items-center text-[11px]">
-                    <span className="text-gray-500 font-mono uppercase">🚀 Verification State:</span>
-                    <span className={`px-2 py-0.5 rounded border text-[9px] font-black uppercase tracking-wider ${
-                      theme === 'dark' ? 'bg-[#39FF14]/10 border-[#39FF14]/20 text-brand' : 'bg-[#2ECC0F]/10 border-[#2ECC0F]/20 text-[#2ECC0F]'
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-[#A3A3A3] font-meta uppercase">Verification State:</span>
+                    <span className={`px-2.5 py-0.5 rounded-[6px] border text-xs font-meta font-bold uppercase tracking-wider ${
+                      theme === 'dark' ? 'bg-[#B7FF38]/15 border-[#B7FF38]/30 text-[#B7FF38]' : 'bg-[#537A00]/10 border-[#537A00]/30 text-[#537A00]'
                     }`}>
                       {selectedDetailPost.status}
                     </span>
@@ -573,11 +578,11 @@ export default function SocialFeed({
 
               {/* Detailed Description */}
               <div className="space-y-1.5">
-                <span className="text-[10px] font-mono font-bold text-gray-500 uppercase tracking-widest block">
+                <span className="text-xs font-meta font-bold text-[#A3A3A3] uppercase tracking-wider block">
                   Detailed Complaint Description
                 </span>
-                <p className={`text-xs leading-relaxed font-sans p-4 whitespace-pre-wrap ${
-                  theme === 'dark' ? 'text-gray-300 bg-black' : 'text-gray-700 bg-gray-50'
+                <p className={`text-sm leading-relaxed p-3.5 rounded-[10px] whitespace-pre-wrap font-ui ${
+                  theme === 'dark' ? 'text-gray-200 bg-[#191919] border border-[#303030]' : 'text-gray-800 bg-[#F1F4EF] border border-[#E1E5DF]'
                 }`}>
                   {selectedDetailPost.description}
                 </p>
@@ -586,11 +591,11 @@ export default function SocialFeed({
               {/* AI Insight Description (if any) */}
               {selectedDetailPost.aiDescription && (
                 <div className="space-y-1.5">
-                  <span className={`text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-1 ${theme === 'dark' ? 'text-brand' : 'text-[#2ECC0F]'}`}>
-                    <Sparkles className="w-3.5 h-3.5" /> AI Analysis Insight
+                  <span className={`text-xs font-meta font-bold uppercase tracking-wider flex items-center gap-1.5 ${theme === 'dark' ? 'text-[#B7FF38]' : 'text-[#537A00]'}`}>
+                    <Sparkles className="w-4 h-4" /> AI Analysis Insight
                   </span>
-                  <p className={`text-xs p-4 border italic leading-relaxed ${
-                    theme === 'dark' ? 'text-gray-400 bg-neutral-950 border-neutral-900' : 'text-gray-650 bg-gray-50 border-gray-200'
+                  <p className={`text-xs p-3.5 rounded-[10px] border italic leading-relaxed font-meta ${
+                    theme === 'dark' ? 'text-gray-300 bg-[#191919] border-[#303030]' : 'text-gray-700 bg-[#F1F4EF] border-[#E1E5DF]'
                   }`}>
                     "{selectedDetailPost.aiDescription}"
                   </p>
@@ -598,14 +603,14 @@ export default function SocialFeed({
               )}
 
               {/* Action Buttons inside Bottom Sheet */}
-              <div className="flex gap-2 mt-2">
+              <div className="flex gap-2 mt-1">
                 <button
                   onClick={() => {
                     setSelectedDetailPost(null);
                     onSelectIssue(selectedDetailPost); // Center map and show popup
                   }}
-                  className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-md hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                    theme === 'dark' ? 'bg-brand text-black' : 'bg-[#2ECC0F] text-white'
+                  className={`flex-1 min-h-[38px] py-2 rounded-[8px] text-xs font-bold uppercase tracking-wider shadow-md hover:bg-[#A6ED27] active:bg-[#94D91F] active:scale-[0.99] transition-all flex items-center justify-center gap-1.5 cursor-pointer font-ui ${
+                    theme === 'dark' ? 'bg-[#B7FF38] text-black' : 'bg-[#537A00] text-white'
                   }`}
                 >
                   <MapPin className="w-4 h-4" /> View on Local Radar Map
@@ -635,23 +640,23 @@ export default function SocialFeed({
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 220 }}
-              className={`absolute top-0 right-0 w-full sm:w-96 h-full z-50 border-l flex flex-col pointer-events-auto shadow-2xl ${
-                theme === 'dark' ? 'bg-neutral-950 border-neutral-900 text-white' : 'bg-white border-gray-200 text-neutral-900'
+              className={`absolute top-0 right-0 w-full sm:w-96 h-full z-50 border-l flex flex-col pointer-events-auto shadow-2xl font-ui ${
+                theme === 'dark' ? 'bg-[#111111] border-[#303030] text-white' : 'bg-white border-[#E1E5DF] text-[#171B18]'
               }`}
               id="comments-drawer-panel"
             >
               {/* Header */}
-              <div className={`p-4 border-b flex items-center justify-between ${
-                theme === 'dark' ? 'border-neutral-900 bg-black' : 'border-gray-100 bg-gray-50'
+              <div className={`p-3 border-b flex items-center justify-between ${
+                theme === 'dark' ? 'border-[#303030] bg-[#191919]' : 'border-[#E1E5DF] bg-[#F1F4EF]'
               }`}>
                 <div className="flex flex-col text-left">
-                  <span className="text-[9px] font-mono font-bold text-gray-500 uppercase tracking-widest">CIVIC TALK GRID</span>
-                  <span className="text-xs font-bold truncate max-w-[200px] uppercase">{activeCommentsPost.title}</span>
+                  <span className="text-xs font-meta font-bold text-[#A3A3A3] uppercase tracking-wider">CIVIC TALK GRID</span>
+                  <span className="text-sm font-display font-bold truncate max-w-[220px] uppercase">{activeCommentsPost.title}</span>
                 </div>
                 <button
                   onClick={() => setActiveCommentsPost(null)}
-                  className={`p-1.5 rounded-lg transition-all shrink-0 cursor-pointer ${
-                    theme === 'dark' ? 'bg-neutral-900 text-gray-400 hover:text-white' : 'bg-gray-100 text-gray-500 hover:text-black'
+                  className={`p-2 rounded-[10px] border transition-all shrink-0 cursor-pointer ${
+                    theme === 'dark' ? 'bg-[#111111] border-[#303030] text-[#A3A3A3] hover:text-white' : 'bg-white border-[#E1E5DF] text-[#626862] hover:text-[#171B18]'
                   }`}
                 >
                   <X className="w-4 h-4" />
@@ -662,13 +667,13 @@ export default function SocialFeed({
               <div className="flex flex-col h-full overflow-hidden">
                 
                 {/* 1. Comment Bar & Emoji Selector Container (Top) */}
-                <div className={`p-4 border-b flex flex-col gap-3 ${
-                  theme === 'dark' ? 'bg-neutral-950/80' : 'bg-gray-50/50'
+                <div className={`p-2.5 border-b flex flex-col gap-2 ${
+                  theme === 'dark' ? 'bg-[#191919] border-[#303030]' : 'bg-[#F1F4EF] border-[#E1E5DF]'
                 }`}>
                   
                   {/* Emoji options block (Top of the comments bar) */}
                   <div className="flex flex-col gap-1 items-start">
-                    <span className="text-[8px] font-mono text-gray-500 uppercase tracking-wider">SELECT COMPLAINT VOUCH EFFECT</span>
+                    <span className="text-[11px] font-meta text-[#A3A3A3] uppercase tracking-wider font-semibold">SELECT COMPLAINT VOUCH EFFECT</span>
                     <div className="flex gap-1.5 overflow-x-auto w-full pb-0.5 scrollbar-none">
                       {[
                         { code: "verified", label: "VERIFIED", icon: Check, colorClass: "text-emerald-500 bg-emerald-500/10 border-emerald-500/35" },
@@ -682,14 +687,14 @@ export default function SocialFeed({
                             key={em.code}
                             type="button"
                             onClick={() => setSelectedEmoji(selectedEmoji === em.code ? null : em.code)}
-                            className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-mono tracking-wider font-black uppercase border transition-all cursor-pointer ${
+                            className={`flex items-center gap-1 px-2 py-1 min-h-[28px] rounded-[8px] text-[11px] font-meta tracking-wider font-bold uppercase border transition-all cursor-pointer ${
                               isSelected
                                 ? (theme === 'dark'
-                                  ? "bg-[#39FF14] text-black border-[#39FF14] shadow-[0_0_8px_rgba(57,255,20,0.4)]"
-                                  : "bg-[#2ECC0F] text-white border-[#2ECC0F] shadow-xs")
+                                  ? "bg-[#B7FF38] text-black border-[#B7FF38] shadow-[0_0_8px_rgba(183,255,56,0.4)]"
+                                  : "bg-[#537A00] text-white border-[#537A00] shadow-xs")
                                 : (theme === 'dark'
-                                  ? "bg-black border-neutral-900 text-gray-400 hover:text-white"
-                                  : "bg-white border-gray-250 text-gray-700 hover:border-gray-400 shadow-xs")
+                                  ? "bg-[#111111] border-[#303030] text-[#A3A3A3] hover:text-white"
+                                  : "bg-white border-[#E1E5DF] text-[#626862] hover:border-[#537A00]/50 shadow-xs")
                             }`}
                           >
                             <em.icon className={`w-3 h-3 ${isSelected ? "" : em.colorClass.split(" ")[0]}`} />
@@ -739,19 +744,19 @@ export default function SocialFeed({
                       value={commentText}
                       onChange={(e) => setCommentText(e.target.value)}
                       placeholder="Contribute information / spill details..."
-                      className={`w-full pl-3 pr-10 py-2 text-xs border rounded-xl outline-none focus:outline-none transition-all ${
+                      className={`w-full pl-3 pr-9 py-1.5 min-h-[36px] text-xs border rounded-[8px] outline-none focus:outline-none transition-all font-ui ${
                         theme === 'dark'
-                          ? 'bg-black border-neutral-900 text-white placeholder-gray-600 focus:border-[#39FF14]/50'
-                          : 'bg-white border-gray-250 text-neutral-900 placeholder-gray-400 focus:border-[#2ECC0F]/50 shadow-xs'
+                          ? 'bg-[#111111] border-[#303030] text-white placeholder-gray-500 focus:border-[#B7FF38]/50'
+                          : 'bg-white border-[#E1E5DF] text-[#171B18] placeholder-gray-400 focus:border-[#537A00]/50 shadow-xs'
                       }`}
                     />
                     <button
                       type="submit"
                       disabled={!commentText.trim()}
-                      className={`absolute right-1.5 p-1.5 rounded-lg transition-all ${
+                      className={`absolute right-1 p-1.5 rounded-[6px] transition-all cursor-pointer ${
                         commentText.trim()
-                          ? (theme === 'dark' ? 'text-[#39FF14] hover:bg-neutral-900' : 'text-[#2ECC0F] hover:bg-gray-100')
-                          : 'text-gray-500 opacity-50 cursor-not-allowed'
+                          ? (theme === 'dark' ? 'text-[#B7FF38] hover:bg-[#191919]' : 'text-[#537A00] hover:bg-[#F1F4EF]')
+                          : 'text-[#A3A3A3] opacity-40 cursor-not-allowed'
                       }`}
                     >
                       <Send className="w-3.5 h-3.5" />
@@ -760,12 +765,12 @@ export default function SocialFeed({
                 </div>
 
                 {/* 2. Comments List Scrollable Container (Below) */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-none text-left">
+                <div className="flex-1 overflow-y-auto p-3.5 space-y-2.5 scrollbar-none text-left">
                   {!activeCommentsPost.comments || activeCommentsPost.comments.length === 0 ? (
-                    <div className="text-center py-12 text-gray-500 flex flex-col items-center gap-1">
-                      <MessageSquare className="w-6 h-6 text-gray-600 mb-1" />
-                      <p className="text-[10px] font-mono uppercase font-bold">GRID SILENCE</p>
-                      <p className="text-[9px] font-mono text-gray-600">No verified testimonials broadcasted yet.</p>
+                    <div className="text-center py-10 text-[#A3A3A3] flex flex-col items-center gap-1.5 font-meta">
+                      <MessageSquare className="w-7 h-7 text-[#A3A3A3]/60 mb-1" />
+                      <p className="text-xs uppercase font-bold tracking-wider">GRID SILENCE</p>
+                      <p className="text-xs text-[#A3A3A3]/80">No verified testimonials broadcasted yet.</p>
                     </div>
                   ) : (
                     [...activeCommentsPost.comments]
@@ -774,45 +779,45 @@ export default function SocialFeed({
                         return (
                           <div
                             key={comm.id}
-                            className={`p-3 border rounded-xl flex flex-col gap-1.5 ${
-                              theme === 'dark' ? 'bg-black border-neutral-900/60' : 'bg-gray-50/80 border-gray-150 shadow-2xs'
+                            className={`p-3 border rounded-[10px] flex flex-col gap-1.5 ${
+                              theme === 'dark' ? 'bg-[#191919] border-[#303030]' : 'bg-[#F1F4EF] border-[#E1E5DF] shadow-2xs'
                             }`}
                           >
                             <div className="flex items-center justify-between gap-2">
-                              <div className="flex items-center gap-1.5">
-                                <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-black uppercase ${
-                                  theme === 'dark' ? 'bg-neutral-900 text-white border border-neutral-800' : 'bg-gray-200 text-neutral-800 border border-gray-300'
+                              <div className="flex items-center gap-2">
+                                <div className={`w-6 h-6 rounded-[8px] flex items-center justify-center text-xs font-black uppercase font-meta ${
+                                  theme === 'dark' ? 'bg-[#111111] text-white border border-[#303030]' : 'bg-white text-[#171B18] border border-[#E1E5DF]'
                                 }`}>
                                   {comm.userName ? comm.userName[0] : "C"}
                                 </div>
-                                <span className={`text-[10px] font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-neutral-900'}`}>
+                                <span className={`text-xs font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-[#171B18]'}`}>
                                   {comm.userName || "Anonymous Citizen"}
                                 </span>
                               </div>
-                              <span className="text-[8px] text-gray-500 font-mono">
+                              <span className="text-xs text-[#A3A3A3] font-meta">
                                 {timeAgo(comm.createdAt)}
                               </span>
                             </div>
 
-                            <p className={`text-xs ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} leading-snug break-words`}>
+                            <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} leading-relaxed break-words font-ui`}>
                               {comm.text}
                             </p>
 
                             {comm.emoji && (
                               <div className="flex items-center gap-1 mt-0.5">
-                                <span className={`text-[8.5px] px-1.5 py-0.2 rounded font-mono font-black border uppercase tracking-wider shrink-0 flex items-center gap-1 ${
+                                <span className={`text-xs px-2 py-0.5 rounded-[8px] font-meta font-bold border uppercase tracking-wider shrink-0 flex items-center gap-1 ${
                                   comm.emoji === "verified" || comm.emoji === "✅"
-                                    ? "text-emerald-500 border-emerald-500/20 bg-emerald-500/5"
+                                    ? "text-emerald-500 border-emerald-500/30 bg-emerald-500/10"
                                     : comm.emoji === "cap" || comm.emoji === "🧢"
-                                    ? "text-red-500 border-red-500/20 bg-red-500/5"
+                                    ? "text-red-500 border-red-500/30 bg-red-500/10"
                                     : comm.emoji === "big_issue" || comm.emoji === "🔥"
-                                    ? "text-amber-500 border-amber-500/20 bg-amber-500/5"
-                                    : "text-teal-500 border-teal-500/20 bg-teal-500/5"
+                                    ? "text-amber-500 border-amber-500/30 bg-amber-500/10"
+                                    : "text-teal-500 border-teal-500/30 bg-teal-500/10"
                                 }`}>
-                                  {comm.emoji === "verified" || comm.emoji === "✅" ? <Check className="w-2.5 h-2.5" /> :
-                                   comm.emoji === "cap" || comm.emoji === "🧢" ? <Flag className="w-2.5 h-2.5" /> :
-                                   comm.emoji === "big_issue" || comm.emoji === "🔥" ? <Flame className="w-2.5 h-2.5" /> :
-                                   <AlertTriangle className="w-2.5 h-2.5" />}
+                                  {comm.emoji === "verified" || comm.emoji === "✅" ? <Check className="w-3 h-3" /> :
+                                   comm.emoji === "cap" || comm.emoji === "🧢" ? <Flag className="w-3 h-3" /> :
+                                   comm.emoji === "big_issue" || comm.emoji === "🔥" ? <Flame className="w-3 h-3" /> :
+                                   <AlertTriangle className="w-3 h-3" />}
                                   <span>{comm.emoji.toUpperCase()}</span>
                                 </span>
                               </div>

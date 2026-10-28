@@ -96,13 +96,13 @@ export default function AnalyticsDashboard({ metrics, theme = "dark" }: Analytic
   const [searchTerm, setSearchTerm] = useState("");
 
   const isDark = theme === "dark";
-  const greenColor = isDark ? "#39FF14" : "#2ECC0F";
+  const greenColor = isDark ? "#B7FF38" : "#537A00";
 
   if (!metrics) {
     return (
-      <div className={`flex flex-col items-center justify-center p-12 gap-2 ${isDark ? 'text-gray-400' : 'text-gray-650'}`}>
-        <Activity className={`w-8 h-8 animate-spin ${isDark ? 'text-[#39FF14]' : 'text-[#2ECC0F]'}`} />
-        <p className={`text-xs font-mono uppercase tracking-widest ${isDark ? 'text-[#39FF14]' : 'text-[#2ECC0F]'}`}>Compiling radar metrics...</p>
+      <div className={`flex flex-col items-center justify-center p-12 gap-2 font-ui ${isDark ? 'text-[#A3A3A3]' : 'text-[#626862]'}`}>
+        <Activity className={`w-8 h-8 animate-spin ${isDark ? 'text-[#B7FF38]' : 'text-[#537A00]'}`} />
+        <p className={`text-xs font-meta uppercase tracking-widest ${isDark ? 'text-[#B7FF38]' : 'text-[#537A00]'}`}>Compiling radar metrics...</p>
       </div>
     );
   }
@@ -117,93 +117,93 @@ export default function AnalyticsDashboard({ metrics, theme = "dark" }: Analytic
   );
 
   return (
-    <div className={`w-full max-w-lg mx-auto border rounded-xl p-4 md:p-6 space-y-6 overflow-y-auto max-h-[85vh] scrollbar-none transition-all duration-300 ${
-      isDark ? 'bg-black border-neutral-900 text-white' : 'bg-white border-gray-200 text-neutral-900 shadow-md'
+    <div className={`w-full max-w-md mx-auto border rounded-[12px] p-3 space-y-3 overflow-y-auto max-h-[85vh] scrollbar-none font-ui transition-all duration-300 ${
+      isDark ? 'bg-[#111111] border-[#303030] text-white' : 'bg-white border-[#E1E5DF] text-[#171B18] shadow-md'
     }`} id="analytics-dashboard-view">
       {/* Title */}
       <div>
-        <h2 className={`text-base font-extrabold tracking-tight flex items-center gap-2 ${
-          isDark ? 'text-[#39FF14]' : 'text-[#2ECC0F]'
+        <h2 className={`text-sm font-display font-black tracking-wide flex items-center gap-1.5 ${
+          isDark ? 'text-[#B7FF38]' : 'text-[#537A00]'
         }`}>
-          <Activity className="w-4 h-4" />
+          <Activity className="w-3.5 h-3.5" />
           MUNICIPAL IMPACT RADAR
         </h2>
-        <p className={`text-[10px] font-mono uppercase ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>CIVIC RESOLUTION & ENGAGEMENT STATISTICS</p>
+        <p className={`text-[11px] font-meta uppercase mt-0.5 ${isDark ? 'text-[#A3A3A3]' : 'text-[#626862]'}`}>CIVIC RESOLUTION & ENGAGEMENT STATISTICS</p>
       </div>
 
       {/* Grid: 3 core counters */}
       <div className="grid grid-cols-3 gap-2 text-center">
-        <div className={`p-3 border rounded-lg transition-all ${
-          isDark ? 'bg-black border-neutral-900' : 'bg-gray-50 border-gray-250 shadow-xs'
+        <div className={`p-2 border rounded-[8px] transition-all ${
+          isDark ? 'bg-[#191919] border-[#303030]' : 'bg-[#F1F4EF] border-[#E1E5DF] shadow-xs'
         }`}>
-          <p className={`text-xl font-black font-mono ${isDark ? 'text-white' : 'text-neutral-900'}`}>{metrics.totalIssues}</p>
-          <p className="text-[8px] text-gray-500 font-mono uppercase tracking-wide mt-1">TOTAL FILED</p>
+          <p className={`text-lg font-display font-black ${isDark ? 'text-white' : 'text-[#171B18]'}`}>{metrics.totalIssues}</p>
+          <p className="text-[9px] text-[#A3A3A3] font-meta uppercase tracking-wider mt-0.5">TOTAL FILED</p>
         </div>
-        <div className={`p-3 border rounded-lg transition-all ${
-          isDark ? 'bg-[#39FF14]/5 border-[#39FF14]/20' : 'bg-red-50/40 border-red-200/40'
+        <div className={`p-2 border rounded-[8px] transition-all ${
+          isDark ? 'bg-[#191919] border-[#303030]' : 'bg-[#F1F4EF] border-[#E1E5DF]'
         }`}>
-          <p className={`text-xl font-black font-mono ${isDark ? 'text-[#39FF14]' : 'text-red-500'}`}>{metrics.unresolvedCount}</p>
-          <p className="text-[8px] text-gray-400 font-mono uppercase tracking-wide mt-1">ACTIVE ISSUES</p>
+          <p className={`text-lg font-display font-black ${isDark ? 'text-[#B7FF38]' : 'text-[#537A00]'}`}>{metrics.unresolvedCount}</p>
+          <p className="text-[9px] text-[#A3A3A3] font-meta uppercase tracking-wider mt-0.5">ACTIVE ISSUES</p>
         </div>
-        <div className={`p-3 border rounded-lg transition-all ${
-          isDark ? 'bg-green-950/20 border border-green-500/30' : 'bg-emerald-50 border border-emerald-100'
+        <div className={`p-2 border rounded-[8px] transition-all ${
+          isDark ? 'bg-[#191919] border-[#303030]' : 'bg-[#F1F4EF] border-[#E1E5DF]'
         }`}>
-          <p className={`text-xl font-black font-mono ${isDark ? 'text-green-400' : 'text-emerald-700'}`}>{metrics.resolvedCount}</p>
-          <p className="text-[8px] text-gray-400 font-mono uppercase tracking-wide mt-1">RESOLVED</p>
+          <p className={`text-lg font-display font-black ${isDark ? 'text-white' : 'text-[#171B18]'}`}>{metrics.resolvedCount}</p>
+          <p className="text-[9px] text-[#A3A3A3] font-meta uppercase tracking-wider mt-0.5">RESOLVED</p>
         </div>
       </div>
 
       {/* Circle resolution meter */}
-      <div className={`flex items-center gap-4 p-4 border rounded-xl transition-all ${
-        isDark ? 'bg-black border-neutral-900' : 'bg-gray-50 border-gray-150'
+      <div className={`flex items-center gap-2.5 p-2.5 border rounded-[8px] transition-all font-ui ${
+        isDark ? 'bg-[#191919] border-[#303030]' : 'bg-[#F1F4EF] border-[#E1E5DF]'
       }`}>
-        <div className="relative w-16 h-16 shrink-0">
+        <div className="relative w-12 h-12 shrink-0">
           <svg className="w-full h-full transform -rotate-90">
             <circle
-              cx="32"
-              cy="32"
-              r="28"
-              stroke={isDark ? "#141414" : "#e5e7eb"}
-              strokeWidth="6"
+              cx="24"
+              cy="24"
+              r="20"
+              stroke={isDark ? "#303030" : "#E1E5DF"}
+              strokeWidth="4"
               fill="transparent"
             />
             <circle
-              cx="32"
-              cy="32"
-              r="28"
-              stroke={isDark ? "#39FF14" : "#2ECC0F"} // Neon green brand accent
-              strokeWidth="6"
+              cx="24"
+              cy="24"
+              r="20"
+              stroke={isDark ? "#B7FF38" : "#537A00"} // Signature UI Hyperlime accent
+              strokeWidth="4"
               fill="transparent"
-              strokeDasharray={175.9}
-              strokeDashoffset={175.9 - (175.9 * resolutionRate) / 100}
+              strokeDasharray={125.6}
+              strokeDashoffset={125.6 - (125.6 * resolutionRate) / 100}
               className="transition-all duration-1000 ease-out"
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className={`text-xs font-black font-mono ${isDark ? 'text-white' : 'text-neutral-950'}`}>{resolutionRate}%</span>
+            <span className={`text-[11px] font-black font-meta ${isDark ? 'text-white' : 'text-[#171B18]'}`}>{resolutionRate}%</span>
           </div>
         </div>
  
         <div>
-          <h3 className={`text-xs font-bold uppercase tracking-wider font-mono ${isDark ? 'text-white' : 'text-neutral-900'}`}>Civic Resolution Speed</h3>
-          <p className={`text-[10px] leading-normal mt-0.5 font-sans ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+          <h3 className={`text-xs font-bold uppercase tracking-wider font-display ${isDark ? 'text-white' : 'text-[#171B18]'}`}>Civic Resolution Speed</h3>
+          <p className={`text-[11px] leading-snug mt-0.5 ${isDark ? 'text-[#A3A3A3]' : 'text-[#626862]'}`}>
             Official municipal bodies are acting faster. Currently resolving {resolutionRate}% of all community-verified citizen reports.
           </p>
         </div>
       </div>
  
       {/* Category Distribution Chart */}
-      <div className="space-y-3" id="category-chart-section">
+      <div className="space-y-2" id="category-chart-section">
         <div className="flex items-center justify-between">
-          <h3 className={`text-xs font-bold font-mono uppercase tracking-wider flex items-center gap-1.5 ${isDark ? 'text-gray-400' : 'text-gray-700'}`}>
-            <BarChart3 className={`w-3.5 h-3.5 ${isDark ? 'text-white' : 'text-neutral-700'}`} />
+          <h3 className={`text-xs font-bold font-meta uppercase tracking-wider flex items-center gap-1.5 ${isDark ? 'text-[#A3A3A3]' : 'text-[#626862]'}`}>
+            <BarChart3 className={`w-3.5 h-3.5 ${isDark ? 'text-white' : 'text-[#171B18]'}`} />
             OUTRAGE BY CATEGORY
           </h3>
-          <span className="text-[8px] text-gray-500 font-mono">SECTOR METRICS</span>
+          <span className="text-xs text-[#A3A3A3] font-meta">SECTOR METRICS</span>
         </div>
  
-        <div className={`space-y-2.5 p-3.5 border rounded-xl transition-all ${
-          isDark ? 'bg-black border-neutral-900' : 'bg-gray-50 border-gray-150'
+        <div className={`space-y-2.5 p-3 border rounded-[10px] transition-all ${
+          isDark ? 'bg-[#191919] border-[#303030]' : 'bg-[#F1F4EF] border-[#E1E5DF]'
         }`}>
           {(Object.entries(metrics.byCategory) as [Category, number][]).map(([cat, count]) => {
             const pct = metrics.totalIssues > 0 ? (count / metrics.totalIssues) * 100 : 0;
@@ -213,15 +213,15 @@ export default function AnalyticsDashboard({ metrics, theme = "dark" }: Analytic
  
             return (
               <div key={cat} className="space-y-1">
-                <div className="flex items-center justify-between text-[10px]">
+                <div className="flex items-center justify-between text-xs">
                   <span className={`flex items-center gap-1.5 font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     <IconComponent className="w-3.5 h-3.5" />
                     {name}
                   </span>
-                  <span className={`font-mono font-bold ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{count} reports ({Math.round(pct)}%)</span>
+                  <span className={`font-meta font-bold ${isDark ? 'text-[#A3A3A3]' : 'text-[#626862]'}`}>{count} reports ({Math.round(pct)}%)</span>
                 </div>
                 {/* Visual bar */}
-                <div className={`w-full h-1.5 rounded-full overflow-hidden ${isDark ? 'bg-[#141414]' : 'bg-gray-200'}`}>
+                <div className={`w-full h-2 rounded-full overflow-hidden ${isDark ? 'bg-[#111111]' : 'bg-gray-200'}`}>
                   <div
                     className={`h-full rounded-full ${barColor}`}
                     style={{ width: `${Math.max(3, pct)}%` }}
@@ -234,56 +234,56 @@ export default function AnalyticsDashboard({ metrics, theme = "dark" }: Analytic
       </div>
 
       {/* Area-wise Heatmap list */}
-      <div className="space-y-3" id="area-heatmap-section">
+      <div className="space-y-2" id="area-heatmap-section">
         <div className="flex items-center justify-between">
-          <h3 className={`text-xs font-bold font-mono uppercase tracking-wider flex items-center gap-1.5 ${isDark ? 'text-gray-400' : 'text-gray-700'}`}>
-            <Map className={`w-3.5 h-3.5 ${isDark ? 'text-white' : 'text-neutral-700'}`} />
+          <h3 className={`text-xs font-bold font-meta uppercase tracking-wider flex items-center gap-1.5 ${isDark ? 'text-[#A3A3A3]' : 'text-[#626862]'}`}>
+            <Map className={`w-3.5 h-3.5 ${isDark ? 'text-white' : 'text-[#171B18]'}`} />
             WARD HEATMAPS & LOCALITIES
           </h3>
-          <span className="text-[8px] text-gray-500 font-mono">BY WARD AREA</span>
+          <span className="text-xs text-[#A3A3A3] font-meta">BY WARD AREA</span>
         </div>
  
         {/* Search filter for wards */}
         <div className="relative">
-          <Search className={`absolute left-2.5 top-2 w-3.5 h-3.5 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} />
+          <Search className={`absolute left-2.5 top-2.5 w-3.5 h-3.5 ${isDark ? 'text-[#A3A3A3]' : 'text-[#626862]'}`} />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search nearby neighborhoods (e.g., West End)..."
-            className={`w-full pl-8 pr-3 py-1.5 text-[11px] rounded-lg outline-none transition-all ${
+            className={`w-full pl-8 pr-3 py-1.5 min-h-[34px] text-xs rounded-[8px] outline-none transition-all font-ui ${
               isDark 
-                ? 'bg-black border border-neutral-900 text-white placeholder-gray-600 focus:border-[#39FF14]/50'
-                : 'bg-white border border-gray-250 text-neutral-900 placeholder-gray-400 focus:border-[#2ECC0F]/50 shadow-xs'
+                ? 'bg-[#111111] border border-[#303030] text-white placeholder-gray-500 focus:border-[#B7FF38]/50'
+                : 'bg-white border border-[#E1E5DF] text-[#171B18] placeholder-gray-400 focus:border-[#537A00]/50 shadow-xs'
             }`}
             id="ward-search-input"
           />
         </div>
  
-        <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+        <div className="space-y-1.5 max-h-52 overflow-y-auto pr-1 scrollbar-none">
           {filteredAreas.length === 0 ? (
-            <p className="text-[10px] text-gray-500 italic text-center py-4 font-sans">No data compiled for search query.</p>
+            <p className="text-xs text-[#A3A3A3] italic text-center py-3 font-ui">No data compiled for search query.</p>
           ) : (
             filteredAreas.map(([areaName, areaStats]) => {
               const areaTotal = areaStats.resolved + areaStats.unresolved;
               const areaResolvedPct = areaTotal > 0 ? (areaStats.resolved / areaTotal) * 100 : 0;
  
               return (
-                <div key={areaName} className={`p-2.5 border rounded-lg flex flex-col gap-1.5 transition-all ${
-                  isDark ? 'bg-black border-neutral-900' : 'bg-gray-50 border-gray-200 shadow-xs'
+                <div key={areaName} className={`p-2.5 border rounded-[8px] flex flex-col gap-1 transition-all ${
+                  isDark ? 'bg-[#111111] border-[#303030]' : 'bg-white border-[#E1E5DF] shadow-xs'
                 }`}>
-                  <div className="flex items-center justify-between text-[11px]">
-                    <span className={`font-bold tracking-tight ${isDark ? 'text-white' : 'text-neutral-900'}`}>{areaName}</span>
-                    <span className={`text-[9px] font-mono ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className={`font-bold font-ui tracking-tight ${isDark ? 'text-white' : 'text-[#171B18]'}`}>{areaName}</span>
+                    <span className={`text-[10.5px] font-meta ${isDark ? 'text-[#A3A3A3]' : 'text-[#626862]'}`}>
                       {areaStats.resolved} Res • {areaStats.unresolved} Active
                     </span>
                   </div>
  
                   {/* Multi-segmented resolution heatmap bar */}
-                  <div className={`flex w-full h-2 rounded-full overflow-hidden ${isDark ? 'bg-[#141414]' : 'bg-gray-200'}`}>
+                  <div className={`flex w-full h-1.5 rounded-full overflow-hidden ${isDark ? 'bg-[#191919]' : 'bg-gray-250'}`}>
                     {areaStats.resolved > 0 && (
                       <div
-                        className={isDark ? "h-full bg-[#39FF14]" : "h-full bg-[#2ECC0F]"}
+                        className={isDark ? "h-full bg-[#B7FF38]" : "h-full bg-[#537A00]"}
                         style={{ width: `${(areaStats.resolved / areaTotal) * 100}%` }}
                         title={`Resolved: ${areaStats.resolved}`}
                       />
@@ -297,13 +297,13 @@ export default function AnalyticsDashboard({ metrics, theme = "dark" }: Analytic
                     )}
                   </div>
  
-                  <div className="flex justify-between items-center text-[8px] text-gray-500 font-mono uppercase tracking-wide">
+                  <div className="flex justify-between items-center text-[9.5px] text-[#A3A3A3] font-meta uppercase tracking-wide">
                     <span>MUNICIPAL CLEANUP INDEX</span>
                     <span className={
                       areaResolvedPct >= 70 
-                        ? `${isDark ? "text-[#39FF14]" : "text-[#2ECC0F]"} font-bold` 
+                        ? `${isDark ? "text-[#B7FF38]" : "text-[#537A00]"} font-bold` 
                         : areaResolvedPct >= 40 
-                          ? "text-yellow-600 font-bold" 
+                          ? "text-yellow-500 font-bold" 
                           : "text-red-500 font-bold"
                     }>
                       {Math.round(areaResolvedPct)}% RECOVERY
@@ -317,10 +317,10 @@ export default function AnalyticsDashboard({ metrics, theme = "dark" }: Analytic
       </div>
  
       {/* Bottom disclaimer */}
-      <div className={`p-2.5 border rounded-lg text-center text-[9px] flex items-center gap-1.5 justify-center transition-all ${
-        isDark ? 'bg-black border-neutral-900 text-gray-600' : 'bg-gray-50 border-gray-200 text-gray-600'
+      <div className={`p-2 border rounded-[8px] text-center text-[10.5px] font-meta flex items-center gap-1.5 justify-center transition-all ${
+        isDark ? 'bg-[#191919] border-[#303030] text-[#A3A3A3]' : 'bg-[#F1F4EF] border-[#E1E5DF] text-[#626862]'
       }`}>
-        <Flame className={`w-3.5 h-3.5 animate-pulse ${isDark ? 'text-[#39FF14]' : 'text-[#2ECC0F]'}`} />
+        <Flame className={`w-3 h-3 animate-pulse shrink-0 ${isDark ? 'text-[#B7FF38]' : 'text-[#537A00]'}`} />
         <span>GroundZero dashboard refreshes automatically as local ward officers resolve issues.</span>
       </div>
     </div>

@@ -70,42 +70,42 @@ export default function LoginPage({ onLogin, theme = "dark" }: LoginPageProps) {
   const blob3Color = isDark ? "bg-neutral-950/15" : "bg-neutral-50/50";
 
   const cardBgClass = isDark
-    ? "bg-white/[0.05] border-white/10 text-white shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
-    : "bg-white/60 border-neutral-200/50 text-neutral-800 shadow-[0_20px_50px_rgba(0,0,0,0.04)]";
+    ? "bg-[#111111] border-[#303030] text-white shadow-2xl"
+    : "bg-white border-[#E1E5DF] text-[#171B18] shadow-lg";
 
-  const headingClass = isDark ? "text-white" : "text-neutral-800";
+  const headingClass = isDark ? "text-white" : "text-[#171B18]";
   const switcherClass = isDark
-    ? "text-neutral-400 hover:text-white"
-    : "text-neutral-500 hover:text-neutral-800";
+    ? "text-[#A3A3A3] hover:text-[#B7FF38]"
+    : "text-[#626862] hover:text-[#537A00]";
 
-  const inputLabelClass = isDark ? "text-neutral-400" : "text-neutral-500";
+  const inputLabelClass = isDark ? "text-[#A3A3A3]" : "text-[#626862]";
   const inputClass = isDark
-    ? "bg-white/[0.05] border-white/10 text-white placeholder-neutral-500 focus:bg-white/[0.08] focus:border-white/20"
-    : "bg-neutral-900/[0.03] border-neutral-300/60 text-neutral-800 placeholder-neutral-400/70 focus:bg-white/80 focus:border-neutral-400";
-  const iconClass = isDark ? "text-neutral-400" : "text-neutral-400/85";
+    ? "bg-[#191919] border-[#303030] text-white placeholder-gray-500 focus:border-[#B7FF38]/50 font-ui"
+    : "bg-[#F1F4EF] border-[#E1E5DF] text-[#171B18] placeholder-gray-400 focus:border-[#537A00]/50 font-ui";
+  const iconClass = isDark ? "text-[#A3A3A3]" : "text-[#626862]";
 
-  const anonymousDotClass = isDark ? "bg-[#39FF14]" : "bg-[#2ECC0F]";
+  const anonymousDotClass = isDark ? "bg-[#B7FF38]" : "bg-[#537A00]";
   const anonymousTextClass = isDark
-    ? "text-neutral-400 hover:text-white"
-    : "text-neutral-500 hover:text-neutral-800";
+    ? "text-[#A3A3A3] hover:text-[#B7FF38]"
+    : "text-[#626862] hover:text-[#537A00]";
 
   const submitBtnBg = isDark
-    ? "bg-[#39FF14] hover:bg-[#39FF14]/90 text-black shadow-[0_4px_12px_rgba(57,255,20,0.25)]"
-    : "bg-[#2ECC0F] hover:bg-[#2ECC0F]/90 text-white shadow-[0_4px_12px_rgba(46,204,15,0.2)]";
+    ? "bg-[#B7FF38] hover:bg-[#A6ED27] active:bg-[#94D91F] text-black shadow-md"
+    : "bg-[#537A00] text-white shadow-md";
 
   const arrowColor = isDark ? "text-black" : "text-white";
 
   return (
     <div 
-      className="fixed inset-0 w-full h-full flex flex-col items-center justify-center p-4 overflow-y-auto z-[90] font-sans selection:bg-[#39FF14]/20 transition-all duration-500"
+      className={`fixed inset-0 w-full h-full flex flex-col items-center justify-center p-4 overflow-y-auto z-[90] font-ui transition-all duration-300 ${
+        isDark ? 'bg-black text-white' : 'bg-[#FAFCFA] text-[#171B18]'
+      }`}
       id="login-glass-screen"
-      style={bgStyle}
     >
-      {/* Soft warm blurry abstract background glows */}
+      {/* Soft blurry abstract background glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className={`absolute -top-[10%] -left-[10%] w-[350px] h-[350px] rounded-full blur-[90px] transition-colors duration-500 ${blob1Color}`} />
-        <div className={`absolute top-[35%] -right-[15%] w-[420px] h-[420px] rounded-full blur-[100px] transition-colors duration-500 ${blob2Color}`} />
-        <div className={`absolute -bottom-[10%] left-[15%] w-[380px] h-[380px] rounded-full blur-[90px] transition-colors duration-500 ${blob3Color}`} />
+        <div className={`absolute -top-[10%] -left-[10%] w-[350px] h-[350px] rounded-full blur-[100px] pointer-events-none ${isDark ? 'bg-[#B7FF38]/5' : 'bg-[#537A00]/5'}`} />
+        <div className={`absolute top-[35%] -right-[15%] w-[420px] h-[420px] rounded-full blur-[110px] pointer-events-none ${isDark ? 'bg-[#B7FF38]/5' : 'bg-[#537A00]/5'}`} />
       </div>
 
       {/* Top Tagline */}
@@ -115,22 +115,22 @@ export default function LoginPage({ onLogin, theme = "dark" }: LoginPageProps) {
         transition={{ duration: 0.5 }}
         className="text-center mb-6 z-10"
       >
-        <span className={`text-[10px] font-bold tracking-[0.3em] font-mono uppercase ${isDark ? 'text-neutral-500' : 'text-neutral-400'}`}>
+        <span className={`text-[10px] font-bold tracking-[0.3em] font-meta uppercase ${isDark ? 'text-[#A3A3A3]' : 'text-[#626862]'}`}>
           GROUNDZERO SYSTEM
         </span>
       </motion.div>
 
-      {/* Glassmorphism card container */}
+      {/* Card container */}
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.4 }}
-        className={`w-full max-w-[360px] border rounded-[24px] p-8 backdrop-blur-[20px] z-10 flex flex-col relative transition-all duration-500 ${cardBgClass}`}
+        className={`w-full max-w-[340px] border rounded-[12px] p-5 sm:p-5.5 z-10 flex flex-col relative transition-all duration-300 ${cardBgClass}`}
         id="login-glass-card"
       >
         {/* Card Header: Log in / Sign up switcher */}
-        <div className="flex items-baseline justify-between mb-8">
-          <h2 className={`text-3xl font-black tracking-tight font-sans transition-colors duration-500 ${headingClass}`}>
+        <div className="flex items-baseline justify-between mb-4">
+          <h2 className={`text-xl font-black tracking-tight font-display uppercase transition-colors duration-300 ${headingClass}`}>
             {isSignUp ? "Sign up" : "Log in"}
           </h2>
           <button
@@ -139,28 +139,28 @@ export default function LoginPage({ onLogin, theme = "dark" }: LoginPageProps) {
               setIsSignUp(!isSignUp);
               setErrorMsg("");
             }}
-            className={`text-xs font-bold transition-colors duration-300 cursor-pointer select-none ${switcherClass}`}
+            className={`text-xs font-bold font-meta transition-colors duration-300 cursor-pointer select-none ${switcherClass}`}
           >
             {isSignUp ? "Log in" : "Sign up"}
           </button>
         </div>
 
         {/* Input fields */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           
           {/* Optional Name for Sign Up */}
           {isSignUp && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
-              className="space-y-1.5 overflow-hidden"
+              className="space-y-1 overflow-hidden"
             >
-              <label className={`block text-[9px] font-bold uppercase tracking-widest transition-colors duration-500 ${inputLabelClass}`}>
+              <label className={`block text-[11px] font-bold uppercase tracking-wider font-meta ${inputLabelClass}`}>
                 Full Name
               </label>
               <div className="relative">
-                <span className={`absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors duration-500 ${iconClass}`}>
-                  <User className="w-4 h-4" />
+                <span className={`absolute left-3 top-1/2 -translate-y-1/2 ${iconClass}`}>
+                  <User className="w-3.5 h-3.5" />
                 </span>
                 <input
                   type="text"
@@ -168,20 +168,20 @@ export default function LoginPage({ onLogin, theme = "dark" }: LoginPageProps) {
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Rahul Sharma"
                   disabled={isPending}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-xl transition-all duration-300 text-xs font-medium focus:outline-none ${inputClass}`}
+                  className={`w-full pl-9 pr-3.5 py-1.5 min-h-[36px] border rounded-[8px] text-xs font-ui focus:outline-none ${inputClass}`}
                 />
               </div>
             </motion.div>
           )}
 
           {/* Email input */}
-          <div className="space-y-1.5">
-            <label className={`block text-[9px] font-bold uppercase tracking-widest transition-colors duration-500 ${inputLabelClass}`}>
+          <div className="space-y-1">
+            <label className={`block text-[11px] font-bold uppercase tracking-wider font-meta ${inputLabelClass}`}>
               Email address
             </label>
             <div className="relative">
-              <span className={`absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors duration-500 ${iconClass}`}>
-                <Mail className="w-4 h-4" />
+              <span className={`absolute left-3 top-1/2 -translate-y-1/2 ${iconClass}`}>
+                <Mail className="w-3.5 h-3.5" />
               </span>
               <input
                 type="email"
@@ -190,20 +190,20 @@ export default function LoginPage({ onLogin, theme = "dark" }: LoginPageProps) {
                 placeholder="citizen@groundzero.news"
                 required
                 disabled={isPending}
-                className={`w-full pl-10 pr-4 py-3 border rounded-xl transition-all duration-300 text-xs font-medium focus:outline-none ${inputClass}`}
+                className={`w-full pl-9 pr-3.5 py-1.5 min-h-[36px] border rounded-[8px] text-xs font-ui focus:outline-none ${inputClass}`}
                 id="login-email-input"
               />
             </div>
           </div>
 
           {/* Password input */}
-          <div className="space-y-1.5">
-            <label className={`block text-[9px] font-bold uppercase tracking-widest transition-colors duration-500 ${inputLabelClass}`}>
+          <div className="space-y-1">
+            <label className={`block text-[11px] font-bold uppercase tracking-wider font-meta ${inputLabelClass}`}>
               Password
             </label>
             <div className="relative">
-              <span className={`absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors duration-500 ${iconClass}`}>
-                <Lock className="w-4 h-4" />
+              <span className={`absolute left-3 top-1/2 -translate-y-1/2 ${iconClass}`}>
+                <Lock className="w-3.5 h-3.5" />
               </span>
               <input
                 type={showPassword ? "text" : "password"}
@@ -212,13 +212,13 @@ export default function LoginPage({ onLogin, theme = "dark" }: LoginPageProps) {
                 placeholder="••••••••••••"
                 required
                 disabled={isPending}
-                className={`w-full pl-10 pr-10 py-3 border rounded-xl transition-all duration-300 text-xs font-medium focus:outline-none ${inputClass}`}
+                className={`w-full pl-9 pr-9 py-1.5 min-h-[36px] border rounded-[8px] text-xs font-ui focus:outline-none ${inputClass}`}
                 id="login-password-input"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className={`absolute right-3.5 top-1/2 -translate-y-1/2 p-0.5 transition-colors duration-500 cursor-pointer ${iconClass} hover:text-neutral-400`}
+                className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 cursor-pointer ${iconClass} hover:text-white`}
                 id="login-toggle-pass-btn"
               >
                 {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
@@ -231,43 +231,43 @@ export default function LoginPage({ onLogin, theme = "dark" }: LoginPageProps) {
             <motion.div 
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-[10px] text-red-600 flex items-center gap-1.5 font-medium"
+              className="p-2.5 bg-red-500/10 border border-red-500/20 rounded-[8px] text-xs text-red-500 flex items-center gap-2 font-meta"
             >
               <AlertCircle className="w-3.5 h-3.5 shrink-0" />
               <span>{errorMsg}</span>
             </motion.div>
           )}
 
-          {/* Bottom Row: Anonymous Login and Small Circular Submit Button */}
-          <div className="flex items-center justify-between pt-3">
+          {/* Bottom Row: Anonymous Login and Submit Button */}
+          <div className="flex items-center justify-between pt-1.5">
             {/* Anonymous trigger on left */}
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-1.5 w-1.5">
+            <div className="flex items-center gap-1.5">
+              <span className="relative flex h-2 w-2">
                 <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${anonymousDotClass}`}></span>
-                <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${anonymousDotClass}`}></span>
+                <span className={`relative inline-flex rounded-full h-2 w-2 ${anonymousDotClass}`}></span>
               </span>
               <button
                 type="button"
                 onClick={handleAnonymousLogin}
                 disabled={isPending}
-                className={`text-[11px] font-bold transition-colors duration-300 cursor-pointer disabled:opacity-50 ${anonymousTextClass}`}
+                className={`text-xs font-bold font-meta transition-colors duration-300 cursor-pointer disabled:opacity-50 py-1 ${anonymousTextClass}`}
                 id="login-anonymous-btn"
               >
                 Enter Anonymously
               </button>
             </div>
 
-            {/* Circular submit button on right (neon green action element) */}
+            {/* Submit button on right */}
             <button
               type="submit"
               disabled={isPending}
-              className={`w-11 h-11 rounded-full flex items-center justify-center transition-all cursor-pointer transform active:scale-95 shrink-0 ${submitBtnBg}`}
+              className={`w-9 h-9 rounded-[8px] flex items-center justify-center transition-all cursor-pointer transform active:scale-95 shrink-0 ${submitBtnBg}`}
               id="login-submit-btn"
             >
               {isPending ? (
-                <Loader2 className={`w-4 h-4 animate-spin ${arrowColor}`} />
+                <Loader2 className={`w-3.5 h-3.5 animate-spin ${arrowColor}`} />
               ) : (
-                <ArrowRight className={`w-4 h-4 stroke-[2.5] ${arrowColor}`} />
+                <ArrowRight className={`w-3.5 h-3.5 stroke-[2.5] ${arrowColor}`} />
               )}
             </button>
           </div>
@@ -279,8 +279,8 @@ export default function LoginPage({ onLogin, theme = "dark" }: LoginPageProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
-        className={`text-center mt-8 text-[10px] font-medium tracking-wide max-w-[280px] leading-normal transition-colors duration-500 ${
-          isDark ? 'text-neutral-500' : 'text-neutral-400'
+        className={`text-center mt-6 text-xs font-meta tracking-wide max-w-[300px] leading-relaxed ${
+          isDark ? 'text-[#A3A3A3]' : 'text-[#626862]'
         }`}
       >
         Secured public connection. GroundZero provides encrypted, community-verified local news streams.
